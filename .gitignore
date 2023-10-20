@@ -2,7 +2,20 @@
 
 # ide
 .idea
-.vs
+.vscode
+
+# encrypted files
+deploy/ansible/vault_credentials.yml.enc
+
+# generic .env.production file (one specific to each environment in ansible inventories)
+.env.production
+
+# local configuration files
+.actrc
+*/**/.actrc
+
+# testing github event files
+.github-test.event
 
 # dependencies
 /node_modules

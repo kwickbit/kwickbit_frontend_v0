@@ -1,0 +1,7 @@
+account_id: "{{ lookup('env','AWS_ACCOUNT_ID') | default(vault_aws_account_id_dev, true) }}"
+role_arn: "arn:aws:iam::{{ account_id }}:role/upload-files-s3-frontend-v0-dev-role"
+bucket_to_upload: "kwickbit-frontpage-v0-dev-bucket"
+aws_region: "eu-central-1"
+aws_access_key: "{{ lookup('env','AWS_ACCESS_KEY') | default(vault_aws_access_key_dev, true) }}"
+aws_secret_key: "{{ lookup('env','AWS_SECRET_KEY') | default(vault_aws_secret_key_dev, true) }}"
+project_env: "dev"

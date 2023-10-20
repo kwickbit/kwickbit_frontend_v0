@@ -1,0 +1,6 @@
+---
+- name: Copy the appropriate .env.production file
+  copy:
+    src: "{{ env_file_path }}"
+    dest: "{{ project_root_path }}/.env.production"
+    remote_src: no

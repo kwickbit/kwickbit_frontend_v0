@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend_kwickbit_v0
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    networks:
+      - kwickbit-network
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+networks:
+  kwickbit-network:
+    external:
+      name: kwickbit_network

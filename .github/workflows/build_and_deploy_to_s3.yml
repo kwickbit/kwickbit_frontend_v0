@@ -1,0 +1,50 @@
+name: Build and Deploy to S3
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target Environment'
+        required: true
+        default: 'dev'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Ansible
+        run: pip install ansible boto3 botocore
+
+      - name: Install community.aws collection
+        run: ansible-galaxy collection install community.aws
+      - name: Set UPPER_ENV variable
+        run: |
+          echo "UPPER_ENV=$(echo ${{ github.event.inputs.environment }} | tr '[:lower:]' '[:upper:]')" >> $GITHUB_ENV
+
+      - name: Set AWS_ACCESS_KEY and AWS_SECRET_KEY based on environment
+        run: |
+          ENV="${{ github.event.inputs.environment }}"
+          echo "Environment: $ENV"
+          echo "Upper letters Environment: ${{ env.UPPER_ENV }}"
+          echo "AWS_ACCESS_KEY_ID=${{ secrets[format('AWS_ACCESS_KEY_ID_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets[format('AWS_SECRET_ACCESS_KEY_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
+          echo "AWS_ACCOUNT_ID=${{ secrets[format('AWS_ACCOUNT_ID_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
+
+      - name: Run ansible
+        run: ansible-playbook deploy/ansible/playbooks/build_and_deploy_to_s3.yml -i deploy/ansible/inventories/${{ github.event.inputs.environment }}/
+        env:
+          AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}

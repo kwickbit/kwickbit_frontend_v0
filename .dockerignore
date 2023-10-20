@@ -1,0 +1,28 @@
+# Ignore Next.js build output
+.next
+
+# Ignore deployment configurations and logs
+deploy
+
+# Ignore build output
+out
+
+# Ignore git related files
+.git
+.gitignore
+.github/
+.actrc
+
+# Ignore ESLint configurations and logs
+.eslintignore
+.eslintrc.json
+
+# Miscellaneous
+*.log
+package-lock.json
+README.md
+
+# Ignore other configuration files that aren't needed for the application to run
+*.event
+*.dev
+
