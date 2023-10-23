@@ -54,6 +54,7 @@ Using `docker-compose` will ensure that your application updates automatically a
     ```yaml
     vault_aws_access_key: <secret_access>
     vault_aws_secret_key: <secret_key>
+    vault_aws_account_id_dev: <account_id>
     ```
 
     Replace `<secret_access>` and `<secret_key>` with the appropriate AWS credentials.
@@ -80,6 +81,7 @@ When defining secret environment variables in GitHub Actions for AWS, follow the
 
 - `AWS_ACCESS_KEY_ID_<ENV>`
 - `AWS_SECRET_ACCESS_KEY_<ENV>`
+- `AWS_ACCOUNT_ID_<ENV>`
 
 Where `<ENV>` is the environment name as defined at the Ansible level (`dev`, `staging`, `prod`, etc.).
 For example, `AWS_ACCESS_KEY_ID_DEV` is valid, but `AWS_ACCESS_KEY_ID` or `AWS_ACCESS_KEY_ID_DEVELOPMENT` are not.
