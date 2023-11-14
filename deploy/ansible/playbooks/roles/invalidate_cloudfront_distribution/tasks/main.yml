@@ -7,12 +7,11 @@
     aws_secret_key: "{{ aws_secret_key }}"
   register: aws_assumed_role
 
-- name: Upload file to S3 using assumed role credentials
-  community.aws.s3_sync:
-    bucket: "{{ bucket_to_upload }}"
-    file_root: "{{ project_root_path }}/out/"
-    mode: push
+- name: Invalidate Cloudfront distribution
+  community.aws.cloudfront_invalidation:
+    distribution_id: "{{ cloudfront_distribution_id }}"
+    target_paths:
+      - "/*"
     aws_access_key: "{{ aws_assumed_role.sts_creds.access_key }}"
     aws_secret_key: "{{ aws_assumed_role.sts_creds.secret_key }}"
     session_token: "{{ aws_assumed_role.sts_creds.session_token }}"
-    region: "{{ aws_region }}"

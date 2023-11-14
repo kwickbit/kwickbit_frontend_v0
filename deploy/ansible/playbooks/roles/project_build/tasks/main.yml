@@ -1,4 +1,8 @@
 ---
+- name: Install dependencies
+  command: "npm install"
+  args:
+    chdir: "{{ project_root_path }}"
 - name: Build project
   command: "npm run build"
   args:

@@ -10,3 +10,4 @@
         env_file_path: "{{ project_root_path}}/deploy/ansible/inventories/{{ project_env }}/resources/.env.production.{{ project_env }}"
     - role: project_build
     - role: aws_upload
+    - role: invalidate_cloudfront_distribution

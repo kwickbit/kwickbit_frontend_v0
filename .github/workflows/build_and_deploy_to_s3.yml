@@ -41,6 +41,7 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=${{ secrets[format('AWS_ACCESS_KEY_ID_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets[format('AWS_SECRET_ACCESS_KEY_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
           echo "AWS_ACCOUNT_ID=${{ secrets[format('AWS_ACCOUNT_ID_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
+          echo "CLOUDFRONT_DISTRIBUTION_ID=${{ secrets[format('CLOUDFRONT_DISTRIBUTION_ID_{0}', env.UPPER_ENV)] }}" >> $GITHUB_ENV
 
       - name: Run ansible
         run: ansible-playbook deploy/ansible/playbooks/build_and_deploy_to_s3.yml -i deploy/ansible/inventories/${{ github.event.inputs.environment }}/
@@ -48,3 +49,4 @@ jobs:
           AWS_ACCESS_KEY: ${{ env.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCOUNT_ID: ${{ env.AWS_ACCOUNT_ID }}
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ env.CLOUDFRONT_DISTRIBUTION_ID }}
