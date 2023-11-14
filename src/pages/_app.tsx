@@ -10,12 +10,13 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode  {
 
     React.useEffect(() => {
         // List of routes that must be excluded from the authentication check
-        const authExcludedRoutes = ['/login', '/signup'];
+        const nonAuthExclusiveRoutes = ['/login', '/signup'];
+        const authExcludedRoutes = [...nonAuthExclusiveRoutes, '/change-password', '/confirm-code'];
 
         if (!authExcludedRoutes.includes(route) && !isConnected() && !isRefreshTokenExpired()) refreshToken();
         else if (!authExcludedRoutes.includes(route) && !isConnected() && isRefreshTokenExpired()) {
             replace(`/login?redirect=${route}`);
-        }
+        } else if (nonAuthExclusiveRoutes.includes(route) && isConnected()) replace('/');
     }, [route, replace]);
 
     return (

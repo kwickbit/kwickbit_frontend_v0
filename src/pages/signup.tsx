@@ -7,13 +7,16 @@ const SignupPage = (): ReactNode => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [givenName, setGivenName] = useState('');
+  const [familyName, setFamilyName] = useState('');
+  const [address, setAddress] = useState('');
 
   const router = useRouter();
-  const handleLogin = async (e: FormEvent): Promise<void> => {
+  const handleSignup = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
+    const data = {username, password, email, givenName, familyName, address};
 
-    await axios.post(process.env.NEXT_PUBLIC_API_APP_URL + '/signup',
-        { username, password, email}, {
+    await axios.post(process.env.NEXT_PUBLIC_API_APP_URL + '/signup', data, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -25,11 +28,7 @@ const SignupPage = (): ReactNode => {
 
   return (
       <div>
-        <form onSubmit={handleLogin}>
-            <label>
-                Email:
-                <input type="text" value={email} onChange={(e): void => setEmail(e.target.value)} />
-            </label>
+        <form onSubmit={handleSignup}>
           <label>
             Username:
             <input type="text" value={username} onChange={(e): void => setUsername(e.target.value)} />
@@ -38,6 +37,26 @@ const SignupPage = (): ReactNode => {
           <label>
             Password:
             <input type="password" value={password} onChange={(e): void => setPassword(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Email:
+            <input type="text" value={email} onChange={(e): void => setEmail(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Given Name:
+            <input type="text" value={givenName} onChange={(e): void => setGivenName(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Family Name:
+            <input type="text" value={familyName} onChange={(e): void => setFamilyName(e.target.value)} />
+          </label>
+          <br />
+          <label>
+            Address:
+            <input type="text" value={address} onChange={(e): void => setAddress(e.target.value)} />
           </label>
           <br />
           <button type="submit">Signup with App</button>
