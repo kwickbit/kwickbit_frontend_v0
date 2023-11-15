@@ -61,7 +61,7 @@ const ChangePasswordPage = (): ReactNode => {
   const handleChangePassword = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     const formAttributes: {[key: string]: string} = {email, givenName, familyName, preferredUsername, address};
-    const userAttributes: { [key: string]: any } = {};
+    const userAttributes: { [key: string]: string } = {};
 
     requiredAttributes.forEach(attr => {
       const key = toCamelCase(attr.replace('userAttributes.', ''));
