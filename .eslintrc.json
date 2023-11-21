@@ -5,9 +5,7 @@
     "plugin:@typescript-eslint/recommended",
     "next/core-web-vitals"
   ],
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "env": {
     "browser": true,
     "node": true,
@@ -30,5 +28,3 @@
     }
   ]
 }
-
-
