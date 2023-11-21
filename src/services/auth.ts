@@ -32,26 +32,3 @@ export const fetchLogin = async (
 
   return data;
 };
-
-export interface SignupAPIProps {
-  username: string;
-  password: string;
-  email: string;
-  givenName: string;
-  familyName: string;
-  address: string;
-}
-
-export const fetchSignup = async (props: SignupAPIProps) => {
-  const { data } = await axios.post(
-    process.env.NEXT_PUBLIC_API_APP_URL + "/signup",
-    props,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  return data;
-};
