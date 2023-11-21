@@ -75,8 +75,8 @@ const useLogin = (): ReturnProps => {
           return new Promise(() => {});
         }
       },
-      onError: (err) => {
-        console.log({ err });
+      onError: () => {
+        //API Should return error message
         toast.error("Account not found.");
       },
     });

@@ -16,23 +16,6 @@ export interface OtherAttributes {
   username: string;
 }
 
-export const fetchLogin = async (
-  props: LoginAPIProps
-): Promise<LoginAPIResponse> => {
-  const { data } = await axios.post(
-    process.env.NEXT_PUBLIC_API_APP_URL + "/login",
-    props,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    }
-  );
-
-  return data;
-};
-
 export interface SignupAPIProps {
   username: string;
   password: string;
@@ -42,16 +25,19 @@ export interface SignupAPIProps {
   address: string;
 }
 
-export const fetchSignup = async (props: SignupAPIProps) => {
-  const { data } = await axios.post(
-    process.env.NEXT_PUBLIC_API_APP_URL + "/signup",
-    props,
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_APP_URL,
+});
 
+export const fetchLogin = async (
+  props: LoginAPIProps
+): Promise<LoginAPIResponse> => {
+  const { data } = await api.post("/login", props);
+
+  return data;
+};
+
+export const fetchSignup = async (props: SignupAPIProps): Promise<any> => {
+  const { data } = await api.post("/signup", props);
   return data;
 };
