@@ -32,7 +32,9 @@ const api = axios.create({
 export const fetchLogin = async (
   props: LoginAPIProps
 ): Promise<LoginAPIResponse> => {
-  const { data } = await api.post("/login", props);
+  const { data } = await api.post("/login", props, {
+    withCredentials: true,
+  });
 
   return data;
 };
