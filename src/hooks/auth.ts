@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-import { LoginAPIProps, LoginAPIResponse, fetchLogin } from "@/services/auth";
-=======
 import {
   LoginAPIProps,
   LoginAPIResponse,
@@ -8,7 +5,6 @@ import {
   fetchLogin,
   fetchSignup,
 } from "@/services/auth";
->>>>>>> 22f62464a63a84a64a3ecea5f123c8ea8ed4410e
 import { UseMutationResult, useMutation } from "@tanstack/react-query";
 
 export const useMutationLogin = (): UseMutationResult<
@@ -19,8 +15,6 @@ export const useMutationLogin = (): UseMutationResult<
 > => {
   return useMutation({ mutationFn: fetchLogin });
 };
-<<<<<<< HEAD
-=======
 
 export const useMutationSignup = (): UseMutationResult<
   any,
@@ -30,4 +24,3 @@ export const useMutationSignup = (): UseMutationResult<
 > => {
   return useMutation({ mutationFn: fetchSignup });
 };
->>>>>>> 22f62464a63a84a64a3ecea5f123c8ea8ed4410e
