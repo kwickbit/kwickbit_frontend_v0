@@ -20,7 +20,7 @@ const PrimaryButton = ({
     <button
       type={type}
       className={classNames(
-        "text-white px-24 py-2 rounded-lg",
+        "text-white px-8 py-2 rounded-lg w-[200px]",
         "bg-[#21254EFF]",
         isDisabled && "opacity-50 cursor-not-allowed"
       )}
