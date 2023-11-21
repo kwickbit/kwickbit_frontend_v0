@@ -75,8 +75,13 @@ const useLogin = (): ReturnProps => {
           return new Promise(() => {});
         }
       },
+<<<<<<< HEAD
       onError: (err) => {
         console.log({ err });
+=======
+      onError: () => {
+        //API Should return error message
+>>>>>>> 22f62464a63a84a64a3ecea5f123c8ea8ed4410e
         toast.error("Account not found.");
       },
     });
