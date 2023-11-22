@@ -12,7 +12,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
-const Noop: React.FC<{children: any}> = ({ children }) => <>{children}</>;
+const Noop: React.FC<{ children: any }> = ({ children }) => <>{children}</>;
 
 function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
   const { route, replace } = useRouter();

@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+import { useRouter } from "next/router";
+import classNames from "classnames";
 import Link from "next/link";
 
 const headerList = [
@@ -16,6 +19,8 @@ const headerList = [
 ];
 
 const MainHeader = (): JSX.Element => {
+  const router = useRouter();
+  const pathname = router.pathname;
   return (
     <div className="z-50 my-[57px] container mx-auto">
       <div className="border-2 rounded-[20px] border-[#BDC1CA] relative flex items-center justify-between py-3 px-6">
@@ -31,7 +36,10 @@ const MainHeader = (): JSX.Element => {
             {headerList.map((item, idx) => (
               <Link
                 key={`hnv-${idx}`}
-                className="cursor-pointer px-4 py-2 text-[16px] leading-[26px] font-bold text-[#9095A1] hover:text-[#565D6D] font-manrope bg-transparent hover:bg-[#D7F0FB] rounded-lg transition-all duration-200 ease-in-out relative capitalize "
+                className={classNames(
+                  "cursor-pointer px-4 py-2 text-[16px] leading-[26px] font-bold text-[#9095A1] hover:text-[#565D6D] font-manrope hover:bg-[#D7F0FB] rounded-lg transition-all duration-200 ease-in-out relative capitalize ",
+                  pathname === item.link ? "bg-[#D7F0FB]" : "bg-transparent"
+                )}
                 href={item.link}
               >
                 {item.title}
