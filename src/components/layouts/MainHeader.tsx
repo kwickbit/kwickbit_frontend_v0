@@ -32,7 +32,7 @@ const MainHeader = ():JSX.Element => {
                             alt="logo" 
                         />
                     </Link>
-                    <div className="hidden lg:flex items-center gap-5 xl:gap-7">
+                    <div className="flex items-center gap-5 xl:gap-7">
                     { headerList.map((item, idx) => (
                         <Link
                             key={`hnv-${idx}`}
@@ -46,7 +46,7 @@ const MainHeader = ():JSX.Element => {
 
                     </div>
                 </div>
-                <div className="hidden lg:flex items-center">
+                <div className="flex items-center">
                     <button className="uppercase bg-[#3ABDED] hover:bg-[#2177A8] hover:text-[#9095A1] text-[16px] leading-[26px] text-[#565D6D] font-bold px-[20px] py-[7px] rounded-[6px] shadow-sm">
                         log out
                     </button>
