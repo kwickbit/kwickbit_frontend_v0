@@ -58,3 +58,4 @@ export const useMutationChangePassword = (): UseMutationResult<
 > => {
   return useMutation({ mutationFn: fetchChangePassword });
 };
+
