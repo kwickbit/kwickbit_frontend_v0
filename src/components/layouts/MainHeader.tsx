@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 
 const headerList = [
@@ -16,7 +15,7 @@ const headerList = [
     }
 ];
 
-const MainHeader = () => {
+const MainHeader = ():JSX.Element => {
 
     return (
         <div className="z-50 my-[57px] container mx-auto">
