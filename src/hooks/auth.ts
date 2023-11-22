@@ -4,6 +4,7 @@ import {
   LoginAPIProps,
   LoginAPIResponse,
   SignupAPIProps,
+  fetchChangePassword,
   fetchConfirmCode,
   fetchLogin,
   fetchResendCode,
@@ -47,4 +48,13 @@ export const useMutationResendCode = (): UseMutationResult<
   unknown
 > => {
   return useMutation({ mutationFn: fetchResendCode });
+};
+
+export const useMutationChangePassword = (): UseMutationResult<
+  any,
+  Error,
+  any,
+  unknown
+> => {
+  return useMutation({ mutationFn: fetchChangePassword });
 };

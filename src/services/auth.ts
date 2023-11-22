@@ -74,3 +74,19 @@ export const fetchResendCode = async (props: {
 
   return data;
 };
+
+interface ChangePasswordAPIProps {
+  username: string;
+  newPassword: string;
+  userAttributes: { [key: string]: string };
+}
+
+export const fetchChangePassword = async (
+  props: ChangePasswordAPIProps
+): Promise<any> => {
+  const { data } = await api.post("/change-password", props, {
+    withCredentials: true,
+  });
+
+  return data;
+};
