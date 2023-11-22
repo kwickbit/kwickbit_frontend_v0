@@ -1,5 +1,6 @@
 import {FormEvent, ReactNode} from 'react';
 import { apiClient } from '@/lib/api-client';
+import MainLayout from '@/components/layouts/MainLayout';
 
 
 const HelloWorldPage = (): ReactNode => {
@@ -18,4 +19,5 @@ const HelloWorldPage = (): ReactNode => {
     );
 };
 
+HelloWorldPage.Layout = MainLayout;
 export default HelloWorldPage;
