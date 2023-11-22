@@ -12,9 +12,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
+const Noop: React.FC<{children: any}> = ({ children }) => <>{children}</>;
+
 function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
   const { route, replace } = useRouter();
-
+  const Layout = (Component as any).Layout || Noop;
   React.useEffect(() => {
     // List of routes that must be excluded from the authentication check
     const nonAuthExclusiveRoutes = ["/login", "/signup"];
@@ -22,7 +24,6 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
       ...nonAuthExclusiveRoutes,
       "/change-password",
       "/confirm-code",
-      "/signup/success",
     ];
 
     if (
@@ -44,7 +45,9 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
+        <Layout pageProps={pageProps}>
+          <Component {...pageProps} />
+        </Layout>
         <ToastContainer />
       </QueryClientProvider>
     </>
