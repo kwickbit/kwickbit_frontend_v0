@@ -1,4 +1,4 @@
-import AuthLayout from "@/components/AuthLayout";
+import AuthLayout from "@/components/layouts/AuthLayout";
 import FormProvider from "@/components/FormProvider";
 import PrimaryButton from "@/components/PrimaryButton";
 import React, { ReactNode } from "react";

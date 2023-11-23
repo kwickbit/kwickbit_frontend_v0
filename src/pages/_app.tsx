@@ -24,6 +24,7 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
       ...nonAuthExclusiveRoutes,
       "/change-password",
       "/confirm-code",
+      "/signup/success",
     ];
 
     if (

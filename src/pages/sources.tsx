@@ -1,8 +1,17 @@
+import { ReactNode } from "react";
+import Head from "next/head";
+import SourcesView from "@/components/sources/SourcesView";
 import MainLayout from "@/components/layouts/MainLayout";
-import React, { ReactNode } from "react";
 
 const SourcesPage = (): ReactNode => {
-  return <div>SourcesPage</div>;
+  return (
+    <>
+      <Head>
+        <title>Sources</title>
+      </Head>
+      <SourcesView />
+    </>
+  );
 };
 
 SourcesPage.Layout = MainLayout;

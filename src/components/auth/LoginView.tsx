@@ -4,7 +4,7 @@ import FormProvider from "@/components/FormProvider";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import useLogin from "@/hooks/useLogin";
-import AuthLayout from "./AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 
 const LoginView = (): ReactNode => {
   const { methods, onSubmit, login } = useLogin();
