@@ -1,16 +1,21 @@
-/* eslint-disable @next/next/no-img-element */
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { SourceProps } from "@/services/sources";
-import AddSourceButton from "./AddSourceButton";
+import { UseBooleanReturnProps } from "@/hooks/useBoolean";
+import CreateSourceButton from "./create/CreateSourceButton";
 import SourceItem from "./SourceItem";
 import SourcesHeader from "./SourcesHeader";
 
 interface Props {
   className: string;
   sources: SourceProps[];
+  createSource: UseBooleanReturnProps;
 }
 
-const SourcesList = ({ className, sources }: Props): ReactNode => {
+const SourcesList = ({
+  className,
+  sources,
+  createSource,
+}: Props): ReactNode => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleSelectItem = (
@@ -36,25 +41,28 @@ const SourcesList = ({ className, sources }: Props): ReactNode => {
 
   return (
     <div className={className}>
-      <SourcesHeader onSelectAll={handleSelectAll} />
-      <div className="flex flex-col gap-4 h-full">
-        {sources.length === 0 && (
-          <div className="flex flex-col items-center justify-center mt-16">
-            <p className="text-center">No wallet yet, please add source</p>
-            <div className="mt-24">
-              <AddSourceButton />
-            </div>
+      {sources.length === 0 ? (
+        <div className="flex flex-col items-center justify-center mt-16">
+          <p className="text-center">No wallet yet, please add source</p>
+          <div className="mt-24">
+            <CreateSourceButton createSource={createSource} />
           </div>
-        )}
-        {sources.map((source, idx) => (
-          <SourceItem
-            source={source}
-            key={idx}
-            onSelect={handleSelectItem}
-            isSelected={selectedItems.includes(source.id)}
-          />
-        ))}
-      </div>
+        </div>
+      ) : (
+        <>
+          <SourcesHeader onSelectAll={handleSelectAll} />
+          <div className="flex flex-col gap-4 h-full">
+            {sources.map((source, idx) => (
+              <SourceItem
+                source={source}
+                key={idx}
+                onSelect={handleSelectItem}
+                isSelected={selectedItems.includes(source.id)}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -16,10 +16,10 @@ const SourcesHeader = ({ onSelectAll }: Props): ReactNode => {
       </div>
       <div className="col-span-2" />
       <div className="col-span-1 flex justify-center">
-        <span>Import date</span>
+        <span>Import Date</span>
       </div>
       <div className="col-span-1 flex justify-center">
-        <span>LAST UPDATED</span>
+        <span>Last Updated</span>
       </div>
     </div>
   );
