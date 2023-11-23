@@ -25,11 +25,16 @@ const ConfirmCodeView = (): ReactNode => {
             placeholder="Enter your code here "
           />
           <div className="flex gap-4 justify-between">
-            <PrimaryButton type="submit" isLoading={confirmCode.isPending}>
+            <PrimaryButton
+              className="w-[200px]"
+              type="submit"
+              isLoading={confirmCode.isPending}
+            >
               Confirm
             </PrimaryButton>
             {shouldRequestNewConfirmationCode && (
               <PrimaryButton
+                className="w-[200px]"
                 onClick={handleResendCode}
                 isLoading={resendCode.isPending}
                 type="button"

@@ -34,7 +34,11 @@ const LoginView = (): ReactNode => {
           </Link>
         </p>
         <div className="flex justify-end w-full mt-2">
-          <PrimaryButton type="submit" isLoading={login.isPending}>
+          <PrimaryButton
+            className="w-[200px]"
+            type="submit"
+            isLoading={login.isPending}
+          >
             Login
           </PrimaryButton>
         </div>
