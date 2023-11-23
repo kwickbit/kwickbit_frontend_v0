@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import AuthLayout from "./AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 import FormProvider from "@/components/FormProvider";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";

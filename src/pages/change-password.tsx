@@ -1,4 +1,4 @@
-import ChangePasswordView from "@/components/ChangePasswordView";
+import ChangePasswordView from "@/components/auth/ChangePasswordView";
 import Head from "next/head";
 import { ReactNode } from "react";
 
