@@ -63,16 +63,28 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
   };
 
   const onSubmit = handleSubmit((data) => {
-    const actualDate = new Date();
+    const today = new Date();
+
+    const actualDateFormat = today.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+
+    const actualTimeFormat = today.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
 
     const newSourceItem: SourceProps = {
       id: Math.random().toString(),
       walletName: data.name,
       walletAddress: data.address,
-      importDate: actualDate.toLocaleDateString(),
-      importTime: actualDate.toLocaleTimeString(),
-      lastUpdatedDate: actualDate.toLocaleDateString(),
-      lastUpdatedTime: actualDate.toLocaleTimeString(),
+      importDate: actualDateFormat,
+      importTime: actualTimeFormat,
+      lastUpdatedDate: actualDateFormat,
+      lastUpdatedTime: actualTimeFormat,
     };
 
     queryClient.setQueryData(["sources"], (oldData: any) => ({
