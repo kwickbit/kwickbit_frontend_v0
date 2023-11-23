@@ -1,7 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import Link from "next/link";
+import Logo from "../Logo";
+import useLogout from "@/hooks/useLogout";
+import useMounted from "@/hooks/useMounted";
 
 const headerList = [
   {
@@ -18,19 +20,21 @@ const headerList = [
   },
 ];
 
-const MainHeader = (): JSX.Element => {
+const MainHeader = (): JSX.Element | null => {
   const router = useRouter();
   const pathname = router.pathname;
+
+  const mounted = useMounted();
+  const { handleLogout, logout } = useLogout();
+
+  if (!mounted) return null;
+
   return (
     <div className="z-50 my-[57px] container mx-auto max-w-7xl px-4">
       <div className="border-2 rounded-[20px] border-[#BDC1CA] relative flex items-center justify-between py-3 px-6">
         <div className="flex-1 flex items-center gap-5 xl:gap-7">
           <Link href="/" passHref className="flex-shrink-0 flex items-center">
-            <img
-              src="/assets/logo.svg"
-              className="w-[158px] h-[24px]"
-              alt="logo"
-            />
+            <Logo className="w-[158px] h-[24px]" />
           </Link>
           <div className="flex items-center gap-5 xl:gap-7">
             {headerList.map((item, idx) => (
@@ -48,7 +52,13 @@ const MainHeader = (): JSX.Element => {
           </div>
         </div>
         <div className="flex items-center">
-          <button className="uppercase bg-[#39BFF0] text-[16px] leading-[26px] text-[#565D6D] font-bold px-[20px] py-[7px] rounded-[6px] shadow-sm transition-all duration-200 ease-in-out hover:scale-95">
+          <button
+            onClick={handleLogout}
+            className={classNames(
+              "uppercase bg-[#39BFF0] text-[16px] leading-[26px] text-[#565D6D] font-bold px-[20px] py-[7px] rounded-[6px] shadow-sm transition-all duration-200 ease-in-out hover:scale-95",
+              logout.isPending && "cursor-not-allowed opacity-50"
+            )}
+          >
             log out
           </button>
         </div>
