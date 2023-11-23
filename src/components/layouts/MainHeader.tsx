@@ -2,6 +2,7 @@
 import { useRouter } from "next/router";
 import classNames from "classnames";
 import Link from "next/link";
+import Image from "next/image";
 
 const headerList = [
   {
@@ -26,9 +27,10 @@ const MainHeader = (): JSX.Element => {
       <div className="border-2 rounded-[20px] border-[#BDC1CA] relative flex items-center justify-between py-3 px-6">
         <div className="flex-1 flex items-center gap-5 xl:gap-7">
           <Link href="/" passHref className="flex-shrink-0 flex items-center">
-            <img
+            <Image
               src="/assets/logo.svg"
-              className="w-[158px] h-[24px]"
+              width={158}
+              height={24}
               alt="logo"
             />
           </Link>
