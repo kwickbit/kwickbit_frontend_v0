@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
       "/change-password",
       "/confirm-code",
       "/signup/success",
+      "/sources",
     ];
 
     if (

@@ -26,7 +26,7 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
   } = source;
 
   return (
-    <div className="grid grid-cols-6 items-center shadow p-6 rounded-lg border">
+    <div className="grid grid-cols-6 items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
       <div className="col-span-1 flex items-center gap-8">
         <input
           className="checkbox-round"

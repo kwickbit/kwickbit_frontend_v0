@@ -37,7 +37,7 @@ const SourcesList = ({ className, sources }: Props): ReactNode => {
   return (
     <div className={className}>
       <SourcesHeader onSelectAll={handleSelectAll} />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 h-full">
         {sources.length === 0 && (
           <div className="flex flex-col items-center justify-center mt-16">
             <p className="text-center">No wallet yet, please add source</p>
