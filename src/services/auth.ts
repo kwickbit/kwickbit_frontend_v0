@@ -1,3 +1,4 @@
+import { apiClient } from "@/lib/api-client";
 import axios from "axios";
 
 export interface LoginAPIProps {
@@ -91,3 +92,7 @@ export const fetchChangePassword = async (
   return data;
 };
 
+export const fetchLogout = async (): Promise<any> => {
+  const { data } = await apiClient.post("/logout", {});
+  return data;
+};
