@@ -33,7 +33,7 @@ const SourcesView = (): ReactNode => {
         </div>
         <SourcesList
           className="max-w-5xl mx-auto min-w-[800px] overflow-x-auto"
-          sources={data?.data}
+          sources={data?.data?.wallets ?? []}
           createSource={createSource}
         />
       </div>
