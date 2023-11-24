@@ -47,7 +47,9 @@ function abbreviateAddr(addr: string): string {
   return addr.slice(0, 3) + "..." + addr.slice(-4);
 }
 
-function getMetadataString(metadata: { [key: string]: string } | undefined):JSX.Element | JSX.Element[] {
+function getMetadataString(
+  metadata: { [key: string]: string } | undefined
+): JSX.Element | JSX.Element[] {
   if (metadata) {
     const keys = Object.keys(metadata);
     return keys.map((key, idx) => (
@@ -79,7 +81,7 @@ const TransactionListSection = ({
   const columns: ColumnDef<TransactionProps>[] = [
     {
       id: "identifier",
-      cell: ({ row }):JSX.Element | string => (
+      cell: ({ row }): JSX.Element | string => (
         <input
           className="checkbox-round"
           type="checkbox"
@@ -87,7 +89,7 @@ const TransactionListSection = ({
           checked={selectedItems.includes(row.original.id || 0)}
         />
       ),
-      header: ():JSX.Element | string => (
+      header: (): JSX.Element | string => (
         <input
           className="checkbox-round"
           type="checkbox"
@@ -98,7 +100,7 @@ const TransactionListSection = ({
     },
     {
       id: "date",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         const date = new Date(row.original.createdAt);
         const dateStr = getLocaleDateString(date);
         return dateStr;
@@ -107,7 +109,7 @@ const TransactionListSection = ({
     },
     {
       id: "from_address",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.from.address) {
           return (
             <>
@@ -123,7 +125,7 @@ const TransactionListSection = ({
     },
     {
       id: "flow",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.from.address) {
           return <Flow />;
         }
@@ -134,7 +136,7 @@ const TransactionListSection = ({
     },
     {
       id: "to_address",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.to.address) {
           return (
             <>
@@ -153,14 +155,14 @@ const TransactionListSection = ({
     {
       id: "type",
       accessorKey: "type",
-      cell: ({ row }):JSX.Element | string => (
+      cell: ({ row }): JSX.Element | string => (
         <span className="capitalize">{row.original.type}</span>
       ),
       header: "",
     },
     {
       id: "from_detail",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.from.detail) {
           return (
             <div className="flex flex-col items-center">
@@ -194,7 +196,7 @@ const TransactionListSection = ({
     },
     {
       id: "to_detail",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.to.detail) {
           return (
             <div className="flex flex-col items-center">
@@ -230,7 +232,7 @@ const TransactionListSection = ({
     {
       id: "fee",
       accessorKey: "fee",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.fee) {
           return (
             <>
@@ -251,18 +253,16 @@ const TransactionListSection = ({
     {
       id: "chain",
       accessorKey: "chain",
-      header: ():JSX.Element | string => "Cahin",
+      header: (): JSX.Element | string => "Cahin",
     },
     {
       id: "published",
       accessorKey: "published",
-      cell: ({ row }):JSX.Element | string => {
+      cell: ({ row }): JSX.Element | string => {
         if (row.original.published) {
           return (
             <div className="flex gap-1 items-center gap-1">
-              <span className="text-[#4ADDB6] text-sm">
-                Published
-              </span>
+              <span className="text-[#4ADDB6] text-sm">Published</span>
               <div className="w-7 h-7 rounded-full bg-[#4ADDB6]" />
             </div>
           );
@@ -283,7 +283,7 @@ const TransactionListSection = ({
     {
       id: "labels",
       accessorKey: "labels",
-      cell: ({ row }):JSX.Element | string => (
+      cell: ({ row }): JSX.Element | string => (
         <>
           {row.original.labels.map((item, idx) => (
             <p key={idx}>{item}</p>
@@ -294,19 +294,17 @@ const TransactionListSection = ({
     },
     {
       id: "view",
-      cell: ():JSX.Element | string => (
-        <button 
-            className="bg-[#39BFF0] rounded-lg px-6 py-2 text-[#21254e] text-base hover:scale-95 w-20"
-        >
+      cell: (): JSX.Element | string => (
+        <button className="bg-[#39BFF0] rounded-lg px-6 py-2 text-[#21254e] text-base hover:scale-95 w-20">
           View
         </button>
       ),
-      header: ():JSX.Element | string => (
+      header: (): JSX.Element | string => (
         <div className="w-full pl-7">
           <button
             className="w-6 h-6 border-0 hover:boder-0 hover:rotate-45"
-            onClick={():void => {
-                onRefreshData()
+            onClick={(): void => {
+              onRefreshData();
             }}
             disabled={loading}
           >
@@ -318,7 +316,7 @@ const TransactionListSection = ({
   ];
 
   const [loading, setLoading] = useState<boolean>(false);
-  const onRefreshData = async ():Promise<void> => {
+  const onRefreshData = async (): Promise<void> => {
     setLoading(true);
     await onRefresh();
     setLoading(false);
@@ -386,7 +384,7 @@ const TransactionListSection = ({
         {table.getRowModel().rows.map((row) => (
           <div
             key={row.id}
-            className="px-4 py-8 bg-[#fefefe] rounded-xl shadow border grid grid-cols-[36px,150px,108px,60px,120px,100px,125px,125px,70px,80px,125px,100px,143px] xl:grid-cols-[36px,150fr,110fr,60px,198fr,132fr,180fr,180fr,95fr,122fr,168fr,102fr,143px]"
+            className="px-4 py-8 bg-white hover:border-[#39bff0] transition-all rounded-xl shadow border grid grid-cols-[36px,150px,108px,60px,120px,100px,125px,125px,70px,80px,125px,100px,143px] xl:grid-cols-[36px,150fr,110fr,60px,198fr,132fr,180fr,180fr,95fr,122fr,168fr,102fr,143px]"
           >
             {row.getVisibleCells().map((cell) => (
               <div
