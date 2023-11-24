@@ -31,11 +31,14 @@ const CreateSourceModal = ({ createSource }: Props): ReactNode => {
     getModalTitle,
     setSelectedBlockchainId,
     selectedBlockchainId,
-    handlePasteClipboardIntoAddress,
     onSubmit,
     methods,
     handleClickBlockchainItem,
     onCloseModal,
+    handleClickPasteFreighter,
+    handleClickPasteManually,
+    selectedTab,
+    handleClickCopyFreighter,
   } = useCreateSourceModal({ createSource });
 
   return (
@@ -66,13 +69,17 @@ const CreateSourceModal = ({ createSource }: Props): ReactNode => {
                 required
               />
               <CreateSourcePasteButtons
-                onClickPasteManually={handlePasteClipboardIntoAddress}
+                onClickPasteManually={handleClickPasteManually}
+                onClickPasteFromFreighter={handleClickPasteFreighter}
+                selectedTab={selectedTab}
               />
               <CreateSourceFieldInput
                 name="address"
                 label="Address"
                 placeholder="Enter your wallet address"
                 required
+                withPasteButton={selectedTab === "freighter"}
+                onClickPasteButton={handleClickCopyFreighter}
               />
               <CreateSourceActionButtons
                 onClickSecondary={(): void => setSelectedBlockchainId("")}
