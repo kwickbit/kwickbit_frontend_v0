@@ -261,14 +261,14 @@ const TransactionListSection = ({
       cell: ({ row }): JSX.Element | string => {
         if (row.original.published) {
           return (
-            <div className="flex gap-1 items-center gap-1">
+            <div className="flex gap-1 items-center">
               <span className="text-[#4ADDB6] text-sm">Published</span>
               <div className="w-7 h-7 rounded-full bg-[#4ADDB6]" />
             </div>
           );
         } else {
           return (
-            <div className="flex gap-1 items-center gap-1">
+            <div className="flex items-center gap-1">
               <div>
                 <p className="text-sm">Yet</p>
                 <p className="text-sm">to Publish</p>
@@ -389,7 +389,7 @@ const TransactionListSection = ({
             {row.getVisibleCells().map((cell) => (
               <div
                 key={cell.id}
-                className="flex flex-col justify-center h-full px-1 text-base font-bold text-[#BDC1CA]"
+                className="flex flex-col justify-center items-center h-full px-1 text-base font-bold text-[#BDC1CA]"
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>
