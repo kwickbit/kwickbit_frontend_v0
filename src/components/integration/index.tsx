@@ -8,7 +8,9 @@ const Integration = () => {
       <div className="mt-[30px]">
         <div className="border rounded-[4px] px-[14px] pt-[8px] pb-[16px] w-fit">
           <div className="flex items-center gap-[15px] py-[16px] pl-[26px] bg-[#D7F0FBFF]">
-            <div>logo</div>
+            <div>
+              <img src="/assets/quickbook-logo.png" alt="quickbooks" />
+            </div>
             <div>
               <p className="text-[16px] text-[#171A1FFF] font-bold">
                 Quickbooks
