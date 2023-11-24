@@ -6,6 +6,7 @@ import CreateSourceModal from "./create/CreateSourceModal";
 import Loader from "../Loader";
 import ServerError from "../ServerError";
 import SourcesList from "./SourcesList";
+import {apiClient} from "@/lib/api-client";
 
 const SourcesView = (): ReactNode => {
   const { data, isLoading, isError } = useQuerySources();
@@ -24,6 +25,20 @@ const SourcesView = (): ReactNode => {
     return <ServerError />;
   }
 
+  const getSources = async (): Promise<void> => {
+    const result = await apiClient.get('/wallets/list');
+    console.log(result);
+  };
+
+  const addSources = async (): Promise<void> => {
+    const result = await apiClient.post('/wallets/add', {
+      name: 'Wallet name from form input',
+      address: 'Wallet address from form input',
+      workspaceId: 'constant to whatever you want for now',
+    });
+    console.log(result);
+  };
+
   return (
     <>
       <CreateSourceModal createSource={createSource} />
@@ -36,6 +51,8 @@ const SourcesView = (): ReactNode => {
           sources={data?.data}
           createSource={createSource}
         />
+        <button onClick={getSources}>Get Sources</button>
+        <button onClick={addSources}>Add Source</button>
       </div>
     </>
   );
