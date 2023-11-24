@@ -1,53 +1,35 @@
-export interface SourceProps {
-  id: string;
-  walletName: string;
-  walletAddress: string;
-  importDate: string;
-  importTime: string;
-  lastUpdatedDate: string;
-  lastUpdatedTime: string;
+import { apiClient } from "@/lib/api-client";
+
+export interface GetSourcesAPIResponse {
+  message: string;
+  data: GetSourcesAPIData;
 }
 
-const sources: SourceProps[] = [
-  {
-    id: "1",
-    walletName: "Wallet 1",
-    walletAddress: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
-    importDate: "Oct 15, 2023",
-    importTime: "12:25 PM",
-    lastUpdatedDate: "Oct 15, 2023",
-    lastUpdatedTime: "12:25 PM",
-  },
-  {
-    id: "2",
-    walletName: "Wallet 2",
-    walletAddress: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
-    importDate: "Oct 15, 2023",
-    importTime: "12:25 PM",
-    lastUpdatedDate: "Oct 15, 2023",
-    lastUpdatedTime: "12:25 PM",
-  },
-  {
-    id: "3",
-    walletName: "Wallet 3",
-    walletAddress: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
-    importDate: "Oct 15, 2023",
-    importTime: "12:25 PM",
-    lastUpdatedDate: "Oct 15, 2023",
-    lastUpdatedTime: "12:25 PM",
-  },
-  {
-    id: "4",
-    walletName: "Wallet 4",
-    walletAddress: "GDKXVNZXCJERWN7FSBOUPE5HKQ62LKYVZZYI4PMZHFVN6IWOFVRVI6LH",
-    importDate: "Oct 15, 2023",
-    importTime: "12:25 PM",
-    lastUpdatedDate: "Oct 15, 2023",
-    lastUpdatedTime: "12:25 PM",
-  },
-];
+export interface GetSourcesAPIData {
+  wallets: SourceWallet[];
+}
 
-export const fetchSources = async (): Promise<any> => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  return { data: sources };
+export interface SourceWallet {
+  name: string;
+  walletId: string;
+  address: string;
+  workspaceId: string;
+}
+
+export interface CreateSourceAPIProps {
+  name: string;
+  address: string;
+  workspaceId: string;
+}
+
+export const fetchSources = async (): Promise<GetSourcesAPIResponse> => {
+  const { data } = await apiClient.get("/wallets/list");
+  return data;
+};
+
+export const fetchCreateSource = async (
+  props: CreateSourceAPIProps
+): Promise<any> => {
+  const { data } = await apiClient.post("/wallets/add", props);
+  return data;
 };
