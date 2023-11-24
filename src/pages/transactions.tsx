@@ -1,8 +1,17 @@
+import { ReactNode } from "react";
+import Head from "next/head";
 import MainLayout from "@/components/layouts/MainLayout";
-import React, { ReactNode } from "react";
+import TransactionsView from "@/components/transactions/TransactionsView";
 
 const TransactionsPage = (): ReactNode => {
-  return <div>TransactionsPage</div>;
+  return (
+    <>
+      <Head>
+        <title>Transactions</title>
+      </Head>
+      <TransactionsView />
+    </>
+  )
 };
 
 TransactionsPage.Layout = MainLayout;
