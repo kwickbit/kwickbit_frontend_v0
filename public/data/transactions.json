@@ -1,0 +1,98 @@
+{
+  "transactions": [
+    {
+      "createdAt": "2023-10-15T16:12:19Z",
+      "from": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet",
+        "detail": null
+      },
+      "to": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract",
+        "detail": {
+          "type": "token",
+          "symbol": "USDC",
+          "amount": 5324,
+          "price": 5324
+        }
+      },
+      "type": "out",
+      "chain": "stella",
+      "published": false,
+      "publishedAt": null,
+      "labels": ["Payment", "Expense"],
+      "fee": {
+        "amount": 0.002,
+        "price": 3.5
+      }
+    },
+    {
+      "createdAt": "2023-10-18T16:12:19Z",
+      "from": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet",
+        "detail": {
+          "type": "currency",
+          "symbol": "XLM",
+          "amount": 45788,
+          "price": 5324
+        }
+      },
+      "to": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract",
+        "detail": {
+          "type": "token",
+          "symbol": "USDC",
+          "amount": 5324,
+          "price": 5324
+        }
+      },
+      "type": "swap",
+      "chain": "stella",
+      "published": true,
+      "publishedAt": "2023-10-18T17:12:19Z",
+      "labels": ["Swap", "Conversion"],
+      "fee": {
+        "amount": 0.012,
+        "price": 15.5
+      }
+    },
+    {
+      "createdAt": "2023-10-25T17:12:19Z",
+      "from": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet",
+        "detail": {
+          "type": "currency",
+          "symbol": "XLM",
+          "amount": 413.36,
+          "price": 50
+        }
+      },
+      "to": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract",
+        "detail": {
+          "type": "token",
+          "symbol": "TRT",
+          "amount": 45,
+          "price": 50,
+          "metadata": {
+            "Stella token address": "R45FEEFFFDVC"
+          }
+        }
+      },
+      "type": "swap",
+      "chain": "stella",
+      "published": false,
+      "publishedAt": null,
+      "labels": ["Swap", "Conversion"],
+      "fee": {
+        "amount": 0.012,
+        "price": 15.5
+      }
+    }
+  ]
+}
