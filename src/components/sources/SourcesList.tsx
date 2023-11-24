@@ -51,7 +51,7 @@ const SourcesList = ({
       ) : (
         <>
           <SourcesHeader onSelectAll={handleSelectAll} />
-          <div className="flex flex-col gap-4 h-full">
+          <div className="flex flex-col gap-4 h-full pb-8">
             {sources.map((source, idx) => (
               <SourceItem
                 source={source}

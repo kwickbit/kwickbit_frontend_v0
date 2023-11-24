@@ -20,7 +20,7 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
   const { walletId, address, name } = source;
 
   return (
-    <div className="grid grid-cols-6 items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
+    <div className="grid grid-cols-6  bg-white  text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
       <div className="col-span-1 flex items-center gap-8">
         <input
           className="checkbox-round"
@@ -36,24 +36,22 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
       </div>
 
       <div className="col-span-1 flex justify-center">
-        <span className="text-gray-400">{name}</span>
+        <span className="">{name}</span>
       </div>
       <div className="col-span-1 flex justify-center">
-        <span className="col-span-1 text-gray-400">
-          {stripWalletAddress(address)}
-        </span>
+        <span className="col-span-1 ">{stripWalletAddress(address)}</span>
       </div>
-      <div className="col-span-1 flex flex-col items-center justify-center text-gray-400">
+      <div className="col-span-1 flex flex-col items-center justify-center ">
         <span>Oct 15, 2023</span>
         <span>6:15 PM</span>
       </div>
-      <div className="col-span-1 flex flex-col items-center justify-center text-gray-400">
+      <div className="col-span-1 flex flex-col items-center justify-center ">
         <span>Oct 15, 2023</span>
         <span>6:15 PM</span>
       </div>
       <div className="col-span-1 flex gap-4 justify-center">
-        <BiPencil className="w-6 h-6 cursor-pointer" />
-        <CiSearch className="w-6 h-6 cursor-pointer" />
+        <BiPencil className="w-6 h-6 cursor-pointer text-neutral-900" />
+        <CiSearch className="w-6 h-6 cursor-pointer text-neutral-900" />
       </div>
     </div>
   );
