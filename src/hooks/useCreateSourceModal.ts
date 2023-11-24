@@ -1,4 +1,5 @@
 import { BaseSyntheticEvent, Dispatch, SetStateAction, useState } from "react";
+import { getPublicKey } from "@stellar/freighter-api";
 import { SourceProps } from "@/services/sources";
 import { toast } from "react-toastify";
 import { UseBooleanReturnProps } from "./useBoolean";
@@ -13,7 +14,7 @@ interface ReturnProps {
   getModalTitle: () => string;
   setSelectedBlockchainId: Dispatch<SetStateAction<string>>;
   selectedBlockchainId: string;
-  handlePasteClipboardIntoAddress: () => Promise<any>;
+  handleClickPasteManually: () => void;
   onSubmit: (
     e?: BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
@@ -27,6 +28,9 @@ interface ReturnProps {
   >;
   handleClickBlockchainItem: (blockchainId: string) => void;
   onCloseModal: () => void;
+  selectedTab: "manually" | "freighter";
+  handleClickPasteFreighter: () => void;
+  handleClickCopyFreighter: () => void;
 }
 
 const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
@@ -38,6 +42,10 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
     setSelectedBlockchainId(blockchainId);
   };
 
+  const [selectedTab, setSelectedTab] = useState<"manually" | "freighter">(
+    "manually"
+  );
+
   const methods = useForm({
     defaultValues: {
       name: "",
@@ -45,14 +53,22 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
     },
   });
 
-  const { handleSubmit, setValue, reset } = methods;
+  const { handleSubmit, reset, setValue } = methods;
 
-  const handlePasteClipboardIntoAddress = async (): Promise<any> => {
+  const handleClickPasteManually = (): void => {
+    setSelectedTab("manually");
+  };
+
+  const handleClickPasteFreighter = (): void => {
+    setSelectedTab("freighter");
+  };
+
+  const handleClickCopyFreighter = async (): Promise<void> => {
     try {
-      const text = await navigator.clipboard.readText();
-      setValue("address", text);
-    } catch (err) {
-      toast.error("We couldn't read your clipboard.");
+      const publicKey = await getPublicKey();
+      setValue("address", publicKey);
+    } catch (error: any) {
+      toast.error(error ?? "Error while getting public key");
     }
   };
 
@@ -104,13 +120,16 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
 
   return {
     getModalTitle,
-    setSelectedBlockchainId,
-    selectedBlockchainId,
-    handlePasteClipboardIntoAddress,
-    onSubmit,
-    methods,
     handleClickBlockchainItem,
+    handleClickCopyFreighter,
+    handleClickPasteFreighter,
+    handleClickPasteManually,
+    methods,
     onCloseModal,
+    onSubmit,
+    selectedBlockchainId,
+    selectedTab,
+    setSelectedBlockchainId,
   };
 };
 
