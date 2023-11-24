@@ -39,6 +39,7 @@ const CreateSourceModal = ({ createSource }: Props): ReactNode => {
     handleClickPasteManually,
     selectedTab,
     handleClickCopyFreighter,
+    isLoadingCreate,
   } = useCreateSourceModal({ createSource });
 
   return (
@@ -83,6 +84,7 @@ const CreateSourceModal = ({ createSource }: Props): ReactNode => {
               />
               <CreateSourceActionButtons
                 onClickSecondary={(): void => setSelectedBlockchainId("")}
+                isLoading={isLoadingCreate}
               />
             </FormProvider>
           )}

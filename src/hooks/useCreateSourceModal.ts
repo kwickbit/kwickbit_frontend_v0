@@ -1,10 +1,9 @@
 import { BaseSyntheticEvent, Dispatch, SetStateAction, useState } from "react";
 import { getPublicKey } from "@stellar/freighter-api";
-import { SourceProps } from "@/services/sources";
 import { toast } from "react-toastify";
 import { UseBooleanReturnProps } from "./useBoolean";
 import { UseFormReturn, useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutationCreateSource } from "./sources";
 
 interface Props {
   createSource: UseBooleanReturnProps;
@@ -31,10 +30,11 @@ interface ReturnProps {
   selectedTab: "manually" | "freighter";
   handleClickPasteFreighter: () => void;
   handleClickCopyFreighter: () => void;
+  isLoadingCreate: boolean;
 }
 
 const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
-  const queryClient = useQueryClient();
+  const create = useMutationCreateSource();
 
   const [selectedBlockchainId, setSelectedBlockchainId] = useState("");
 
@@ -79,38 +79,22 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
   };
 
   const onSubmit = handleSubmit((data) => {
-    const today = new Date();
-
-    const actualDateFormat = today.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-
-    const actualTimeFormat = today.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-
-    const newSourceItem: SourceProps = {
-      id: Math.random().toString(),
-      walletName: data.name,
-      walletAddress: data.address,
-      importDate: actualDateFormat,
-      importTime: actualTimeFormat,
-      lastUpdatedDate: actualDateFormat,
-      lastUpdatedTime: actualTimeFormat,
-    };
-
-    queryClient.setQueryData(["sources"], (oldData: any) => ({
-      ...oldData,
-      data: [...oldData.data, newSourceItem],
-    }));
-
-    toast.success("Source created successfully");
-
-    onCloseModal();
+    create.mutate(
+      {
+        address: data.address,
+        name: data.name,
+        workspaceId: "whatever",
+      },
+      {
+        onSuccess: (data) => {
+          toast.success(data?.message ?? "Source created successfully");
+          onCloseModal();
+        },
+        onError: (error) => {
+          toast.error(error?.message ?? "Error while creating source");
+        },
+      }
+    );
   });
 
   const getModalTitle = (): string => {
@@ -130,6 +114,7 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
     selectedBlockchainId,
     selectedTab,
     setSelectedBlockchainId,
+    isLoadingCreate: create.isPending,
   };
 };
 

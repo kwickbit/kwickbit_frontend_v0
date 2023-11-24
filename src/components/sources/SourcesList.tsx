@@ -1,5 +1,5 @@
 import { ReactNode, SyntheticEvent, useState } from "react";
-import { SourceProps } from "@/services/sources";
+import { SourceWallet } from "@/services/sources";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import CreateSourceButton from "./create/CreateSourceButton";
 import SourceItem from "./SourceItem";
@@ -7,7 +7,7 @@ import SourcesHeader from "./SourcesHeader";
 
 interface Props {
   className: string;
-  sources: SourceProps[];
+  sources: SourceWallet[];
   createSource: UseBooleanReturnProps;
 }
 
@@ -33,7 +33,7 @@ const SourcesList = ({
     e: SyntheticEvent<HTMLInputElement, Event>
   ): void => {
     if (e.currentTarget.checked) {
-      setSelectedItems(sources.map((source) => source.id));
+      setSelectedItems(sources.map((source) => source.walletId));
     } else {
       setSelectedItems([]);
     }
@@ -57,7 +57,7 @@ const SourcesList = ({
                 source={source}
                 key={idx}
                 onSelect={handleSelectItem}
-                isSelected={selectedItems.includes(source.id)}
+                isSelected={selectedItems.includes(source.walletId)}
               />
             ))}
           </div>
