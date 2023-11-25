@@ -94,5 +94,11 @@
         "price": 15.5
       }
     }
+  ],
+  "non_set_currencies": [
+	{
+		"currency": "XLM",
+		"token": "TRT"
+	}
   ]
 }
