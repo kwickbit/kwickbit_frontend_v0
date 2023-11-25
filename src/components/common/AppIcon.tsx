@@ -98,3 +98,28 @@ export const Flow = (): JSX.Element => {
     </svg>
   );
 };
+
+export const Warning = (): JSX.Element => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+      <path d="M12 6.49L19.53 19.5L4.47 19.5L12 6.49ZM12 2.5L1 21.5L23 21.5L12 2.5ZM13 16.5L11 16.5V18.5H13V16.5ZM13 10.5L11 10.5L11 14.5L13 14.5L13 10.5Z" fill="white"/>
+    </svg>    
+  )
+}
+
+export const CircleClose = ():JSX.Element => {
+
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+      <path d="M12 2.5C6.47 2.5 2 6.97 2 12.5C2 18.03 6.47 22.5 12 22.5C17.53 22.5 22 18.03 22 12.5C22 6.97 17.53 2.5 12 2.5ZM12 20.5C7.59 20.5 4 16.91 4 12.5C4 8.09 7.59 4.5 12 4.5C16.41 4.5 20 8.09 20 12.5C20 16.91 16.41 20.5 12 20.5ZM15.59 7.5L12 11.09L8.41 7.5L7 8.91L10.59 12.5L7 16.09L8.41 17.5L12 13.91L15.59 17.5L17 16.09L13.41 12.5L17 8.91L15.59 7.5Z" fill="white"/>
+    </svg>    
+  )
+}
+
+export const YellowWarning = (): JSX.Element => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+      <path d="M1 21.5L23 21.5L12 2.5L1 21.5ZM13 18.5H11V16.5L13 16.5V18.5ZM13 14.5L11 14.5L11 10.5L13 10.5L13 14.5Z" fill="#ECB90D"/>
+    </svg>    
+  )
+}

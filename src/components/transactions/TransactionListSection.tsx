@@ -9,6 +9,7 @@ import {
 import cn from "classnames";
 import { Info, Refresh, Flow } from "../common/AppIcon";
 import { Tooltip } from "react-tooltip";
+import { YellowWarning } from "../common/AppIcon";
 
 interface PageProps {
   transactions: TransactionProps[] | undefined;
@@ -384,7 +385,7 @@ const TransactionListSection = ({
         {table.getRowModel().rows.map((row) => (
           <div
             key={row.id}
-            className="px-4 py-8 bg-white hover:border-[#39bff0] transition-all rounded-xl shadow border grid grid-cols-[36px,150px,108px,60px,120px,100px,125px,125px,70px,80px,125px,100px,143px] xl:grid-cols-[36px,150fr,110fr,60px,198fr,132fr,180fr,180fr,95fr,122fr,168fr,102fr,143px]"
+            className="relative px-4 py-8 bg-white hover:border-[#39bff0] transition-all rounded-xl shadow border grid grid-cols-[36px,150px,108px,60px,120px,100px,125px,125px,70px,80px,125px,100px,143px] xl:grid-cols-[36px,150fr,110fr,60px,198fr,132fr,180fr,180fr,95fr,122fr,168fr,102fr,143px]"
           >
             {row.getVisibleCells().map((cell) => (
               <div
@@ -394,6 +395,14 @@ const TransactionListSection = ({
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>
             ))}
+            {row.original.currencyMapping?.nonSetMapping && (
+              <div className="absolute bottom-2 right-4 text-[#ECB90D] text-sm font-bold space-y-0.5">
+                <div className="flex justify-end">
+                  <YellowWarning />
+                </div>
+                {`Configure Mapping for token ${row.original.currencyMapping.token} to integrate this transaction`}
+              </div>
+            )}
           </div>
         ))}
       </div>
