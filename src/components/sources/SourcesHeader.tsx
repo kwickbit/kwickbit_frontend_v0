@@ -6,7 +6,7 @@ interface Props {
 
 const SourcesHeader = ({ onSelectAll }: Props): ReactNode => {
   return (
-    <div className="grid grid-cols-6 items-center px-6 py-4">
+    <div className="grid grid-cols-6 items-center px-6 py-4 text-[#21254E]">
       <div className="col-span-1 flex items-center gap-8">
         <input
           className="checkbox-round"
