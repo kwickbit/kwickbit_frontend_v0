@@ -1,7 +1,7 @@
 import React from "react";
 import PrimaryButton from "../PrimaryButton";
 
-const Integration = () => {
+const Integration: React.FC = (): JSX.Element => {
   return (
     <div className="max-w-7xl mx-auto overflow-x-auto mt-12 px-4 pb-12">
       <h1>Integrations</h1>
