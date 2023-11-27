@@ -44,7 +44,7 @@ export interface TransactionAPIResult {
 }
 
 export const fetchTransactions = async (): Promise<TransactionAPIResult> => {
-  const ret = await fetch("/data/transactions.json");
+  const ret = await fetch("/data/transactions-empty.json");
   if (!ret.ok) {
     throw new Error(ret.statusText);
   }
