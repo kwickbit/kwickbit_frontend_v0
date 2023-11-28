@@ -5,9 +5,15 @@ import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import useLogin from "@/hooks/useLogin";
 import AuthLayout from "../layouts/AuthLayout";
+import { useUserWebSocket } from "@/hooks/useWebSocket";
 
 const LoginView = (): ReactNode => {
   const { methods, onSubmit, login } = useLogin();
+
+  const isLoggedIn = login.isSuccess; // or use a more robust way to check login status
+
+  // Initialize WebSocket only when logged in
+  useUserWebSocket(process.env.NEXT_PUBLIC_WS_APP_URL as string, isLoggedIn);
 
   return (
     <AuthLayout title="Login">
