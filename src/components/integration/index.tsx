@@ -12,15 +12,15 @@ const Integration: React.FC = (): JSX.Element => {
               <img src="/assets/quickbook-logo.png" alt="quickbooks" />
             </div>
             <div>
-              <p className="text-base text-[#171A1FFF] font-bold">Quickbooks</p>
-              <p className="text-base text-[#9095A1FF] font-bold">Accounting</p>
+              <p className="text-base text-neutral-900 font-bold">Quickbooks</p>
+              <p className="text-base text-neutral-500 font-bold">Accounting</p>
             </div>
           </div>
           <div className="flex flex-col justify-between pt-4 px-4 h-64">
-            <p className="text-base text-[#9095A1FF] font-bold">
+            <p className="text-base text-neutral-500 font-bold">
               Connecting a Quickbooks account
             </p>
-            <PrimaryButton className="bg-[#4ADDB6FF] text-[#21254EFF] w-20 py-3 px-1 rounded-xl text-base">
+            <PrimaryButton className="bg-[#4ADDB6FF] text-[#21254EFF] w-fit py-3 px-1 rounded-xl text-base">
               Connect
             </PrimaryButton>
           </div>
