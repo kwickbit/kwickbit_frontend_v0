@@ -2,7 +2,7 @@ import MainLayout from "@/components/layouts/MainLayout";
 import React, { ReactNode, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-const clientId = process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID;
+const clientId = "ABuPzxGEOadryTiwHbFLaIwEqKfJJreHdDZn8xd6jP6OHvKuQt";
 const redirectUri = encodeURIComponent("http://localhost:3000/integration");
 const scope = encodeURIComponent("com.intuit.quickbooks.accounting");
 const state = generateState();
@@ -34,29 +34,9 @@ const IntegrationsPage = (): ReactNode => {
     window.location.href = authUrl;
   };
 
-  // will create a backend to handle this
-  // function getAccessToken(code: any, callback: any) {
-  //   const clientId = process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_ID;
-  //   const clientSecret = process.env.NEXT_PUBLIC_QUICKBOOKS_CLIENT_SECRET;
-  //   const redirectUri = "http://localhost:3000/integration";
-
-  //   const authHeader = "Basic " + btoa(clientId + ":" + clientSecret);
-
-  //   fetch("https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/x-www-form-urlencoded",
-  //       Authorization: authHeader,
-  //     },
-  //     body: `grant_type=authorization_code&code=${code}&redirect_uri=${redirectUri}`,
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => callback(null, data))
-  //     .catch((error) => callback(error, null));
-  // }
-
   useEffect(() => {
     if (code) {
+      console.log("code: ", code);
       // will call the backend API to get the access token
     }
   }, [code]);
