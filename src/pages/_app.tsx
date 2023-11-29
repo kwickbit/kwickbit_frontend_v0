@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
   const Layout = (Component as any).Layout || Noop;
   React.useEffect(() => {
     // List of routes that must be excluded from the authentication check
-    const nonAuthExclusiveRoutes = ["/login", "/signup"];
+    const nonAuthExclusiveRoutes = ["/login", "/signup", "/integration"];
     const authExcludedRoutes = [
       ...nonAuthExclusiveRoutes,
       "/change-password",
