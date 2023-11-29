@@ -1,4 +1,4 @@
-import Integration from "@/components/integration";
+import Integration from "../components/integrations";
 import MainLayout from "@/components/layouts/MainLayout";
 import React, { ReactNode } from "react";
 

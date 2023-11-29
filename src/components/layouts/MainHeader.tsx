@@ -15,8 +15,8 @@ const headerList = [
     title: "Transactions",
   },
   {
-    link: "/integration",
-    title: "Integration",
+    link: "/integrations",
+    title: "Integrations",
   },
 ];
 
