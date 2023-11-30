@@ -13,7 +13,7 @@ const redirectUri = encodeURIComponent(
 const scope = encodeURIComponent(process.env.NEXT_PUBLIC_API_QUICKBOOK_SCOPE!);
 
 interface ReturnProps {
-  handleConnecToQuickbook: () => Promise<void>;
+  handleConnectToQuickbook: () => Promise<void>;
 }
 
 const useConnectToQuickbook = (): ReturnProps => {
@@ -78,7 +78,7 @@ const useConnectToQuickbook = (): ReturnProps => {
     });
   };
 
-  return { handleConnecToQuickbook };
+  return { handleConnectToQuickbook: handleConnecToQuickbook };
 };
 
 export default useConnectToQuickbook;
