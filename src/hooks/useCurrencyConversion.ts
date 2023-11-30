@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 
 export interface UseCurrencyConversionReturnProps {
     convert: (from: string, to: string, fromValue: number) => number;
@@ -10,7 +11,7 @@ export interface CurrencyMap {
 }
 
 const useCurrencyConversion = ():UseCurrencyConversionReturnProps => {
-    const convert = (from: string, to: string, fromValue: number): number => {
+    const convert = useCallback((from: string, to: string, fromValue: number): number => {
         // const fromCurr = currencyMaps.find(item => item.from === from );
         // const toCurr = currencyMaps.find(item => item.to === to);
         // if( !fromCurr || !toCurr ) {
@@ -37,7 +38,7 @@ const useCurrencyConversion = ():UseCurrencyConversionReturnProps => {
         }
 
         return fromValue;
-    }
+    },[])
 
     return { convert };
 }

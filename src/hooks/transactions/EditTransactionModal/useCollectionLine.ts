@@ -164,7 +164,7 @@ const useCollectionLine = ({
         }
       }
     }
-  }, [item, accountingTransactions]);
+  }, [item, accountingTransactions, typeOptions]);
 
   const selectType = (type: SelectOption): void => {
     changeAccTransactionType(

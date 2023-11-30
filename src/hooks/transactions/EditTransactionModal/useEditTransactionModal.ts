@@ -108,7 +108,7 @@ const useEditTransactionModal = ({
         collection,
       });
     }
-  }, [transaction]);
+  }, [transaction, convert]);
 
   const publishTransaction = useCallback((): void => {
     setTempTransaction((prev) => {
