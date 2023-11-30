@@ -1,7 +1,87 @@
+export interface Currency {
+  fiat?: boolean;
+  name: string;
+  symbol: string;
+  onchain?: {
+    chain: string;
+    token?: string;
+    tokenContractAddress: string;
+  }
+}
+
+export interface AccountTransactionBase {
+  id: string;
+  description: string,
+  amount: number
+  currency: Currency;
+  included?: boolean;
+}
+
+export type OutgoingTransactionTypes = 'BILL' | 'EXP' | 'SW_OUT';
+export type IncomingTransactionTypes = 'INV' | 'INC' | 'SW_IN';
+
+export interface AccountTransaction {
+  id: string;
+  symbol: OutgoingTransactionTypes | IncomingTransactionTypes;
+  description: string,
+  amount: number
+  currency: Currency;
+  included?: boolean;
+  from_account?: string; // Only for outgoing
+  to_account?: string;   // Only for incoming,
+  mainCurrency?: {
+    name: string,
+    amount: number;
+  }
+}
+
+export interface TypeOption {
+  title: OutgoingTransactionTypes | IncomingTransactionTypes;
+  value: 'bills' | 'expenses' | 'swapouts' | 'invoices' | 'incomes' | 'swapins';  
+}
+
+export const outgoingTypeOptions: TypeOption[] = [
+  {
+      title: "BILL",  // Same as symbole
+      value: "bills"  // Same as a key of accounting-transactions
+  },
+  {
+    title: "EXP",
+    value: "expenses"
+  },
+  {
+    title: "SW_OUT",
+    value: "swapouts"
+  }
+];
+
+export const incomingTypeOptions: TypeOption[] = [
+  {
+      title: "INV",
+      value: "invoices"
+  },
+  {
+    title: "INC",
+    value: "incomes"
+  },
+  {
+    title: "SW_IN",
+    value: "swapins"
+  }
+]
+
 export interface TransUser {
   address: string;
   type: "wallet" | "smart contract";
-  detail: null | {
+}
+
+export interface TransactionProps {
+  id?: number | string;
+  createdAt: string;
+  hash: string;
+  from: TransUser;
+  to: TransUser;
+  detail: {
     type: "currency" | "token";
     symbol: string;
     amount: number;
@@ -10,14 +90,7 @@ export interface TransUser {
       [key: string]: string;
     };
   };
-}
-
-export interface TransactionProps {
-  id?: number | string;
-  createdAt: string;
-  from: TransUser;
-  to: TransUser;
-  type: "out" | "swap";
+  type: "out" | "income";
   chain: string;
   published: boolean;
   publishedAt: string | null;
@@ -25,12 +98,17 @@ export interface TransactionProps {
   fee: {
     amount: number;
     price: number;
+    mainCurrency?: {
+      name: string,
+      amount: number;
+    }
   };
   currencyMapping?: {
     currency: string | null;
     token: string | null;
     nonSetMapping: boolean;
   };
+  collection: AccountTransaction[]
 }
 
 export interface NonSetCurrencyProps {
@@ -44,29 +122,23 @@ export interface TransactionAPIResult {
 }
 
 export const fetchTransactions = async (): Promise<TransactionAPIResult> => {
-  const ret = await fetch("/data/transactions-empty.json");
+  const ret = await fetch("/data/transactions1.json");
   if (!ret.ok) {
     throw new Error(ret.statusText);
   }
   const data: TransactionAPIResult = await ret.json();
   if (data.transactions) {
     const transactions = data.transactions.map((transaction) => {
-      const fromDetail = transaction.from.detail;
-      const toDetail = transaction.to.detail;
+      const detail = transaction.detail;
 
-      let currency: string | null = null;
+      let currency: string | null = 'XLM';
       let token: string | null = null;
 
-      if (fromDetail?.type === "currency") {
-        currency = fromDetail.symbol;
-      } else if (toDetail?.type === "currency") {
-        currency = toDetail.symbol;
+      if (detail.type === "currency") {
+        currency = detail.symbol;
       }
-
-      if (toDetail?.type === "token") {
-        token = toDetail.symbol;
-      } else if (fromDetail?.type === "token") {
-        token = fromDetail.symbol;
+      else if( detail.type === 'token' ) {
+        token = detail.symbol;
       }
 
       let nonSetMapping = false;
@@ -92,3 +164,23 @@ export const fetchTransactions = async (): Promise<TransactionAPIResult> => {
   }
   return data;
 };
+
+export interface AccountingTransactionAPIResult {
+  bills?:    AccountTransaction[];
+  expenses?: AccountTransaction[];
+  swapouts?: AccountTransaction[];
+  invoices?: AccountTransaction[];
+  incomes?:  AccountTransaction[];
+  swapins?:  AccountTransaction[];  
+}
+
+
+export const fetchAccountingTransactions = async():Promise<AccountingTransactionAPIResult> => {
+  const ret = await fetch("/data/accounting-transactions.json");
+  if (!ret.ok) {
+    throw new Error(ret.statusText);
+  }
+
+  const data:AccountingTransactionAPIResult = await ret.json();
+  return data;
+}

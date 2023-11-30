@@ -1,0 +1,217 @@
+{
+  "bills": [
+    {
+      "id": "bill-1",
+      "symbol": "BILL",
+      "from_account": "account1",
+      "description": "Bill 1",
+      "amount": 2500,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    },
+    {
+      "id": "bill-2",
+      "symbol": "BILL",
+      "from_account": "account2",
+      "description": "Bill 2",
+      "amount": 3000,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      }
+    },
+    {
+      "id": "bill-3",
+      "symbol": "BILL",
+      "from_account": "account3",
+      "description": "Bill 3",
+      "amount": 3500,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      }
+    },
+    {
+      "id": "bill-4",
+      "symbol": "BILL",
+      "from_account": "account4",
+      "description": "Bill 4",
+      "amount": 3500,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    }
+  ],
+  "expenses": [
+    {
+      "id": "expense-1",
+      "symbol": "EXP",
+      "from_account": "ledger1",
+      "description": "Expense 1",
+      "amount": 15,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    },
+    {
+      "id": "expense-2",
+      "symbol": "EXP",
+      "from_account": "ledger2",
+      "description": "Expense 2",
+      "amount": 25,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      }
+    },
+    {
+      "id": "expense-3",
+      "symbol": "EXP",
+      "from_account": "ledger4",
+      "description": "Expense 3",
+      "amount": 25,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      }
+    }
+  ],
+  "swapouts": [
+    {
+      "id": "swapout-1",
+      "symbol": "SW_OUT",
+      "from_account": "account1",
+      "amount": 10,
+      "currency": {
+        "name": "lumens",
+        "symbol": "XLM",
+        "onchain": {
+          "chain": "stellar"
+        }
+      }
+    },
+    {
+      "id": "swapout-2",
+      "symbol": "SW_OUT",
+      "to_account": "account2",
+      "amount": 20,
+      "currency": {
+        "name": "lumens",
+        "symbol": "XLM",
+        "onchain": {
+          "chain": "stellar"
+        }
+      }
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-1",
+      "symbol": "INV",
+      "description": "invoice 1",
+      "amount": 2500,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    },
+    {
+      "id": "inv-2",
+      "symbol": "INV",
+      "description": "invoice 2",
+      "amount": 1500,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    },
+    {
+      "id": "inv-3",
+      "symbol": "INV",
+      "description": "invoice 3",
+      "amount": 3000,
+      "currency": {
+        "fiat": true,
+        "name": "euro",
+        "symbol": "€"
+      }
+    }
+  ],
+  "incomes": [
+    {
+      "id": "inc-1",
+      "symbol": "INC",
+      "to_account": "account5",
+      "description": "rent 1",
+      "amount": 100,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      },
+      "included": true
+    },
+    {
+      "id": "inc-2",
+      "symbol": "INC",
+      "to_account": "account6",
+      "description": "sales 1",
+      "amount": 200,
+      "currency": {
+        "fiat": true,
+        "name": "dollar",
+        "symbol": "$"
+      }
+    }
+  ],
+  "swapins": [
+    {
+      "id": "swapin-1",
+      "symbol": "SW_IN",
+      "to_account": "account3",
+      "amount": 20,
+      "currency": {
+        "name": "USDC",
+        "symbol": "USDC",
+        "onchain": {
+          "chain": "stellar",
+          "token": "USDC",
+          "tokenContractAddress": "USDC-GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+        }
+      }
+    },
+    {
+      "id": "swapin-2",
+      "symbol": "SW_IN",
+      "to_account": "account3",
+      "amount": 25,
+      "currency": {
+        "name": "USDC",
+        "symbol": "USDC",
+        "onchain": {
+          "chain": "stellar",
+          "token": "USDC",
+          "tokenContractAddress": "USDC-GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN"
+        }
+      }
+    }
+  ]
+}

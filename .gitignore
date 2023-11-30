@@ -10,6 +10,7 @@
 deploy/ansible/vault_credentials.yml.enc
 
 # generic .env.production file (one specific to each environment in ansible inventories)
+.env.development
 .env.production
 
 # local configuration files

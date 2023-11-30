@@ -5,7 +5,10 @@ import TransactionSelectSection from "./SelectSection";
 import TransactionListSection from "./TransactionListSection";
 import { NonSetCurrencyProps } from "@/services/transactions";
 import WarningAlert from "./WarningAlert";
-import { useQueryTransactions } from "@/hooks/transactions";
+import {
+  useQueryTransactions,
+  useQueryAccountingTransactions,
+} from "@/hooks/transactions";
 import * as _ from "lodash";
 
 const TransactionsView = (): JSX.Element => {
@@ -13,6 +16,12 @@ const TransactionsView = (): JSX.Element => {
     []
   );
   const { data, isLoading, isError, refetch } = useQueryTransactions();
+  const {
+    data: accountingTrasactions,
+    isLoading: isLoadingAccountingTransactions,
+    isError: isErrorAccountingTransactions,
+    refetch: refreshAccountingTractions,
+  } = useQueryAccountingTransactions();
 
   useEffect(() => {
     if (data && data.transactions && data.non_set_currencies) {
@@ -26,7 +35,7 @@ const TransactionsView = (): JSX.Element => {
     }
   }, [data]);
 
-  if (isLoading) {
+  if (isLoading || isLoadingAccountingTransactions) {
     return (
       <div className="flex justify-center mt-8">
         <Loader />
@@ -34,7 +43,7 @@ const TransactionsView = (): JSX.Element => {
     );
   }
 
-  if (isError) {
+  if (isError || isErrorAccountingTransactions) {
     return <ServerError />;
   }
 
@@ -60,7 +69,9 @@ const TransactionsView = (): JSX.Element => {
           <TransactionSelectSection />
           <TransactionListSection
             transactions={data?.transactions}
-            onRefresh={refetch}
+            onRefreshTransactions={refetch}
+            accountingTransactions={accountingTrasactions}
+            onRefreshAccountingTrasactions={refreshAccountingTractions}
           />
         </div>
       </div>
