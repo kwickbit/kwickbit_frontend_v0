@@ -1,15 +1,29 @@
 /* eslint-disable @next/next/no-img-element */
+import { useQueryIntegrationInformation } from "@/hooks/oauth2-providers/intuit";
+import Loader from "../Loader";
 import PrimaryButton from "../PrimaryButton";
 import useConnectToQuickbook from "@/hooks/useConnectToQuickbook";
-import {apiClient} from "@/lib/api-client";
+import ServerError from "../ServerError";
+import classNames from "classnames";
 
 const IntegrationsView: React.FC = (): React.JSX.Element => {
   const { handleConnectToQuickbook } = useConnectToQuickbook();
 
-  const fetchIntegrationInformation = async (): Promise<void> => {
-    const response = await apiClient.get('/integrations/intuit/get-info-integration');
-    console.log(response);
-  };
+  const { data, isLoading, isError } = useQueryIntegrationInformation();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center mt-8">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <ServerError />;
+  }
+
+  const isConnected = data?.data?.message === "Found intuit integration";
 
   return (
     <div className="max-w-7xl mx-auto overflow-x-auto mt-12 px-4 pb-12">
@@ -27,15 +41,23 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
           </div>
           <div className="flex flex-col justify-between pt-4 h-64">
             <p className="text-base text-neutral-500 font-bold">
-              Connecting a Quickbooks account
+              {isConnected
+                ? "Connected to Quickbooks account"
+                : "Connecting a Quickbooks account"}
             </p>
             <PrimaryButton
-              onClick={handleConnectToQuickbook}
-              className="bg-[#4ADDB6FF] text-[#21254EFF] w-fit py-3 px-1 rounded-xl text-base"
+              onClick={
+                isConnected
+                  ? (): null => null
+                  : (): Promise<void> => handleConnectToQuickbook()
+              }
+              className={classNames(
+                " text-[#21254EFF] w-fit py-3 px-1 rounded-xl text-base",
+                isConnected ? "bg-sky-500 cursor-not-allowed" : "bg-[#4ADDB6FF]"
+              )}
             >
-              Connect
+              {isConnected ? "Settings" : "Connect"}
             </PrimaryButton>
-            <button onClick={fetchIntegrationInformation}>Fetch Integration Information</button>
           </div>
         </div>
       </div>

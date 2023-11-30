@@ -24,3 +24,10 @@ export const fetchRequestState = async (): Promise<any> => {
   const { data } = await apiClient.post("/integrations/intuit/request-state");
   return data;
 };
+
+export const fetchIntegrationInformation = async (): Promise<any> => {
+  const { data } = await apiClient.get(
+    "/integrations/intuit/get-info-integration"
+  );
+  return { data };
+};

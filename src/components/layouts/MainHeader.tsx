@@ -33,7 +33,11 @@ const MainHeader = (): JSX.Element | null => {
     <div className="z-50 my-14 container mx-auto max-w-7xl px-4">
       <div className="border-2 rounded-[20px] border-[#BDC1CA] bg-white relative flex items-center justify-between py-3 px-6">
         <div className="flex-1 flex items-center gap-5 xl:gap-7">
-          <Link href="/" passHref className="flex-shrink-0 flex items-center">
+          <Link
+            href="/transactions"
+            passHref
+            className="flex-shrink-0 flex items-center"
+          >
             <Logo className="w-[158px] h-[24px]" />
           </Link>
           <div className="flex items-center gap-5 xl:gap-7">
