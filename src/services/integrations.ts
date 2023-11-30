@@ -6,11 +6,21 @@ export interface GetOAuth2CallbackResponse {
 }
 
 export interface RequestBodyCallBackIntuit {
-  code: string,
-  state: string,
+  code: string;
+  state: string;
 }
 
-export const oauth2CallbackIntuit = async (requestBodyCallBackIntuit: RequestBodyCallBackIntuit): Promise<GetOAuth2CallbackResponse> => {
-  const { data } = await apiClient.post(`/integrations/intuit/callback`, requestBodyCallBackIntuit);
+export const oauth2CallbackIntuit = async (
+  requestBodyCallBackIntuit: RequestBodyCallBackIntuit
+): Promise<GetOAuth2CallbackResponse> => {
+  const { data } = await apiClient.post(
+    `/integrations/intuit/callback`,
+    requestBodyCallBackIntuit
+  );
+  return data;
+};
+
+export const fetchRequestState = async (): Promise<any> => {
+  const { data } = await apiClient.post("/integrations/intuit/request-state");
   return data;
 };
