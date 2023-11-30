@@ -17,7 +17,7 @@ const useLogout = (): ReturnProps => {
     logout.mutate(undefined, {
       onSuccess: () => {
         toast.success("Logged out successfully");
-        queryClient.invalidateQueries();
+        queryClient.clear();
         router.push("/login");
       },
     });

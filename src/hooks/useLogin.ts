@@ -68,7 +68,7 @@ const useLogin = (): ReturnProps => {
           );
           toast.info(data.message);
         } else if (data.result === "LOGIN_SUCCESSFUL") {
-          router.push("/sources");
+          router.push("/transactions");
           toast.success(data.message);
         } else {
           toast.error("Could not change password. Please try to login again");
