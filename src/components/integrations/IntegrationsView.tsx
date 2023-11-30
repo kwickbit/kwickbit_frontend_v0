@@ -1,9 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import PrimaryButton from "../PrimaryButton";
 import useConnectToQuickbook from "@/hooks/useConnectToQuickbook";
+import {apiClient} from "@/lib/api-client";
 
 const IntegrationsView: React.FC = (): React.JSX.Element => {
-  const { handleConnecToQuickbook } = useConnectToQuickbook();
+  const { handleConnectToQuickbook } = useConnectToQuickbook();
+
+  const fetchIntegrationInformation = async (): Promise<void> => {
+    const response = await apiClient.get('/integrations/intuit/get-info-integration');
+    console.log(response);
+  };
 
   return (
     <div className="max-w-7xl mx-auto overflow-x-auto mt-12 px-4 pb-12">
@@ -24,11 +30,12 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
               Connecting a Quickbooks account
             </p>
             <PrimaryButton
-              onClick={handleConnecToQuickbook}
+              onClick={handleConnectToQuickbook}
               className="bg-[#4ADDB6FF] text-[#21254EFF] w-fit py-3 px-1 rounded-xl text-base"
             >
               Connect
             </PrimaryButton>
+            <button onClick={fetchIntegrationInformation}>Fetch Integration Information</button>
           </div>
         </div>
       </div>
