@@ -2,6 +2,7 @@
   "transactions": [
     {
       "createdAt": "2023-10-15T16:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
       "from": {
         "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
         "type": "wallet",
@@ -13,8 +14,8 @@
         "detail": {
           "type": "token",
           "symbol": "USDC",
-          "amount": 5324,
-          "price": 5324
+          "amount": 2515.00024,
+          "price": 2515.00024
         }
       },
       "type": "out",
@@ -29,6 +30,7 @@
     },
     {
       "createdAt": "2023-10-18T16:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
       "from": {
         "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
         "type": "wallet",
@@ -96,9 +98,9 @@
     }
   ],
   "non_set_currencies": [
-	{
-		"currency": "XLM",
-		"token": "TRT"
-	}
+    {
+      "currency": "XLM",
+      "token": "TRT"
+    }
   ]
 }
