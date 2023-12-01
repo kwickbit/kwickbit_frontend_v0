@@ -1,6 +1,6 @@
 import { useState, useMemo, SyntheticEvent } from "react";
 import Link from "next/link";
-import { TransactionProps } from "@/services/transactions";
+import { AccountingTransactionAPIResult, TransactionProps } from "@/services/transactions";
 import {
   flexRender,
   getCoreRowModel,
@@ -11,42 +11,16 @@ import cn from "classnames";
 import { Info, Refresh, Flow } from "../common/AppIcon";
 import { Tooltip } from "react-tooltip";
 import { YellowWarning } from "../common/AppIcon";
+import { useBoolean } from "@/hooks/useBoolean";
+import EditTransactionModal from "./EditTransactionModal";
+import { getLocaleDateString } from "@/utils/time-utils";
+import { abbreviateAddr } from "@/utils/utils";
 
 interface PageProps {
   transactions: TransactionProps[] | undefined;
-  onRefresh: () => Promise<any>;
-}
-
-function getLocaleDateString(date: Date): string {
-  // Define options for day, month, year, hour, minute, second
-  const dateOptions: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  };
-  const timeOptions: Intl.DateTimeFormatOptions = {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: true,
-  };
-
-  // Create an Intl.DateTimeFormat instance for date and time
-  const dateFormatter = new Intl.DateTimeFormat("en-US", dateOptions);
-  const timeFormatter = new Intl.DateTimeFormat("en-US", timeOptions);
-
-  // Format the date and time parts separately
-  const datePart = dateFormatter.format(date);
-  const timePart = timeFormatter.format(date);
-
-  // Combine and return the formatted string
-  return `${datePart}\n${timePart}`;
-}
-
-function abbreviateAddr(addr: string): string {
-  if (addr.length <= 8) return addr;
-
-  return addr.slice(0, 3) + "..." + addr.slice(-4);
+  onRefreshTransactions: () => Promise<any>;
+  accountingTransactions: AccountingTransactionAPIResult | undefined;
+  onRefreshAccountingTrasactions: () => Promise<any>;
 }
 
 function getMetadataString(
@@ -60,7 +34,6 @@ function getMetadataString(
         <span className="uppercase underline">{metadata[key]}</span>
       </p>
     ));
-    // return str;
   }
 
   return <></>;
@@ -68,9 +41,14 @@ function getMetadataString(
 
 const TransactionListSection = ({
   transactions = [],
-  onRefresh,
+  onRefreshTransactions,
+  accountingTransactions,
+  onRefreshAccountingTrasactions
 }: PageProps): JSX.Element => {
+
   const [selectedItems, setSelectedItems] = useState<(number | string)[]>([]);
+  const editTransaction = useBoolean(false);
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionProps | undefined>();
   const data = useMemo<TransactionProps[]>(
     () =>
       transactions.map((item, idx) => ({
@@ -79,6 +57,8 @@ const TransactionListSection = ({
       })),
     [transactions]
   );
+
+  
 
   const columns: ColumnDef<TransactionProps>[] = [
     {
@@ -127,12 +107,8 @@ const TransactionListSection = ({
     },
     {
       id: "flow",
-      cell: ({ row }): JSX.Element | string => {
-        if (row.original.from.address) {
+      cell: (): JSX.Element => {
           return <Flow />;
-        }
-
-        return "";
       },
       header: "",
     },
@@ -165,28 +141,28 @@ const TransactionListSection = ({
     {
       id: "from_detail",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.from.detail) {
+        if (row.original.type === 'out' ) {
           return (
             <div className="flex flex-col items-center">
               <span className="text-center uppercase inline-block relative">
-                {`${row.original.from.detail.amount.toFixed(2)} ${
-                  row.original.from.detail.symbol
+                {`${row.original.detail.amount.toFixed(2)} ${
+                  row.original.detail.symbol
                 }`}
-                {row.original.from.detail.metadata && (
+                {row.original.detail.metadata && (
                   <>
                     <span
                       data-tooltip-id="info-fulltime"
-                      className="absolute bottom-4 lg:top-0 -right-3 cursor-pointer"
+                      className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
                     >
                       <Info className="w-4 h-4" />
                     </span>
                     <Tooltip id="info-fulltime" place="top" variant="info">
-                      {getMetadataString(row.original.from.detail.metadata)}
+                      {getMetadataString(row.original.detail.metadata)}
                     </Tooltip>
                   </>
                 )}
               </span>
-              <span className="text-center uppercase">{`$${row.original.from.detail.price.toFixed(
+              <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
                 2
               )}`}</span>
             </div>
@@ -199,14 +175,14 @@ const TransactionListSection = ({
     {
       id: "to_detail",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.to.detail) {
+        if (row.original.type === 'income') {
           return (
             <div className="flex flex-col items-center">
               <span className="text-center uppercase inline-block relative">
-                {`${row.original.to.detail.amount.toFixed(2)} ${
-                  row.original.to.detail.symbol
+                {`${row.original.detail.amount.toFixed(2)} ${
+                  row.original.detail.symbol
                 }`}
-                {row.original.to.detail.metadata && (
+                {row.original.detail.metadata && (
                   <>
                     <span
                       data-tooltip-id="info-fulltime"
@@ -215,12 +191,12 @@ const TransactionListSection = ({
                       <Info className="w-4 h-4" />
                     </span>
                     <Tooltip id="info-fulltime" place="top" variant="info">
-                      {getMetadataString(row.original.to.detail.metadata)}
+                      {getMetadataString(row.original.detail.metadata)}
                     </Tooltip>
                   </>
                 )}
               </span>
-              <span className="text-center uppercase">{`$${row.original.to.detail.price.toFixed(
+              <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
                 2
               )}`}</span>
             </div>
@@ -238,12 +214,8 @@ const TransactionListSection = ({
         if (row.original.fee) {
           return (
             <>
-              <p className="uppercase">{`${row.original.fee.amount.toFixed(
-                2
-              )}`}</p>
-              <p className="uppercase">{`$${row.original.fee.price.toFixed(
-                2
-              )}`}</p>
+              <p className="uppercase">{`${row.original.fee.amount}`}</p>
+              <p className="uppercase">{`$${row.original.fee.price}`}</p>
             </>
           );
         }
@@ -296,8 +268,14 @@ const TransactionListSection = ({
     },
     {
       id: "view",
-      cell: (): JSX.Element | string => (
-        <button className="bg-[#39BFF0] rounded-lg px-6 py-2 text-[#21254e] text-base hover:scale-95 w-20">
+      cell: ({row}): JSX.Element | string => (
+        <button 
+          className="bg-[#39BFF0] rounded-lg px-6 py-2 text-[#21254e] text-base hover:scale-95 w-20"
+          onClick={():void => {
+            editTransaction.onTrue();
+            setSelectedTransaction(row.original);
+          }}
+        >
           View
         </button>
       ),
@@ -320,7 +298,8 @@ const TransactionListSection = ({
   const [loading, setLoading] = useState<boolean>(false);
   const onRefreshData = async (): Promise<void> => {
     setLoading(true);
-    await onRefresh();
+    await onRefreshTransactions();
+    await onRefreshAccountingTrasactions();
     setLoading(false);
   };
 
@@ -357,6 +336,11 @@ const TransactionListSection = ({
 
   return (
     <>
+      <EditTransactionModal 
+        editTransaction={editTransaction}
+        transaction={selectedTransaction}
+        accountingTransactions={accountingTransactions}
+      />
       <div className="pt-5 pb-4">
         {table.getHeaderGroups().map((headerGroup) => (
           <div
@@ -382,7 +366,7 @@ const TransactionListSection = ({
           </div>
         ))}
       </div>
-      <div className="space-y-6 mb-2">
+      <div className="space-y-6 mb-7">
         {transactions.length > 0 ? (
           table.getRowModel().rows.map((row) => (
             <div
