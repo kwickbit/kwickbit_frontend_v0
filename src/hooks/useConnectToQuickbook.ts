@@ -1,7 +1,4 @@
-import {
-  useMutationIntegrationsOAuth2CallbackIntuit,
-  useMutationRequestState,
-} from "./oauth2-providers/intuit";
+import { useMutationRequestState } from "./oauth2-providers/intuit";
 import { toast } from "react-toastify";
 
 const clientId = encodeURIComponent(
@@ -17,7 +14,6 @@ interface ReturnProps {
 }
 
 const useConnectToQuickbook = (): ReturnProps => {
-  const OAuth2CallbackIntuit = useMutationIntegrationsOAuth2CallbackIntuit();
   const requestState = useMutationRequestState();
 
   const handleConnecToQuickbook = async (): Promise<void> => {
@@ -42,27 +38,10 @@ const useConnectToQuickbook = (): ReturnProps => {
             }
 
             // Check if the URL has the code parameter
-            const popupUrl = new URL(oauthWindow?.location.href as string);
-            const code = popupUrl.searchParams.get("code");
-            const state = popupUrl.searchParams.get("state");
-            if (code && state) {
+            if (oauthWindow?.location.origin === process.env.NEXT_PUBLIC_FRONTEND_APP_URL) {
               clearInterval(checkInterval);
-              OAuth2CallbackIntuit.mutate(
-                { code, state },
-                {
-                  onSuccess: () => {
-                    toast.success("Quickbook account connected successfully");
-                    oauthWindow?.close();
-                  },
-                  onError: (error) => {
-                    toast.error(
-                      error?.message ??
-                        "There was an error trying to connect your Quickbook account, please try again"
-                    );
-                    oauthWindow?.close();
-                  },
-                }
-              );
+              toast.success("Quickbook account connected successfully");
+              oauthWindow?.close();
             }
           } catch (_) {
             // eslint-disable-next-line no-empty

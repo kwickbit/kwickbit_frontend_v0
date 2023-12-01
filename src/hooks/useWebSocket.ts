@@ -1,5 +1,6 @@
 import { isConnected } from "@/lib/session";
 import useWebSocket, { SendMessage } from "react-use-websocket";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface UserWebSocketReturn {
   sendMessage: SendMessage;
@@ -27,6 +28,13 @@ const onReconnectStop = (numAttempts: number): void => {
   console.error(`Failed to reconnect. Tried ${numAttempts} times`);
 };
 
+const generateWebSocketUrl = (templateUrl: string): string => {
+    const uuid = uuidv4();
+    return templateUrl.replace('UUID_PLACEHOLDER', uuid);
+};
+
+const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
+
 export const useUserWebSocket = (): UserWebSocketReturn => {
   const {
     sendMessage,
@@ -34,7 +42,7 @@ export const useUserWebSocket = (): UserWebSocketReturn => {
     readyState,
     // other returned values and methods
   } = useWebSocket(
-    process.env.NEXT_PUBLIC_WS_APP_URL!,
+      websocketUrl,
     {
       shouldReconnect: () => true,
       onError,
