@@ -1,19 +1,11 @@
-import {
-  fetchIntegrationInformation,
-  fetchRequestState,
-  GetOAuth2CallbackResponse,
-  oauth2CallbackIntuit,
-  RequestBodyCallBackIntuit,
-} from "@/services/integrations";
+import { fetchIntegrationInformation, fetchRequestState } from "@/services/integrations";
 import {
   UseMutationResult,
   UseQueryResult,
   useMutation,
-  useQuery,
-  useQueryClient,
+  useQuery
 } from "@tanstack/react-query";
 
-const key = "integration-info";
 
 export const useQueryIntegrationInformation = (): UseQueryResult<
   any,
@@ -24,21 +16,6 @@ export const useQueryIntegrationInformation = (): UseQueryResult<
     queryFn: fetchIntegrationInformation,
   });
 };
-
-export const useMutationIntegrationsOAuth2CallbackIntuit =
-  (): UseMutationResult<
-    GetOAuth2CallbackResponse,
-    Error,
-    RequestBodyCallBackIntuit
-  > => {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: oauth2CallbackIntuit,
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [key] });
-      },
-    });
-  };
 
 export const useMutationRequestState = (): UseMutationResult<
   any,

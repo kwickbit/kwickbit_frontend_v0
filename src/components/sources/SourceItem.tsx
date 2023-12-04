@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { SourceWallet } from "@/services/sources";
+import Image from "next/image";
 import { ReactNode, SyntheticEvent } from "react";
 import { BiPencil } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
@@ -28,10 +28,12 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
           onChange={(e): void => onSelect(e, walletId)}
           checked={isSelected}
         />
-        <img
+        <Image
           src="/assets/stellar-logo.jpeg"
           alt="stellar"
           className="col-span-1 h-8 object-contain"
+          width={90}
+          height={40}
         />
       </div>
 
