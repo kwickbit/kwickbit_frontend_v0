@@ -33,7 +33,9 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
           alt="stellar"
           className="col-span-1 h-8 object-contain"
           width={90}
-          height={40}
+          height={45}
+          style={{ width: '70%', height: 'auto' }}
+          priority={true}
         />
       </div>
 

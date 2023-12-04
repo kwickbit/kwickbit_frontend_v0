@@ -1,17 +1,22 @@
 import Image from "next/image";
+import React from "react";
 
 interface Props {
   className?: string;
+  width?: number;
+  height?: number,
 }
 
-const Logo = ({ className }: Props): JSX.Element => {
+const Logo = ({ className, width, height }: Props): React.JSX.Element => {
   return (
     <Image
       src="/assets/logo.svg"
       alt="logo"
       className={className}
-      width={300}
-      height={100}
+      width={width}
+      height={height}
+      style={{ width: '100%', height: 'auto' }}
+      priority={true}
     />
   );
 };
