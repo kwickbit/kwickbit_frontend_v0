@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useMutationRequestState } from "./oauth2-providers/intuit";
 import { toast } from "react-toastify";
 
@@ -15,6 +16,8 @@ interface ReturnProps {
 
 const useConnectToQuickbook = (): ReturnProps => {
   const requestState = useMutationRequestState();
+
+  const queryClient = useQueryClient();
 
   const handleConnecToQuickbook = async (): Promise<void> => {
     requestState.mutate(undefined, {
@@ -38,10 +41,14 @@ const useConnectToQuickbook = (): ReturnProps => {
             }
 
             // Check if the URL has the code parameter
-            if (oauthWindow?.location.origin === process.env.NEXT_PUBLIC_FRONTEND_APP_URL) {
+            if (
+              oauthWindow?.location.origin ===
+              process.env.NEXT_PUBLIC_FRONTEND_APP_URL
+            ) {
               clearInterval(checkInterval);
               toast.success("Quickbook account connected successfully");
               oauthWindow?.close();
+              queryClient.invalidateQueries({ queryKey: ["integration-info"] });
             }
           } catch (_) {
             // eslint-disable-next-line no-empty

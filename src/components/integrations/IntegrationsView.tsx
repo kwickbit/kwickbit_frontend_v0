@@ -1,10 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
 import { useQueryIntegrationInformation } from "@/hooks/oauth2-providers/intuit";
 import Loader from "../Loader";
 import PrimaryButton from "../PrimaryButton";
 import useConnectToQuickbook from "@/hooks/useConnectToQuickbook";
 import ServerError from "../ServerError";
 import classNames from "classnames";
+import Image from "next/image";
 
 const IntegrationsView: React.FC = (): React.JSX.Element => {
   const { handleConnectToQuickbook } = useConnectToQuickbook();
@@ -32,7 +32,12 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
         <div className="border rounded-md px-4 pt-2 pb-4 w-fit bg-white">
           <div className="flex items-center gap-4 py-4 pl-4 bg-[#D7F0FBFF]">
             <div>
-              <img src="/assets/quickbook-logo.png" alt="quickbooks" />
+              <Image
+                src="/assets/quickbook-logo.png"
+                alt="quickbooks"
+                width={50}
+                height={50}
+              />
             </div>
             <div>
               <p className="text-base text-neutral-900 font-bold">Quickbooks</p>

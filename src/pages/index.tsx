@@ -1,23 +1,27 @@
-import {FormEvent, ReactNode} from 'react';
-import { apiClient } from '@/lib/api-client';
-import MainLayout from '@/components/layouts/MainLayout';
+import { ReactNode, useEffect } from "react";
+import Head from "next/head";
+import MainLayout from "@/components/layouts/MainLayout";
+import { useRouter } from "next/router";
+import Loader from "@/components/Loader";
 
+const HomePage = (): ReactNode => {
+  const router = useRouter();
 
-const HelloWorldPage = (): ReactNode => {
-    const requestHelloWorld = async (e: FormEvent): Promise<void> => {
-        e.preventDefault();
-        await apiClient.post(process.env.NEXT_PUBLIC_API_APP_URL + '/hello', {name: 'Charles'});
-    };
-
-    return (
-        <div>
-            <form onSubmit={requestHelloWorld}>
-                <br />
-                <button type="submit">Hello World</button>
-            </form>
-        </div>
-    );
+  useEffect(() => {
+    router.push("/transactions");
+  }, [router]);
+  return (
+    <>
+      <Head>
+        <title>Transactions</title>
+      </Head>
+      <div className="flex justify-center mt-12">
+        <Loader />
+      </div>
+    </>
+  );
 };
 
-HelloWorldPage.Layout = MainLayout;
-export default HelloWorldPage;
+HomePage.Layout = MainLayout;
+
+export default HomePage;

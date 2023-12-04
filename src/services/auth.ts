@@ -41,6 +41,8 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_APP_URL,
 });
 
+console.log(process.env.NEXT_PUBLIC_API_APP_URL);
+
 export const fetchLogin = async (
   props: LoginAPIProps
 ): Promise<LoginAPIResponse> => {

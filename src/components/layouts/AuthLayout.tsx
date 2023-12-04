@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { ReactNode } from "react";
 import Logo from "@/components/Logo";
+import Image from "next/image";
 
 interface Props {
   children: ReactNode;
@@ -19,10 +19,12 @@ const AuthLayout = ({ children, title }: Props): ReactNode => {
       </div>
 
       <div className="col-span-5 hidden lg:block">
-        <img
+        <Image
           src="/assets/auth/auth-img.png"
           alt="auth"
           className=" object-cover h-full w-full"
+          width={950}
+          height={1300}
         />
       </div>
     </div>
