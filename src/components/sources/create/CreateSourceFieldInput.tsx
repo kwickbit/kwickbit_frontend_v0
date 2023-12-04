@@ -38,10 +38,10 @@ const CreateSourceFieldInput = ({
           {...register(name)}
           className={classNames(
             "outline-none border border-gray-500 py-3 px-3 w-full",
-            withPasteButton
-              ? "rounded-tr-md rounded-br-md col-span-3"
-              : "rounded-md col-span-5"
+            withPasteButton ? "rounded-tr-md rounded-br-md col-span-3" : "rounded-md col-span-5",
+            withPasteButton ? "bg-gray-200" : "bg-white"
           )}
+          readOnly={withPasteButton}
           {...rest}
         />
       </div>
