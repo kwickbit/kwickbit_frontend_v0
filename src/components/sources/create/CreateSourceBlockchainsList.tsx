@@ -1,6 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 import { ReactNode } from "react";
 import { SourceBlockchain } from "./CreateSourceModal";
+import Image from "next/image";
 
 interface Props {
   sourceBlockchains: SourceBlockchain[];
@@ -19,10 +19,12 @@ const CreateSourceBlockchainLists = ({
           onClick={(): void => onClickBlockchainItem(blockchain.id)}
           className="w-[140px] shadow border rounded-md px-2 py-1 hover:border-[#39bff0] transition-all cursor-pointer"
         >
-          <img
+          <Image
             src={blockchain.image}
             alt={blockchain.name}
             className="h-9 object-contain"
+            width={90}
+            height={40}
           />
           <h3 className="font-semibold text-center">{blockchain.name}</h3>
         </div>

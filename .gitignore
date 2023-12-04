@@ -1,7 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-.env
-
 # ide
 .idea
 .vscode
@@ -10,8 +8,10 @@
 deploy/ansible/vault_credentials.yml.enc
 
 # generic .env.production file (one specific to each environment in ansible inventories)
-.env.development
 .env.production
+
+# secret variables .env file
+.env
 
 # local configuration files
 .actrc
