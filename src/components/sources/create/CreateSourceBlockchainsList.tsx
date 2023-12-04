@@ -25,6 +25,8 @@ const CreateSourceBlockchainLists = ({
             className="h-9 object-contain"
             width={90}
             height={40}
+            style={{ width: '100%', height: 'auto' }}
+            priority={true}
           />
           <h3 className="font-semibold text-center">{blockchain.name}</h3>
         </div>

@@ -38,7 +38,7 @@ const MainHeader = (): JSX.Element | null => {
             passHref
             className="flex-shrink-0 flex items-center"
           >
-            <Logo className="w-[158px] h-[24px]" />
+            <Logo width={158} height={24} className="" />
           </Link>
           <div className="flex items-center gap-5 xl:gap-7">
             {headerList.map((item, idx) => (
