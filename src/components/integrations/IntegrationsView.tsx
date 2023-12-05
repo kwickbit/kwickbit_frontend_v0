@@ -5,13 +5,22 @@ import useConnectToQuickbook from "@/hooks/useConnectToQuickbook";
 import ServerError from "../ServerError";
 import classNames from "classnames";
 import Image from "next/image";
+import { useBoolean } from "@/hooks/useBoolean";
+import IntegrationSettingsModal from "./SettingsModal";
+import { useQueryBlockchainCurrencyMaps } from "@/hooks/integration";
 
 const IntegrationsView: React.FC = (): React.JSX.Element => {
   const { handleConnectToQuickbook } = useConnectToQuickbook();
 
   const { data, isLoading, isError } = useQueryIntegrationInformation();
+  const editIntegrationModal = useBoolean(false);
+  const {
+    data: blockchainCurrenciesData,
+    isLoading: isLoadingBlockchainCurrencies,
+    isError: isErrorBlockchainCurrencies,
+  } = useQueryBlockchainCurrencyMaps();
 
-  if (isLoading) {
+  if (isLoading || isLoadingBlockchainCurrencies) {
     return (
       <div className="flex justify-center mt-8">
         <Loader />
@@ -19,7 +28,7 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
     );
   }
 
-  if (isError) {
+  if (isError || isErrorBlockchainCurrencies) {
     return <ServerError />;
   }
 
@@ -53,12 +62,12 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
             <PrimaryButton
               onClick={
                 isConnected
-                  ? (): null => null
+                  ? (): void => editIntegrationModal.onTrue()
                   : (): Promise<void> => handleConnectToQuickbook()
               }
               className={classNames(
                 " text-[#21254EFF] w-fit py-3 px-1 rounded-xl text-base",
-                isConnected ? "bg-sky-500 cursor-not-allowed" : "bg-[#4ADDB6FF]"
+                isConnected ? "bg-sky-500" : "bg-[#4ADDB6FF]"
               )}
             >
               {isConnected ? "Settings" : "Connect"}
@@ -66,6 +75,11 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
           </div>
         </div>
       </div>
+      <IntegrationSettingsModal
+        editIntegration={editIntegrationModal}
+        currency={blockchainCurrenciesData?.maps[0].currency1}
+        token={blockchainCurrenciesData?.maps[0].currency2}
+      />
     </div>
   );
 };
