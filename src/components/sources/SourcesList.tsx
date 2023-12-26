@@ -17,7 +17,6 @@ const SourcesList = ({
   createSource,
 }: Props): ReactNode => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
   const handleSelectItem = (
     e: SyntheticEvent<HTMLInputElement, Event>,
     id: string
@@ -52,7 +51,7 @@ const SourcesList = ({
         <>
           <SourcesHeader onSelectAll={handleSelectAll} />
           <div className="flex flex-col gap-4 h-full pb-8">
-            {sources.map((source, idx) => (
+            {sources && sources.map((source, idx) => (
               <SourceItem
                 source={source}
                 key={idx}

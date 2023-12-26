@@ -2,11 +2,8 @@ import { apiClient } from "@/lib/api-client";
 
 export interface GetSourcesAPIResponse {
   message: string;
-  data: GetSourcesAPIData;
-}
-
-export interface GetSourcesAPIData {
-  wallets: SourceWallet[];
+  data: SourceWallet[];
+  nextCursor: object,
 }
 
 export interface SourceWallet {
@@ -20,10 +17,12 @@ export interface CreateSourceAPIProps {
   name: string;
   address: string;
   workspaceId: string;
+  chain: string;
 }
 
 export const fetchSources = async (): Promise<GetSourcesAPIResponse> => {
   const { data } = await apiClient.get("/wallets/list");
+  console.log(data);
   return data;
 };
 
