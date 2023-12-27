@@ -1,14 +1,12 @@
-import AuthLayout from "@/components/AuthLayout";
+import { ReactNode } from "react";
+import AuthLayout from "@/components/layouts/AuthLayout";
 import FormProvider from "@/components/FormProvider";
 import PrimaryButton from "@/components/PrimaryButton";
-import React, { ReactNode } from "react";
 import RHFTextField from "@/components/RHFTextField";
-import useChangePassword, {
-  DynamicChangePasswordFormField,
-} from "@/hooks/useChangePassword";
+import useChangePassword from "@/hooks/useChangePassword";
 
 const ChangePasswordView = (): ReactNode => {
-  const { onSubmit, methods, fields, labelDict, placeholderDict } =
+  const { onSubmit, methods, labelDict, placeholderDict, addedKeys } =
     useChangePassword();
 
   return (
@@ -26,22 +24,12 @@ const ChangePasswordView = (): ReactNode => {
           required
         />
 
-        {fields.map((item) => (
+        {addedKeys?.map((key, idx) => (
           <RHFTextField
-            key={item.id}
-            name={(item as DynamicChangePasswordFormField)?.name}
-            label={
-              labelDict[
-                (item as DynamicChangePasswordFormField)
-                  ?.name as keyof typeof labelDict
-              ]
-            }
-            placeholder={
-              placeholderDict[
-                (item as DynamicChangePasswordFormField)
-                  ?.name as keyof typeof placeholderDict
-              ]
-            }
+            key={idx}
+            name={key}
+            label={labelDict[key as keyof typeof labelDict]}
+            placeholder={placeholderDict[key as keyof typeof placeholderDict]}
             required
           />
         ))}

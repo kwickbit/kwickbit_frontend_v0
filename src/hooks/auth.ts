@@ -7,6 +7,7 @@ import {
   fetchChangePassword,
   fetchConfirmCode,
   fetchLogin,
+  fetchLogout,
   fetchResendCode,
   fetchSignup,
 } from "@/services/auth";
@@ -59,3 +60,11 @@ export const useMutationChangePassword = (): UseMutationResult<
   return useMutation({ mutationFn: fetchChangePassword });
 };
 
+export const useMutationLogout = (): UseMutationResult<
+  any,
+  Error,
+  void,
+  unknown
+> => {
+  return useMutation({ mutationFn: fetchLogout });
+};

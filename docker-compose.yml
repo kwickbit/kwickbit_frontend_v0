@@ -10,6 +10,8 @@ services:
       - kwickbit-network
     ports:
       - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_QUICKBOOK_CLIENT_ID=${NEXT_PUBLIC_API_QUICKBOOK_CLIENT_ID}
     volumes:
       - .:/app
       - /app/node_modules

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import ConfirmCodeView from "@/components/ConfirmCodeView";
+import ConfirmCodeView from "@/components/auth/ConfirmCodeView";
 import Head from "next/head";
 
 const ConfirmCodePage = (): ReactNode => {

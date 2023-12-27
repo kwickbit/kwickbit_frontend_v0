@@ -1,0 +1,199 @@
+{
+  "transactions": [
+    {
+      "createdAt": "2023-10-15T16:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+      "from": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet"
+      },
+      "to": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract"
+      },
+      "detail": {
+        "type": "token",
+        "symbol": "USDC",
+        "amount": 2515,
+        "price": 2515
+      },
+      "type": "out",
+      "chain": "stella",
+      "published": false,
+      "publishedAt": null,
+      "labels": ["Payment", "Expense"],
+      "fee": {
+        "amount": 0.002,
+        "price": 3.5
+      },
+      "collection": [
+        {
+          "id": "bill-1",
+          "symbol": "BILL",
+          "from_account": "account1",
+          "description": "Bill 1",
+          "amount": 2500,
+          "currency": {
+            "fiat": true,
+            "name": "dollar",
+            "symbol": "$"
+          }
+        },
+        {
+          "id": "expense-1",
+          "symbol": "EXP",
+          "from_account": "ledger1",
+          "description": "Expense 1",
+          "amount": 15,
+          "currency": {
+            "fiat": true,
+            "name": "dollar",
+            "symbol": "$"
+          }
+        }
+      ]
+    },
+    {
+      "createdAt": "2023-10-18T16:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+      "from": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract"
+      },
+      "to": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet"
+      },
+      "detail": {
+        "type": "token",
+        "symbol": "USDC",
+        "amount": 2615,
+        "price": 2615
+      },
+      "type": "income",
+      "chain": "stella",
+      "published": true,
+      "publishedAt": "2023-10-18T17:12:19Z",
+      "labels": ["Income", "Conversion"],
+      "fee": {
+        "amount": 0.012,
+        "price": 15.5
+      },
+      "collection": [
+        {
+          "id": "inv-1",
+          "symbol": "INV",
+          "description": "invoice 1",
+          "amount": 2500,
+          "currency": {
+            "fiat": true,
+            "name": "dollar",
+            "symbol": "$"
+          }
+        },
+        {
+          "id": "inc-1",
+          "symbol": "INC",
+          "to_account": "account5",
+          "description": "rent",
+          "amount": 100,
+          "currency": {
+            "fiat": true,
+            "name": "dollar",
+            "symbol": "$"
+          }
+        }
+      ]
+    },
+    {
+      "createdAt": "2023-10-18T18:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+      "from": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract"
+      },
+      "to": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet"
+      },
+      "detail": {
+        "type": "token",
+        "symbol": "USDC",
+        "amount": 1500,
+        "price": 1500
+      },
+      "type": "income",
+      "chain": "stella",
+      "published": false,
+      "publishedAt": null,
+      "labels": ["Income", "Conversion"],
+      "fee": {
+        "amount": 0.012,
+        "price": 15.5
+      },
+      "collection": [
+        {
+          "id": "inv-2",
+          "symbol": "INV",
+          "description": "invoice 2",
+          "amount": 1500,
+          "currency": {
+            "fiat": true,
+            "name": "dollar",
+            "symbol": "$"
+          }
+        }
+      ]
+    },
+    {
+      "createdAt": "2023-10-25T17:12:19Z",
+      "hash": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+      "from": {
+        "address": "0x6fC7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "wallet"
+      },
+      "to": {
+        "address": "0x71C7656EC7ab88b098defB751B7401B5f6d8976F",
+        "type": "smart contract"
+      },
+      "detail": {
+        "type": "token",
+        "symbol": "TRT",
+        "amount": 3515.5,
+        "price": 75,
+        "metadata": {
+          "Stella token address": "R45FEEFFFDVC"
+        }
+      },
+      "type": "out",
+      "chain": "stella",
+      "published": false,
+      "publishedAt": null,
+      "labels": ["Out", "Conversion"],
+      "fee": {
+        "amount": 0.012,
+        "price": 15.5
+      },
+      "collection": [
+        {
+          "id": "bill-4",
+          "symbol": "BILL",
+          "from_account": "account4",
+          "description": "Bill 4",
+          "amount": 3500,
+          "currency": {
+            "fiat": true,
+            "name": "euro",
+            "symbol": "€"
+          }
+        }
+      ]
+    }
+  ],
+  "non_set_currencies": [
+    {
+      "currency": "XLM",
+      "token": "TRT"
+    }
+  ]
+}

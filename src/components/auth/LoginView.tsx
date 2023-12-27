@@ -4,7 +4,7 @@ import FormProvider from "@/components/FormProvider";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
 import useLogin from "@/hooks/useLogin";
-import AuthLayout from "./AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 
 const LoginView = (): ReactNode => {
   const { methods, onSubmit, login } = useLogin();
@@ -34,7 +34,11 @@ const LoginView = (): ReactNode => {
           </Link>
         </p>
         <div className="flex justify-end w-full mt-2">
-          <PrimaryButton type="submit" isLoading={login.isPending}>
+          <PrimaryButton
+            className="w-[200px]"
+            type="submit"
+            isLoading={login.isPending}
+          >
             Login
           </PrimaryButton>
         </div>

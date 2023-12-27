@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import AuthLayout from "./AuthLayout";
+import AuthLayout from "../layouts/AuthLayout";
 import FormProvider from "@/components/FormProvider";
 import Link from "next/link";
 import PrimaryButton from "@/components/PrimaryButton";
@@ -43,8 +43,12 @@ const SignupView = (): ReactNode => {
           </Link>
         </p>
         <div className="flex justify-end w-full mt-2">
-          <PrimaryButton type="submit" isLoading={signup.isPending}>
-            Singup
+          <PrimaryButton
+            className="w-[200px]"
+            type="submit"
+            isLoading={signup.isPending}
+          >
+            Signup
           </PrimaryButton>
         </div>
       </FormProvider>

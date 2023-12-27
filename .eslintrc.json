@@ -13,7 +13,8 @@
   },
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "error",
-    "@typescript-eslint/no-explicit-any": "warn"
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@next/next/no-img-element": "error"
   },
   "parserOptions": {
     "ecmaVersion": 2020,

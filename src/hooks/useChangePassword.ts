@@ -1,18 +1,8 @@
-import { useRouter } from "next/router";
-import { BaseSyntheticEvent, useEffect, useMemo } from "react";
+import { BaseSyntheticEvent, useEffect, useMemo, useState } from "react";
+import { UseFormReturn, useForm } from "react-hook-form";
 import { useMutationChangePassword } from "./auth";
-import {
-  FieldValues,
-  UseFormReturn,
-  useFieldArray,
-  useForm,
-} from "react-hook-form";
-
-export interface DynamicChangePasswordFormField {
-  [key: string]: string;
-  name: string;
-  id: string;
-}
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const toCamelCase = (str: string): string => {
   return str
@@ -28,12 +18,23 @@ interface ReturnProps {
   onSubmit: (
     e?: BaseSyntheticEvent<object, any, any> | undefined
   ) => Promise<void>;
-  methods: UseFormReturn<FieldValues, any, undefined>;
-  fields: Record<"id", string>[];
+  methods: UseFormReturn<
+    {
+      newPassword: string;
+      email: string;
+      givenName: string;
+      familyName: string;
+      preferredUsername: string;
+      address: string;
+    },
+    any,
+    undefined
+  >;
   labelDict: { [key in keyof typeof labelDict]: string };
   placeholderDict: {
     [key in keyof typeof placeholderDict]: string;
   };
+  addedKeys: string[];
 }
 
 const labelDict = {
@@ -65,14 +66,20 @@ const useChangePassword = (): ReturnProps => {
 
   const changePassword = useMutationChangePassword();
 
-  const methods = useForm({});
-
-  const { control, handleSubmit } = methods;
-
-  const { fields, append } = useFieldArray({
-    control,
-    name: "requiredAttributesFields",
+  const methods = useForm({
+    defaultValues: {
+      newPassword: "",
+      email: "",
+      givenName: "",
+      familyName: "",
+      preferredUsername: "",
+      address: "",
+    },
   });
+
+  const { handleSubmit } = methods;
+
+  const [addedKeys, setAddedKeys] = useState<string[]>([]);
 
   useEffect(() => {
     if (requiredAttributes.length > 0) {
@@ -80,43 +87,42 @@ const useChangePassword = (): ReturnProps => {
         .map((attr) => attr.replace("userAttributes.", ""))
         .forEach((attr) => {
           const key = toCamelCase(attr);
-
-          if (
-            fields.find(
-              (item) => (item as DynamicChangePasswordFormField)?.[key] === ""
-            )
-          )
-            return;
-
-          append({ [key]: "", name: key });
+          if (addedKeys.includes(key)) return;
+          setAddedKeys((prev) => [...prev, key]);
         });
     }
-  }, [requiredAttributes, append, fields]);
+  }, [requiredAttributes, addedKeys]);
 
   const onSubmit = handleSubmit((data) => {
+    const userAttributes: { [key: string]: string } = {};
+
+    addedKeys.forEach((key) => {
+      userAttributes[key] = data[key as keyof typeof data];
+    });
+
     const args = {
       username,
       newPassword: data.newPassword,
-      userAttributes: fields.reduce((acc, item) => {
-        const itemField = item as DynamicChangePasswordFormField;
-        return {
-          ...acc,
-          [itemField.name]: itemField[itemField.name],
-        };
-      }, {}),
+      userAttributes,
     };
 
     changePassword.mutate(args, {
       onSuccess: () => {
         router.push("/");
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
+        toast.error("Something went wrong, please try again.");
       },
     });
   });
 
-  return { onSubmit, methods, fields, labelDict, placeholderDict };
+  return {
+    onSubmit,
+    methods,
+    labelDict,
+    placeholderDict,
+    addedKeys,
+  };
 };
 
 export default useChangePassword;

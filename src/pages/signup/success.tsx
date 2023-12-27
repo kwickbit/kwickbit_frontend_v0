@@ -1,6 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { ReactNode } from "react";
-import SignupSuccessView from "@/components/SignupSuccessView";
+import SignupSuccessView from "@/components/auth/SignupSuccessView";
 import Head from "next/head";
 
 const SuccessSignupPage = (): ReactNode => {

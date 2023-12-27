@@ -7,7 +7,3 @@
   command: "npm run build"
   args:
     chdir: "{{ project_root_path }}"
-- name: Export project files
-  command: "npm run export"
-  args:
-    chdir: "{{ project_root_path }}"
