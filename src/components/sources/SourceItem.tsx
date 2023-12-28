@@ -34,12 +34,13 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
   };
 
   const getTransactions = async (): Promise<void> => {
-      const request = await apiClient.get(`/transactions/stellar/${address}`);
+      const request = await apiClient.post(`/transactions/stellar/${address}`);
       console.log(request.data);
 
       if (request.data.nextCursor) {
-          const nextCursor = encodeURIComponent(JSON.stringify(request.data.nextCursor));
-          const request2 = await apiClient.get(`/transactions/stellar/${address}?cursor=${nextCursor}`);
+          const request2 = await apiClient.post(`/transactions/stellar/${address}`, {
+              cursor: request.data.nextCursor
+          });
           console.log(request2.data);
       }
   };

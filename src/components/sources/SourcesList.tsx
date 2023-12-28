@@ -4,6 +4,9 @@ import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import CreateSourceButton from "./create/CreateSourceButton";
 import SourceItem from "./SourceItem";
 import SourcesHeader from "./SourcesHeader";
+import {v4 as uuidv4} from "uuid";
+import {apiClient} from "@/lib/api-client";
+import {RxTriangleDown, RxUpdate} from "react-icons/rx";
 
 interface Props {
   className: string;
@@ -38,6 +41,22 @@ const SourcesList = ({
     }
   };
 
+  const updateTransactions = async (): Promise<void> => {
+    console.log('Fetch all transactions not implemented yet');
+  };
+
+  const getTransactions = async (): Promise<void> => {
+    const request = await apiClient.post('/transactions');
+    console.log(request.data);
+
+    if (request.data.nextCursors) {
+      const request2 = await apiClient.post('/transactions', {
+        cursors: request.data.nextCursors
+      });
+      console.log(request2.data);
+    }
+  };
+
   return (
     <div className={className}>
       {sources.length === 0 ? (
@@ -49,6 +68,8 @@ const SourcesList = ({
         </div>
       ) : (
         <>
+          <RxUpdate className="w-6 h-6 cursor-pointer text-neutral-900" onClick={updateTransactions} />
+          <RxTriangleDown className="w-6 h-6 cursor-pointer text-neutral-900" onClick={getTransactions} />
           <SourcesHeader onSelectAll={handleSelectAll} />
           <div className="flex flex-col gap-4 h-full pb-8">
             {sources && sources.map((source, idx) => (
