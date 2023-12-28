@@ -1,6 +1,9 @@
 import { useState, useMemo, SyntheticEvent } from "react";
 import Link from "next/link";
-import { AccountingTransactionAPIResult, TransactionProps } from "@/services/transactions";
+import {
+  AccountingTransactionAPIResult,
+  TransactionProps,
+} from "@/services/transactions";
 import {
   flexRender,
   getCoreRowModel,
@@ -43,12 +46,13 @@ const TransactionListSection = ({
   transactions = [],
   onRefreshTransactions,
   accountingTransactions,
-  onRefreshAccountingTrasactions
+  onRefreshAccountingTrasactions,
 }: PageProps): JSX.Element => {
-
   const [selectedItems, setSelectedItems] = useState<(number | string)[]>([]);
   const editTransaction = useBoolean(false);
-  const [selectedTransaction, setSelectedTransaction] = useState<TransactionProps | undefined>();
+  const [selectedTransaction, setSelectedTransaction] = useState<
+    TransactionProps | undefined
+  >();
   const data = useMemo<TransactionProps[]>(
     () =>
       transactions.map((item, idx) => ({
@@ -58,8 +62,6 @@ const TransactionListSection = ({
     [transactions]
   );
 
-  
-
   const columns: ColumnDef<TransactionProps>[] = [
     {
       id: "identifier",
@@ -67,8 +69,12 @@ const TransactionListSection = ({
         <input
           className="checkbox-round"
           type="checkbox"
-          onChange={(e): void => handleSelectItem(e, row.original.id)}
-          checked={selectedItems.includes(row.original.id || 0)}
+          onChange={(e): void =>
+            handleSelectItem(e, row.original.id)
+          }
+          checked={selectedItems.includes(
+            row.original.atomicTransactionId || 0
+          )}
         />
       ),
       header: (): JSX.Element | string => (
@@ -92,11 +98,11 @@ const TransactionListSection = ({
     {
       id: "from_address",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.from.address) {
+        if (row.original.from) {
           return (
             <>
-              <span className="capitalize">{row.original.from.type}</span>
-              {abbreviateAddr(row.original.from.address)}
+              <span className="capitalize">wallet</span>
+              {abbreviateAddr(row.original.from)}
             </>
           );
         }
@@ -108,20 +114,18 @@ const TransactionListSection = ({
     {
       id: "flow",
       cell: (): JSX.Element => {
-          return <Flow />;
+        return <Flow />;
       },
       header: "",
     },
     {
       id: "to_address",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.to.address) {
+        if (row.original.to) {
           return (
             <>
-              <span className="capitalize inline-box relative">
-                {row.original.to.type}
-              </span>
-              {abbreviateAddr(row.original.to.address)}
+              <span className="capitalize inline-box relative">wallet</span>
+              {abbreviateAddr(row.original.to)}
             </>
           );
         }
@@ -134,38 +138,42 @@ const TransactionListSection = ({
       id: "type",
       accessorKey: "type",
       cell: ({ row }): JSX.Element | string => (
-        <span className="capitalize">{row.original.type}</span>
+        <span className="capitalize">{row.original.direction}</span>
       ),
       header: "",
     },
     {
       id: "from_detail",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.type === 'out' ) {
+        if (row.original.direction === "Outgoing") {
           return (
-            <div className="flex flex-col items-center">
-              <span className="text-center uppercase inline-block relative">
-                {`${row.original.detail.amount.toFixed(2)} ${
-                  row.original.detail.symbol
-                }`}
-                {row.original.detail.metadata && (
-                  <>
-                    <span
-                      data-tooltip-id="info-fulltime"
-                      className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
-                    >
-                      <Info className="w-4 h-4" />
-                    </span>
-                    <Tooltip id="info-fulltime" place="top" variant="info">
-                      {getMetadataString(row.original.detail.metadata)}
-                    </Tooltip>
-                  </>
-                )}
-              </span>
-              <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
-                2
-              )}`}</span>
-            </div>
+            <>
+              {row.original.detail && (
+                <div className="flex flex-col items-center">
+                  <span className="text-center uppercase inline-block relative">
+                    {`${row.original.detail.amount.toFixed(2)} ${
+                      row.original.detail.symbol
+                    }`}
+                    {row.original.detail.metadata && (
+                      <>
+                        <span
+                          data-tooltip-id="info-fulltime"
+                          className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
+                        >
+                          <Info className="w-4 h-4" />
+                        </span>
+                        <Tooltip id="info-fulltime" place="top" variant="info">
+                          {getMetadataString(row.original.detail.metadata)}
+                        </Tooltip>
+                      </>
+                    )}
+                  </span>
+                  <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
+                    2
+                  )}`}</span>
+                </div>
+              )}
+            </>
           );
         }
         return "";
@@ -175,31 +183,35 @@ const TransactionListSection = ({
     {
       id: "to_detail",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.type === 'income') {
+        if (row.original.direction === "Incoming") {
           return (
-            <div className="flex flex-col items-center">
-              <span className="text-center uppercase inline-block relative">
-                {`${row.original.detail.amount.toFixed(2)} ${
-                  row.original.detail.symbol
-                }`}
-                {row.original.detail.metadata && (
-                  <>
-                    <span
-                      data-tooltip-id="info-fulltime"
-                      className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
-                    >
-                      <Info className="w-4 h-4" />
-                    </span>
-                    <Tooltip id="info-fulltime" place="top" variant="info">
-                      {getMetadataString(row.original.detail.metadata)}
-                    </Tooltip>
-                  </>
-                )}
-              </span>
-              <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
-                2
-              )}`}</span>
-            </div>
+            <>
+              {row.original.detail && (
+                <div className="flex flex-col items-center">
+                  <span className="text-center uppercase inline-block relative">
+                    {`${row.original.detail.amount.toFixed(2)} ${
+                      row.original.detail.symbol
+                    }`}
+                    {row.original.detail.metadata && (
+                      <>
+                        <span
+                          data-tooltip-id="info-fulltime"
+                          className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
+                        >
+                          <Info className="w-4 h-4" />
+                        </span>
+                        <Tooltip id="info-fulltime" place="top" variant="info">
+                          {getMetadataString(row.original.detail.metadata)}
+                        </Tooltip>
+                      </>
+                    )}
+                  </span>
+                  <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
+                    2
+                  )}`}</span>
+                </div>
+              )}
+            </>
           );
         }
 
@@ -233,7 +245,7 @@ const TransactionListSection = ({
       id: "published",
       accessorKey: "published",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.published) {
+        if (row.original.status !== "NonPublished") {
           return (
             <div className="flex gap-1 items-center">
               <span className="text-[#4ADDB6] text-sm">Published</span>
@@ -268,10 +280,10 @@ const TransactionListSection = ({
     },
     {
       id: "view",
-      cell: ({row}): JSX.Element | string => (
-        <button 
+      cell: ({ row }): JSX.Element | string => (
+        <button
           className="bg-[#39BFF0] rounded-lg px-6 py-2 text-[#21254e] text-base hover:scale-95 w-20"
-          onClick={():void => {
+          onClick={(): void => {
             editTransaction.onTrue();
             setSelectedTransaction(row.original);
           }}
@@ -318,7 +330,7 @@ const TransactionListSection = ({
     e: SyntheticEvent<HTMLInputElement, Event>
   ): void => {
     if (e.currentTarget.checked) {
-      setSelectedItems(data.map((t) => t.id || 0));
+      setSelectedItems(data.map((t) => t.atomicTransactionId || 0));
     } else {
       setSelectedItems([]);
     }
@@ -328,7 +340,7 @@ const TransactionListSection = ({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => row.createdAt, //good to have guaranteed unique row ids/keys for rendering
+    getRowId: (row) => `${row.createdAt}-${row.id}`, //good to have guaranteed unique row ids/keys for rendering
     debugTable: true,
     debugHeaders: true,
     debugColumns: true,
@@ -336,11 +348,13 @@ const TransactionListSection = ({
 
   return (
     <>
-      <EditTransactionModal 
-        editTransaction={editTransaction}
-        transaction={selectedTransaction}
-        accountingTransactions={accountingTransactions}
-      />
+      {selectedTransaction?.detail && (
+        <EditTransactionModal
+          editTransaction={editTransaction}
+          transaction={selectedTransaction}
+          accountingTransactions={accountingTransactions}
+        />
+      )}
       <div className="pt-5 pb-4">
         {table.getHeaderGroups().map((headerGroup) => (
           <div
@@ -350,7 +364,6 @@ const TransactionListSection = ({
             {headerGroup.headers.map((header) => (
               <div
                 key={header.id}
-                // colSpan={header.colSpan}
                 className={cn(
                   "text-[#21254E] text-base font-normal pr-2 flex justify-center items-center"
                 )}

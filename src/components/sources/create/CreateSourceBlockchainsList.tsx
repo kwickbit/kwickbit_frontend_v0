@@ -16,7 +16,7 @@ const CreateSourceBlockchainLists = ({
       {sourceBlockchains?.map((blockchain) => (
         <div
           key={blockchain.name}
-          onClick={(): void => onClickBlockchainItem(blockchain.id)}
+          onClick={(): void => onClickBlockchainItem(blockchain.chain)}
           className="w-[140px] shadow border rounded-md px-2 py-1 hover:border-[#39bff0] transition-all cursor-pointer"
         >
           <Image

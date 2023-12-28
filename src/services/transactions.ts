@@ -1,3 +1,6 @@
+import { apiClient } from "@/lib/api-client";
+import { v4 as uuidv4 } from "uuid";
+
 export interface Currency {
   fiat?: boolean;
   name: string;
@@ -6,69 +9,69 @@ export interface Currency {
     chain: string;
     token?: string;
     tokenContractAddress: string;
-  }
+  };
 }
 
 export interface AccountTransactionBase {
   id: string;
-  description: string,
-  amount: number
+  description: string;
+  amount: number;
   currency: Currency;
   included?: boolean;
 }
 
-export type OutgoingTransactionTypes = 'BILL' | 'EXP' | 'SW_OUT';
-export type IncomingTransactionTypes = 'INV' | 'INC' | 'SW_IN';
+export type OutgoingTransactionTypes = "BILL" | "EXP" | "SW_OUT";
+export type IncomingTransactionTypes = "INV" | "INC" | "SW_IN";
 
 export interface AccountTransaction {
   id: string;
   symbol: OutgoingTransactionTypes | IncomingTransactionTypes;
-  description: string,
-  amount: number
+  description: string;
+  amount: number;
   currency: Currency;
   included?: boolean;
   from_account?: string; // Only for outgoing
-  to_account?: string;   // Only for incoming,
+  to_account?: string; // Only for incoming,
   mainCurrency?: {
-    name: string,
+    name: string;
     amount: number;
-  }
+  };
 }
 
 export interface TypeOption {
   title: OutgoingTransactionTypes | IncomingTransactionTypes;
-  value: 'bills' | 'expenses' | 'swapouts' | 'invoices' | 'incomes' | 'swapins';  
+  value: "bills" | "expenses" | "swapouts" | "invoices" | "incomes" | "swapins";
 }
 
 export const outgoingTypeOptions: TypeOption[] = [
   {
-      title: "BILL",  // Same as symbole
-      value: "bills"  // Same as a key of accounting-transactions
+    title: "BILL", // Same as symbole
+    value: "bills", // Same as a key of accounting-transactions
   },
   {
     title: "EXP",
-    value: "expenses"
+    value: "expenses",
   },
   {
     title: "SW_OUT",
-    value: "swapouts"
-  }
+    value: "swapouts",
+  },
 ];
 
 export const incomingTypeOptions: TypeOption[] = [
   {
-      title: "INV",
-      value: "invoices"
+    title: "INV",
+    value: "invoices",
   },
   {
     title: "INC",
-    value: "incomes"
+    value: "incomes",
   },
   {
     title: "SW_IN",
-    value: "swapins"
-  }
-]
+    value: "swapins",
+  },
+];
 
 export interface TransUser {
   address: string;
@@ -76,12 +79,24 @@ export interface TransUser {
 }
 
 export interface TransactionProps {
-  id?: number | string;
+  chain: string;
+  hash?: string;
+  atomicTransactionId: string;
+  workspaceIdChainAddress: string;
+  type: "OnChain" | "OffChain";
+  assetMetadata?: {
+    code: string;
+    issuer: string;
+  };
+  labels: string[];
   createdAt: string;
-  hash: string;
-  from: TransUser;
-  to: TransUser;
-  detail: {
+  from: string;
+  to: string;
+  asset: string;
+  status: "NonPublished" | "Published";
+  direction: "Incoming" | "Outgoing";
+  workspaceId: string;
+  detail?: {
     type: "currency" | "token";
     symbol: string;
     amount: number;
@@ -90,25 +105,23 @@ export interface TransactionProps {
       [key: string]: string;
     };
   };
-  type: "out" | "income";
-  chain: string;
-  published: boolean;
-  publishedAt: string | null;
-  labels: string[];
-  fee: {
+  fee?: {
     amount: number;
     price: number;
     mainCurrency?: {
-      name: string,
+      name: string;
       amount: number;
-    }
+    };
   };
+  collection?: AccountTransaction[];
   currencyMapping?: {
     currency: string | null;
     token: string | null;
     nonSetMapping: boolean;
   };
-  collection: AccountTransaction[]
+  groupId?: number;
+  resultId?: number;
+  id?: number;
 }
 
 export interface NonSetCurrencyProps {
@@ -117,28 +130,188 @@ export interface NonSetCurrencyProps {
 }
 
 export interface TransactionAPIResult {
-  transactions: TransactionProps[];
+  data: TransactionProps[];
+  message: string;
+  nextCursors?: any;
+  nextCursor?: any;
   non_set_currencies?: NonSetCurrencyProps[];
 }
 
-export const fetchTransactions = async (): Promise<TransactionAPIResult> => {
-  const ret = await fetch("/data/transactions1.json");
-  if (!ret.ok) {
-    throw new Error(ret.statusText);
-  }
-  const data: TransactionAPIResult = await ret.json();
-  if (data.transactions) {
-    const transactions = data.transactions.map((transaction) => {
-      const detail = transaction.detail;
+interface GetTrasactionsSetting {
+  cursors?: any;
+  dateTimeMin?: any;
+  dateTimeMax?: any;
+}
 
-      let currency: string | null = 'XLM';
+/**
+ * Trigger an action for fetching transactions from blockchain and then save them onto the database
+ */
+export const fetchAllTransactions = async (
+  deduplicationId: string
+): Promise<boolean> => {
+  const payload = {
+    deduplicationId,
+  };
+
+  try {
+    await apiClient.post("/fetch-transactions", payload);
+  } catch (err) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Trigger an action for fetching transactions from blockchain and then save them onto the database
+ */
+export const fetchWalletTransactions = async (
+  chain: string,
+  address: string,
+  walletId: string,
+  deduplicationId: string
+): Promise<boolean> => {
+  const payload = {
+    address,
+    chain,
+    walletId,
+    deduplicationId
+  };
+
+  try {
+    await apiClient.post(`/fetch-transactions/${walletId}`, payload);
+  } catch (err) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ * Get transactions from the database
+ */
+export const getTransactions = async ({
+  chain,
+  address,
+  nextCursor,
+  dateTimeMin,
+  dateTimeMax,
+}: {
+  chain?: string;
+  address?: string;
+  nextCursor?: any;
+  dateTimeMin?: any;
+  dateTimeMax?: any;
+}): Promise<TransactionAPIResult> => {
+  const setting: GetTrasactionsSetting = {};
+  if (nextCursor) {
+    setting.cursors = nextCursor;
+  } else {
+    if (dateTimeMin) {
+      setting.dateTimeMin = dateTimeMin;
+    }
+    if (dateTimeMax) {
+      setting.dateTimeMax = dateTimeMax;
+    }
+  }
+
+  let url = "/transactions";
+  if (chain && address) {
+    url += `/${chain}/${address}`;
+  }
+  const { data } = await apiClient.post<TransactionAPIResult>(url, setting);
+
+  if (data.nextCursor) {
+    data.nextCursors = data.nextCursor;
+    delete data.nextCursor;
+  }
+
+  if (data.nextCursors && Object.keys(data.nextCursors).length === 0) {
+    data.nextCursors = null;
+  }
+  if (data.data) {
+    const transactions = data.data.map((transaction) => {
+      const currency: string | null = "XLM";
       let token: string | null = null;
 
-      if (detail.type === "currency") {
-        currency = detail.symbol;
+      if (transaction.asset === "native") {
+        transaction.detail = {
+          type: "currency",
+          symbol: "XLM",
+          amount: 1000, // fake data
+          price: 110, // fake data
+        };
+      } else {
+        transaction.detail = {
+          type: "token",
+          symbol: transaction.asset,
+          amount: 1000, // fake
+          price: 1000, // fake
+        };
+
+        token = transaction.asset;
       }
-      else if( detail.type === 'token' ) {
-        token = detail.symbol;
+
+      if (!transaction.fee) {
+        transaction.fee = {
+          amount: 0.012,
+          price: 15.5,
+        };
+      }
+
+      if (!transaction.collection) {
+        if (transaction.direction === "Outgoing") {
+          transaction.collection = [
+            {
+              id: "bill-1",
+              symbol: "BILL",
+              from_account: "account1",
+              description: "Bill 1",
+              amount: 2500,
+              currency: {
+                fiat: true,
+                name: "dollar",
+                symbol: "$",
+              },
+            },
+            {
+              id: "expense-1",
+              symbol: "EXP",
+              from_account: "ledger1",
+              description: "Expense 1",
+              amount: 15,
+              currency: {
+                fiat: true,
+                name: "dollar",
+                symbol: "$",
+              },
+            },
+          ];
+        } else {
+          transaction.collection = [
+            {
+              id: "inv-1",
+              symbol: "INV",
+              description: "invoice 1",
+              amount: 2500,
+              currency: {
+                fiat: true,
+                name: "dollar",
+                symbol: "$",
+              },
+            },
+            {
+              id: "inc-1",
+              symbol: "INC",
+              to_account: "account5",
+              description: "rent",
+              amount: 100,
+              currency: {
+                fiat: true,
+                name: "dollar",
+                symbol: "$",
+              },
+            },
+          ];
+        }
       }
 
       let nonSetMapping = false;
@@ -159,28 +332,72 @@ export const fetchTransactions = async (): Promise<TransactionAPIResult> => {
 
     return {
       ...data,
-      transactions,
+      data: transactions,
     };
   }
   return data;
 };
 
+export const fetchInvoices = async (): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    const ret = await apiClient.post("/fetch-invoices", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+    });
+    console.log("fetchInvoices ret =>", ret.data);
+  } catch (error) {
+    console.log("fetchInvoices error =>", error);
+    return false;
+  }
+  return true;
+};
+
+export const getInvoices = async (): Promise<void> => {
+  const request = await apiClient.post("/integrations/intuit/get-invoices", {
+    integrationProvider: "QuickBooks",
+  });
+  console.log("getInvoices =>", request.data);
+};
+
+export const fetchBills = async (): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    const ret = await apiClient.post("/fetch-bills", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+    });
+    console.log("fetchBills ret =>", ret.data);
+  } catch (error) {
+    console.log("fetchBills error =>", error);
+    return false;
+  }
+  return true;
+};
+
+export const getBills = async (): Promise<void> => {
+  const request = await apiClient.post("/integrations/intuit/get-bills", {
+    integrationProvider: "QuickBooks",
+  });
+  console.log("getBills =>", request.data);
+};
+
 export interface AccountingTransactionAPIResult {
-  bills?:    AccountTransaction[];
+  bills?: AccountTransaction[];
   expenses?: AccountTransaction[];
   swapouts?: AccountTransaction[];
   invoices?: AccountTransaction[];
-  incomes?:  AccountTransaction[];
-  swapins?:  AccountTransaction[];  
+  incomes?: AccountTransaction[];
+  swapins?: AccountTransaction[];
 }
 
+export const fetchAccountingTransactions =
+  async (): Promise<AccountingTransactionAPIResult> => {
+    const ret = await fetch("/data/accounting-transactions.json");
+    if (!ret.ok) {
+      throw new Error(ret.statusText);
+    }
 
-export const fetchAccountingTransactions = async():Promise<AccountingTransactionAPIResult> => {
-  const ret = await fetch("/data/accounting-transactions.json");
-  if (!ret.ok) {
-    throw new Error(ret.statusText);
-  }
-
-  const data:AccountingTransactionAPIResult = await ret.json();
-  return data;
-}
+    const data: AccountingTransactionAPIResult = await ret.json();
+    return data;
+  };

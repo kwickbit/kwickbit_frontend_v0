@@ -23,8 +23,12 @@ apiClient.interceptors.request.use(async (config) => {
     await refreshToken();
     return config;
   } else {
-    // Router.push("/login");
+    if( window ) {
+      location.replace("/login");
+    }
     toast.error("Session expired. Please login again.");
-    return new Promise(() => {});
+    return new Promise(() => {
+      
+    });
   }
 });

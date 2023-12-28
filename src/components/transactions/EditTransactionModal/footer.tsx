@@ -34,24 +34,22 @@ const EditTransactionModalFooter = ({
         <div
           className={cn(
             "w-4 h-4 rounded-full",
-            { "bg-[#4ADDB6]": transaction.published },
-            { "bg-[#BABABA]": !transaction.published }
+            { "bg-[#4ADDB6]": transaction.status === 'Published' },
+            { "bg-[#BABABA]": transaction.status === 'NonPublished'}
           )}
         />
         <span
           className={cn(
             "text-sm font-bold",
-            { "text-[#4ADDB6]": transaction.published },
-            { "text-[#BABABA]": !transaction.published }
+            { "bg-[#4ADDB6]": transaction.status === 'Published' },
+            { "bg-[#BABABA]": transaction.status === 'NonPublished'}
           )}
         >
-          {transaction.published ? "Published" : "Yet to Publish"}
+          {transaction.status === 'Published' ? "Published" : "Yet to Publish"}
         </span>
-        {!transaction.published && (
+        {transaction.status === 'NonPublished' && (
           <button
             className={cn("bg-[#4ADDB6] rounded-md text-[#082C22] text-sm px-3 py-2 flex items-center gap-2",
-            // {"hover:scale-95": !transaction.currencyMapping?.nonSetMapping })}
-            // disabled={transaction.currencyMapping?.nonSetMapping}
             {"hover:scale-95": !disabledPublish })}
             disabled={disabledPublish}
             onClick={():void => publishTransaction()}

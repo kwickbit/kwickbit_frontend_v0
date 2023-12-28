@@ -80,15 +80,17 @@ const useEditTransactionModal = ({
   }, [accountingTransactions]);
 
   useEffect(() => {
-    if (transaction) {
+    if (
+      transaction &&
+      transaction.detail &&
+      transaction.collection &&
+      transaction.fee
+    ) {
+      const detail = transaction.detail;
       const collection = transaction.collection.map((item) => {
         const mainCurrency = {
-          name: transaction.detail.symbol,
-          amount: convert(
-            item.currency.name,
-            transaction.detail.symbol,
-            item.amount
-          ),
+          name: detail.symbol,
+          amount: convert(item.currency.name, detail.symbol, item.amount),
         };
         return {
           ...item,

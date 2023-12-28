@@ -20,13 +20,13 @@ const EditTransactionModalHeader = ({
     <>
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
-          {transaction.type == "out" ? (
+          {transaction.direction == "Outgoing" ? (
             <CircleRightArrow className="w-8 h-8" />
           ) : (
             <CircleLeftArrow className="w-8 h-8" />
           )}
           <h2 className="text-lg text-[#171A1F]">
-            {transaction.type === "out" ? "Outgoing" : "Incoming"}
+            {transaction.direction === "Outgoing" ? "Outgoing" : "Incoming"}
           </h2>
         </div>
         <button
