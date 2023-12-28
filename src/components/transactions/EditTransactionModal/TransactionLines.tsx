@@ -38,7 +38,7 @@ const TransactionLines = ({
 
   return (
     <div className="relative space-y-3">
-      {transaction.collection.map((item, idx) => (
+      {transaction.collection && transaction.collection.map((item, idx) => (
         <EditOneLine
           key={idx}
           colIdx={idx}
@@ -52,7 +52,7 @@ const TransactionLines = ({
           deleteAccTransaction={deleteAccTransaction}
         />
       ))}
-      {!transaction.published && (
+      {transaction.status === 'NonPublished' && (
         <button
           className="absolute -bottom-12 right-0.5 w-7 h-8 flex items-center justify-center"
           onClick={(): void => addNewLine()}
