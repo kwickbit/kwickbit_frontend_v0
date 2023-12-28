@@ -84,7 +84,7 @@ const useChangePassword = (): ReturnProps => {
   useEffect(() => {
     if (requiredAttributes.length > 0) {
       requiredAttributes
-        .map((attr) => attr.replace("userAttributes.", ""))
+       .map((attr) => attr.replace("userAttributes.", ""))
         .forEach((attr) => {
           const key = toCamelCase(attr);
           if (addedKeys.includes(key)) return;

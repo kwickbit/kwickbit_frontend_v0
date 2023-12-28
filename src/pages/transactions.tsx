@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
 import Head from "next/head";
 import MainLayout from "@/components/layouts/MainLayout";
-import TransactionsView from "@/components/transactions/TransactionsView";
+import dynamic from "next/dynamic";
+const TransactionsView = dynamic(
+  () => import("@/components/transactions/TransactionsView"),
+  { ssr: false }
+);
 
 const TransactionsPage = (): ReactNode => {
   return (
@@ -11,7 +15,7 @@ const TransactionsPage = (): ReactNode => {
       </Head>
       <TransactionsView />
     </>
-  )
+  );
 };
 
 TransactionsPage.Layout = MainLayout;

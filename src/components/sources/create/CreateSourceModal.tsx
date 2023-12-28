@@ -11,6 +11,7 @@ import useCreateSourceModal from "@/hooks/useCreateSourceModal";
 export interface SourceBlockchain {
   id: string;
   name: string;
+  chain: string;
   image: string;
 }
 
@@ -18,6 +19,7 @@ const sourceBlockchains: SourceBlockchain[] = [
   {
     id: "1",
     name: "Stellar",
+    chain: "stellar",
     image: "/assets/stellar-logo.jpeg",
   },
 ];

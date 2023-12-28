@@ -51,7 +51,7 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
     defaultValues: {
       name: "",
       address: "",
-      chain: "stellar",
+      chain: "",
     },
   });
 
@@ -86,7 +86,7 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
         address: data.address,
         name: data.name,
         workspaceId: "whatever",
-        chain: data.chain,
+        chain: selectedBlockchainId,
       },
       {
         onSuccess: (data) => {

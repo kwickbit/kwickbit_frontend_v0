@@ -23,30 +23,36 @@ const BlockchainFee = ({ transaction }: Props): JSX.Element => {
         </div>
       </div>
       <div className="grid grid-cols-[2fr,4.1fr] mt-3 gap-1">
-        <div>
-          <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
-            {`${transaction.fee.mainCurrency?.amount.toFixed(5)} ${transaction.detail.symbol}`}
-          </span>
-        </div>
-        <div className="grid grid-cols-[1fr,1.1fr,1fr,28px] gap-1">
-          <div className="flex justify-center items-center">
-            <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-2 w-full text-center">
-              Fee
-            </span>
-          </div>
-          <div className="flex justify-center items-center">
-            <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-1 w-full text-center">
-              Blockchain fees
-            </span>
-          </div>
-          <div className="flex justify-center items-center">
-            <div className="relative rounded-xl bg-[#F3F4F6] text-[#565D6D] text-xs py-2 grid grid-cols-[1fr,37px] w-full px-2">
-              <span className="">{transaction.fee.amount}</span>
-              <p className="pl-1">XLM</p>
+        {transaction.fee ? (
+          <>
+            <div>
+              <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
+                {`${transaction.fee.mainCurrency?.amount.toFixed(5)} ${
+                  transaction.detail?.symbol
+                }`}
+              </span>
             </div>
-          </div>
-          <div />
-        </div>
+            <div className="grid grid-cols-[1fr,1.1fr,1fr,28px] gap-1">
+              <div className="flex justify-center items-center">
+                <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-2 w-full text-center">
+                  Fee
+                </span>
+              </div>
+              <div className="flex justify-center items-center">
+                <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-1 w-full text-center">
+                  Blockchain fees
+                </span>
+              </div>
+              <div className="flex justify-center items-center">
+                <div className="relative rounded-xl bg-[#F3F4F6] text-[#565D6D] text-xs py-2 grid grid-cols-[1fr,37px] w-full px-2">
+                  <span className="">{transaction.fee.amount}</span>
+                  <p className="pl-1">XLM</p>
+                </div>
+              </div>
+              <div />
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );
