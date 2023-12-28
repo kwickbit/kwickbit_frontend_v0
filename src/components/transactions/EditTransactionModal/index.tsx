@@ -1,6 +1,6 @@
 /**
  * EditTransactionModal Component
-*/
+ */
 
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import {
@@ -46,6 +46,8 @@ const EditTransactionModal = ({
       closeModal={editTransaction.onFalse}
     >
       {tempTransaction &&
+        tempTransaction.fee &&
+        tempTransaction.detail &&
         tempTransaction.fee.mainCurrency &&
         tempAccountingTransactions && (
           <div className="rounded pt-8 pb-11 px-7 border-0 shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none h-full overflow-y-auto">

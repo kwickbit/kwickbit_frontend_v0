@@ -88,7 +88,7 @@ const useTransactionLines = ({
 
   const typeOptions = useMemo(
     () =>
-      transaction.type === "out" ? outgoingTypeOptions : incomingTypeOptions,
+      transaction.direction === "Outgoing" ? outgoingTypeOptions : incomingTypeOptions,
     [transaction]
   );
 
@@ -96,7 +96,7 @@ const useTransactionLines = ({
     if (transaction && accountingTransactions) {
       let accTrans: AccountTransaction | undefined;
       const _accountingTransactions = _.cloneDeep(accountingTransactions);
-      if (transaction.type === "out") {
+      if (transaction.direction === "Outgoing") {
         if (_accountingTransactions.bills) {
           accTrans = _accountingTransactions.bills.find(
             (item) => !item.included
@@ -139,7 +139,7 @@ const useTransactionLines = ({
         accTrans.included = true;
         setAccountingTransactions(_accountingTransactions);
         setTransaction((prev) => {
-          if (prev) {
+          if (prev && transaction.detail && prev.collection) {
             newAccTrans.mainCurrency = {
               name: transaction.detail.symbol,
               amount: convert(
@@ -166,15 +166,16 @@ const useTransactionLines = ({
     prevType: TypeOption,
     type: TypeOption
   ): void => {
-    if (transaction && accountingTransactions) {
+    if (transaction && accountingTransactions && transaction.collection ) {
       const _accountingTransactions = _.cloneDeep(accountingTransactions);
       const arrOneTypeTransaction = _accountingTransactions[type.value]?.filter(
         (item) => !item.included
       );
       if (arrOneTypeTransaction && arrOneTypeTransaction.length > 0) {
-        if (_accountingTransactions[type.value]) {
+        if (_accountingTransactions[type.value]  && transaction.collection ) {
+          const col = transaction.collection[colIdx];
           const origLine = _accountingTransactions[prevType.value]?.find(
-            (item) => item.id === transaction.collection[colIdx].id
+            (item) => item.id === col.id
           );
           if (origLine) {
             origLine.included = false;
@@ -183,16 +184,17 @@ const useTransactionLines = ({
         }
 
         setTransaction((prev) => {
-          if (prev) {
+          if (prev ) {
             if (prev.collection) {
               const collection = prev.collection.map((col, idx) => {
-                if (idx === colIdx) {
+                if (idx === colIdx && transaction.detail) {
                   arrOneTypeTransaction[0].included = true;
+                  const detail = transaction.detail;
                   const mainCurrency = {
-                    name: transaction.detail.symbol,
+                    name: detail.symbol,
                     amount: convert(
                       arrOneTypeTransaction[0].currency.name,
-                      transaction.detail.symbol,
+                      detail.symbol,
                       arrOneTypeTransaction[0].amount
                     ),
                   };
@@ -220,9 +222,10 @@ const useTransactionLines = ({
   ): void => {
     if (transaction && accountingTransactions) {
       const _accountingTransactions = _.cloneDeep(accountingTransactions);
-      if (_accountingTransactions[type.value]) {
+      if (_accountingTransactions[type.value] && transaction.collection) {
+        const col = transaction.collection[colIdx];
         const origLine = _accountingTransactions[type.value]?.find(
-          (item) => item.id === transaction.collection[colIdx].id
+          (item) => item.id === col.id
         );
         if (origLine) {
           origLine.included = false;
@@ -231,9 +234,9 @@ const useTransactionLines = ({
       }
 
       setTransaction((prev) => {
-        if (prev) {
+        if (prev && prev.collection) {
           const collection = prev.collection.map((col, idx) => {
-            if (idx === colIdx) {
+            if (idx === colIdx && transaction.detail) {
               const mainCurrency = {
                 name: transaction.detail.symbol,
                 amount: convert(
@@ -263,32 +266,38 @@ const useTransactionLines = ({
     type: TypeOption,
     value: number
   ): void => {
-    const convertedValue = convert(
-      transaction.detail.symbol,
-      transaction.collection[colIdx].currency.name,
-      value
-    );
-    setTransaction((prev) => {
-      if (prev) {
-        const collection = _.cloneDeep(prev.collection);
-        if (collection[colIdx].mainCurrency) {
-          collection[colIdx].mainCurrency = {
-            name: transaction.detail.symbol,
-            amount: value,
-          };
+    if( transaction.detail && transaction.collection) {
+      const convertedValue = convert(
+        transaction.detail.symbol,
+        transaction.collection[colIdx].currency.name,
+        value
+      );
+
+      const detail = transaction.detail;
+      setTransaction((prev) => {
+        if (prev && prev.collection) {
+          const collection = _.cloneDeep(prev.collection);
+          if (collection[colIdx].mainCurrency) {
+            collection[colIdx].mainCurrency = {
+              name: detail.symbol,
+              amount: value,
+            };
+          }
+          collection[colIdx].amount = convertedValue;
+          return { ...prev, collection };
         }
-        collection[colIdx].amount = convertedValue;
-        return { ...prev, collection };
-      }
-    });
+      });
+    }
+
   };
 
   const deleteAccTransaction = (colIdx: number, type: TypeOption): void => {
-    if (accountingTransactions) {
+    if (accountingTransactions && transaction.collection) {
+      const col = transaction.collection[colIdx];
       const _accountingTransactions = _.cloneDeep(accountingTransactions);
       if (_accountingTransactions[type.value]) {
         const origLine = _accountingTransactions[type.value]?.find(
-          (item) => item.id === transaction.collection[colIdx].id
+          (item) => item.id === col.id
         );
         if (origLine) {
           origLine.included = false;
@@ -296,7 +305,7 @@ const useTransactionLines = ({
         }
       }
       const collection = transaction.collection.filter(
-        (it) => it.id !== transaction.collection[colIdx].id
+        (it) => it.id !== col.id
       );
       setTransaction((prev) => {
         if (prev) {

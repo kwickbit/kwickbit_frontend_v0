@@ -1,41 +1,34 @@
-import { useState, useEffect } from "react";
 import Loader from "../Loader";
 import ServerError from "../ServerError";
 import TransactionSelectSection from "./SelectSection";
 import TransactionListSection from "./TransactionListSection";
-import { NonSetCurrencyProps } from "@/services/transactions";
 import WarningAlert from "./WarningAlert";
-import {
-  useQueryTransactions,
-  useQueryAccountingTransactions,
-} from "@/hooks/transactions";
-import * as _ from "lodash";
+import useTransactionsView from "@/hooks/transactions/useTransactionsView";
+import Pagination from "../common/pagination";
 
 const TransactionsView = (): JSX.Element => {
-  const [nonSetMappings, setNonSetMappings] = useState<NonSetCurrencyProps[]>(
-    []
-  );
-  const { data, isLoading, isError, refetch } = useQueryTransactions();
   const {
-    data: accountingTrasactions,
-    isLoading: isLoadingAccountingTransactions,
-    isError: isErrorAccountingTransactions,
-    refetch: refreshAccountingTractions,
-  } = useQueryAccountingTransactions();
+    isLoading,
+    isError,
+    transactionsData,
+    refreshTransactions,
+    accountingTrasactionsData,
+    refreshAccountingTractions,
+    onCloseWarningAlert,
+    nonSetMappings,
+    moveNext,
+    movePrev,
+    page,
+    totalTransactions,
+    fromCount,
+    toCount,
+    haveNext,
+    havePrev
+  } = useTransactionsView();
 
-  useEffect(() => {
-    if (data && data.transactions && data.non_set_currencies) {
-      const arr: NonSetCurrencyProps[] = [];
-      for (const transaction of data.transactions) {
-        if (transaction.currencyMapping?.nonSetMapping) {
-          arr.push(transaction.currencyMapping as NonSetCurrencyProps);
-        }
-      }
-      setNonSetMappings(arr);
-    }
-  }, [data]);
+  console.log('havePrev, haveNext =>', havePrev, haveNext);
 
-  if (isLoading || isLoadingAccountingTransactions) {
+  if (isLoading) {
     return (
       <div className="flex justify-center mt-8">
         <Loader />
@@ -43,17 +36,9 @@ const TransactionsView = (): JSX.Element => {
     );
   }
 
-  if (isError || isErrorAccountingTransactions) {
+  if (isError) {
     return <ServerError />;
   }
-
-  const onCloseWarningAlert = (): void => {
-    if (nonSetMappings.length > 0) {
-      const arr: NonSetCurrencyProps[] = _.cloneDeep(nonSetMappings);
-      arr.shift();
-      setNonSetMappings(arr);
-    }
-  };
 
   return (
     <div className="max-w-7xl mx-auto mt-12 px-4">
@@ -66,13 +51,25 @@ const TransactionsView = (): JSX.Element => {
       )}
       <div className="overflow-x-auto ">
         <div className="w-fit">
-          <TransactionSelectSection />
-          <TransactionListSection
-            transactions={data?.transactions}
-            onRefreshTransactions={refetch}
-            accountingTransactions={accountingTrasactions}
-            onRefreshAccountingTrasactions={refreshAccountingTractions}
+          <Pagination 
+            moveNext={moveNext}
+            movePrev={movePrev}
+            page={page}
+            totalTransactions={totalTransactions}
+            fromCount={fromCount}
+            toCount={toCount}
+            haveNext={haveNext}
+            havePrev={havePrev}
           />
+          <TransactionSelectSection />
+          {transactionsData && (
+            <TransactionListSection
+              transactions={transactionsData.data}
+              onRefreshTransactions={refreshTransactions}
+              accountingTransactions={accountingTrasactionsData}
+              onRefreshAccountingTrasactions={refreshAccountingTractions}
+            />
+          )}
         </div>
       </div>
     </div>

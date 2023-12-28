@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { isConnected } from "@/lib/session";
 import useWebSocket, { SendMessage } from "react-use-websocket";
 import { v4 as uuidv4 } from "uuid";
@@ -6,6 +7,7 @@ export interface UserWebSocketReturn {
   sendMessage: SendMessage;
   lastMessage: MessageEvent<any> | null;
   readyState: WebSocket["readyState"];
+  fetchedNewTransactionsData: any;
 }
 
 const onError = (error: WebSocketEventMap["error"]): void => {
@@ -20,10 +22,6 @@ const onOpen = (event: WebSocketEventMap["open"]): void => {
   console.log("WebSocket open:", event);
 };
 
-const onMessage = (event: WebSocketEventMap["message"]): void => {
-  console.log("WebSocket message:", event.data);
-};
-
 const onReconnectStop = (numAttempts: number): void => {
   console.error(`Failed to reconnect. Tried ${numAttempts} times`);
 };
@@ -36,6 +34,23 @@ const generateWebSocketUrl = (templateUrl: string): string => {
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
 
 export const useUserWebSocket = (): UserWebSocketReturn => {
+  const [fetchedNewTransactionsData, setFetchedNewTransactionsData] =
+    useState<any>();
+  const onMessage = (event: WebSocketEventMap["message"]): void => {
+    console.log("WebSocket message:", event.data);
+    if (event.data) {
+      const data = JSON.parse(event.data);
+      switch (data.topic) {
+        case "fetchedNewTransactions":
+          setFetchedNewTransactionsData(data.data);
+          console.log("WebSocket message1: fetchedNewTransactions");
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   const {
     sendMessage,
     lastMessage,
@@ -45,6 +60,7 @@ export const useUserWebSocket = (): UserWebSocketReturn => {
     websocketUrl,
     {
       shouldReconnect: () => true,
+      retryOnError: true,
       onError,
       onClose,
       onOpen,
@@ -56,5 +72,5 @@ export const useUserWebSocket = (): UserWebSocketReturn => {
     isConnected()
   );
 
-  return { sendMessage, lastMessage, readyState };
+  return { sendMessage, lastMessage, readyState, fetchedNewTransactionsData };
 };

@@ -61,7 +61,7 @@ const EditOneLine = ({
   return (
     <div className="grid grid-cols-[1fr,1.1fr,1fr,28px] gap-1">
       <div className="flex items-center">
-        {transaction.published ? (
+        {transaction.status === 'Published' ? (
           <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-3 w-full">
             {selectedType?.title}
           </span>
@@ -70,12 +70,11 @@ const EditOneLine = ({
             selected={selectedType}
             setSelected={selectType}
             options={typeOptions}
-            disabled={transaction.published}
           />
         )}
       </div>
       <div className="flex items-center">
-        {transaction.published ? (
+        {transaction.status === 'Published' ? (
           <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-3 w-full">
             {selectedAccTransOption?.title}
           </span>
@@ -84,7 +83,6 @@ const EditOneLine = ({
             selected={selectedAccTransOption}
             setSelected={selectTranOption}
             options={accTransOptions}
-            disabled={transaction.published}
           />
         )}
       </div>
@@ -96,13 +94,13 @@ const EditOneLine = ({
             min={0}
             value={item.mainCurrency?.amount}
             onChange={changeValue}
-            disabled={transaction.published}
+            disabled={transaction.status === 'Published' }
           />
-          <p className="pl-1">{transaction.detail.symbol}</p>
+          <p className="pl-1">{transaction.detail?.symbol}</p>
         </div>
       </div>
       <div className="flex items-center justify-center">
-        {!transaction.published && (
+        {transaction.status === 'NonPublished' && (
           <button
             className="flex items-center justify-center"
             onClick={(): void => deleteLine()}

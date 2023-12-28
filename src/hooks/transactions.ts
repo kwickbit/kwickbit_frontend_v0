@@ -1,6 +1,6 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
 import {
-  fetchTransactions,
+  getTransactions,
   fetchAccountingTransactions,
   TransactionAPIResult,
   AccountingTransactionAPIResult,
@@ -10,9 +10,15 @@ export const useQueryTransactions = (): UseQueryResult<
   TransactionAPIResult,
   Error
 > => {
-  return useQuery({ queryKey: ["transactions"], queryFn: fetchTransactions });
+  return useQuery({ queryKey: ["transactions"], queryFn: getTransactions });
 };
 
-export const useQueryAccountingTransactions = (): UseQueryResult<AccountingTransactionAPIResult, Error> => {
-  return useQuery({ queryKey: ["accounting-transactions"], queryFn: fetchAccountingTransactions });
-}
+export const useQueryAccountingTransactions = (): UseQueryResult<
+  AccountingTransactionAPIResult,
+  Error
+> => {
+  return useQuery({
+    queryKey: ["accounting-transactions"],
+    queryFn: fetchAccountingTransactions,
+  });
+};
