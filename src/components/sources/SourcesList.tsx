@@ -6,7 +6,7 @@ import SourceItem from "./SourceItem";
 import SourcesHeader from "./SourcesHeader";
 import {v4 as uuidv4} from "uuid";
 import {apiClient} from "@/lib/api-client";
-import {RxTriangleDown, RxUpdate} from "react-icons/rx";
+import { RxTriangleDown, RxUpdate, RxClipboardCopy, RxClipboard, RxEnvelopeOpen, RxEnvelopeClosed } from "react-icons/rx";
 
 interface Props {
   className: string;
@@ -45,6 +45,66 @@ const SourcesList = ({
     console.log('Fetch all transactions not implemented yet');
   };
 
+  const fetchInvoices = async (): Promise<void> => {
+    const deduplicationId = uuidv4();
+    const request = await apiClient.post('/fetch-invoices', {
+      integrationProvider: 'QuickBooks',
+      deduplicationId,
+    });
+    console.log(request.data);
+
+    // if (request.data.nextCursors) {
+    //   const request2 = await apiClient.post('/transactions', {
+    //     cursors: request.data.nextCursors
+    //   });
+    //   console.log(request2.data);
+    // }
+  };
+
+  const fetchBills = async (): Promise<void> => {
+    const deduplicationId = uuidv4();
+    const request = await apiClient.post('/fetch-bills', {
+      integrationProvider: 'QuickBooks',
+      deduplicationId,
+    });
+    console.log(request.data);
+
+    // if (request.data.nextCursors) {
+    //   const request2 = await apiClient.post('/transactions', {
+    //     cursors: request.data.nextCursors
+    //   });
+    //   console.log(request2.data);
+    // }
+  };
+
+  const getInvoices = async (): Promise<void> => {
+    const request = await apiClient.post('/integrations/intuit/get-invoices', {
+      integrationProvider: 'QuickBooks',
+    });
+    console.log(request.data);
+
+    // if (request.data.nextCursors) {
+    //   const request2 = await apiClient.post('/transactions', {
+    //     cursors: request.data.nextCursors
+    //   });
+    //   console.log(request2.data);
+    // }
+  };
+
+  const getBills = async (): Promise<void> => {
+    const request = await apiClient.post('/integrations/intuit/get-bills', {
+      integrationProvider: 'QuickBooks',
+    });
+    console.log(request.data);
+
+    // if (request.data.nextCursors) {
+    //   const request2 = await apiClient.post('/transactions', {
+    //     cursors: request.data.nextCursors
+    //   });
+    //   console.log(request2.data);
+    // }
+  };
+
   const getTransactions = async (): Promise<void> => {
     const request = await apiClient.post('/transactions');
     console.log(request.data);
@@ -69,6 +129,10 @@ const SourcesList = ({
       ) : (
         <>
           <RxUpdate className="w-6 h-6 cursor-pointer text-neutral-900" onClick={updateTransactions} />
+          <RxClipboardCopy className="w-6 h-6 cursor-pointer text-neutral-900" onClick={fetchInvoices} />
+          <RxEnvelopeClosed className="w-6 h-6 cursor-pointer text-neutral-900" onClick={fetchBills} />
+          <RxClipboard className="w-6 h-6 cursor-pointer text-neutral-900" onClick={getInvoices} />
+          <RxEnvelopeOpen className="w-6 h-6 cursor-pointer text-neutral-900" onClick={getBills} />
           <RxTriangleDown className="w-6 h-6 cursor-pointer text-neutral-900" onClick={getTransactions} />
           <SourcesHeader onSelectAll={handleSelectAll} />
           <div className="flex flex-col gap-4 h-full pb-8">

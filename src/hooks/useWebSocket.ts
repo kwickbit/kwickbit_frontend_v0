@@ -1,6 +1,7 @@
 import { isConnected } from "@/lib/session";
 import useWebSocket, { SendMessage } from "react-use-websocket";
 import { v4 as uuidv4 } from "uuid";
+import {apiClient} from "@/lib/api-client";
 
 export interface UserWebSocketReturn {
   sendMessage: SendMessage;
@@ -20,8 +21,18 @@ const onOpen = (event: WebSocketEventMap["open"]): void => {
   console.log("WebSocket open:", event);
 };
 
-const onMessage = (event: WebSocketEventMap["message"]): void => {
+const onMessage = async (event: WebSocketEventMap["message"]): Promise<void> => {
   console.log("WebSocket message:", event.data);
+    const eventData = JSON.parse(event.data);
+    console.log(eventData.data.minDateTime);
+    console.log(eventData.data.maxDateTime);
+  if (eventData.topic && eventData.topic === 'fetchedNewTransactions') {
+      const request = await apiClient.post('/transactions', {
+          dateTimeMin: eventData.data.minDateTime,
+          dateTimeMax: eventData.data.maxDateTime,
+      });
+      console.log(request.data);
+  }
 };
 
 const onReconnectStop = (numAttempts: number): void => {
