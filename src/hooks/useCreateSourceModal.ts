@@ -21,6 +21,7 @@ interface ReturnProps {
     {
       name: string;
       address: string;
+      chain: string;
     },
     any,
     undefined
@@ -50,6 +51,7 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
     defaultValues: {
       name: "",
       address: "",
+      chain: "stellar",
     },
   });
 
@@ -84,6 +86,7 @@ const useCreateSourceModal = ({ createSource }: Props): ReturnProps => {
         address: data.address,
         name: data.name,
         workspaceId: "whatever",
+        chain: data.chain,
       },
       {
         onSuccess: (data) => {
