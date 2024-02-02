@@ -16,7 +16,6 @@ export interface UserWebSocketReturn {
 const generateWebSocketUrl = (templateUrl: string): string => {
   const uuid = uuidv4();
   return templateUrl.replace("UUID_PLACEHOLDER", uuid);
-  // return uuid;
 };
 
 export const SocketContext = React.createContext<UserWebSocketReturn>({
@@ -56,6 +55,7 @@ export const UserWebSocketProvider = ({
   const onMessage = (event: WebSocketEventMap["message"]): void => {
     if (event.data) {
       const data = JSON.parse(event.data);
+      console.log('---------data: ', data);
       switch (data.topic) {
         case "fetchedNewTransactions":
           setFetchedNewTransactionsData(data.data);
