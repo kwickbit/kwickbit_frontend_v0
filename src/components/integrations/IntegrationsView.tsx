@@ -45,7 +45,17 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
           tokenMetadata: {
             isNative: true
           },
-          integrationCurrencyRef: {something: 'not defined yet'},
+          integrationRef: {
+            accountsReceivable: {
+              id: '84',
+            },
+            accountsPayable: {
+              id: '33',
+            },
+            bank: {
+              id: '35',
+            },
+          },
         },
         {
           chain: 'stellar',
@@ -54,7 +64,17 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
             code: 'USD',
             issuer: '0x7785699EWFV52552'
           },
-          integrationCurrencyRef: {something: 'not defined yet'},
+          integrationRef: {
+            accountsReceivable: {
+              id: '84',
+            },
+            accountsPayable: {
+              id: '33',
+            },
+            bank: {
+              id: '35',
+            },
+          },
         },
       ],
     });
@@ -68,6 +88,19 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
     });
     console.log('------currenciesResponse: ', currencies);
   };
+
+  const fetchAccounts = async (): Promise<void> => {
+    const accountsFetchResponse = await apiClient.post('/fetch-accounts', {
+      deduplicationId: uuidv4(),
+      integrationProvider: 'QuickBooks',
+    });
+    console.log('------accountsFetchResponse: ', accountsFetchResponse);
+  };
+
+  const getAvailableAccounts = async (): Promise<void> => {
+    const availableAccounts = await apiClient.get('/get-available-integration-accounts/QuickBooks');
+    console.log('------availableAccounts: ', availableAccounts);
+  }
 
   return (
     <div className="max-w-7xl mx-auto overflow-x-auto mt-12 px-4 pb-12">
@@ -113,6 +146,9 @@ const IntegrationsView: React.FC = (): React.JSX.Element => {
 
             <button onClick={fetchCurrencies}>Fetch currencies</button>
             <button onClick={getAvailableCurrencies}>Get Available currencies</button>
+
+            <button onClick={fetchAccounts}>Fetch accounts</button>
+            <button onClick={getAvailableAccounts}>Get Available accounts</button>
           </div>
         </div>
       </div>
