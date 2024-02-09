@@ -5,18 +5,24 @@ import useWebSocket, { SendMessage } from "react-use-websocket";
 import { v4 as uuidv4 } from "uuid";
 import { WebSocketMessage } from "react-use-websocket/dist/lib/types";
 
+export interface FetchedAvailableIntegrationAccountsData {
+  workspaceId: string;
+  nbAccounts: number;
+  messageDeduplicationId: string;
+}
+
 export interface UserWebSocketReturn {
   sendMessage: SendMessage;
   lastMessage: MessageEvent<any> | null;
   readyState: WebSocket["readyState"];
   fetchedNewTransactionsData: any;
+  fetchedAvailableIntegrationAccounts: FetchedAvailableIntegrationAccountsData | null;
   clearFetchedTransactionsData: () => void;
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
   const uuid = uuidv4();
   return templateUrl.replace("UUID_PLACEHOLDER", uuid);
-  // return uuid;
 };
 
 export const SocketContext = React.createContext<UserWebSocketReturn>({
@@ -24,6 +30,7 @@ export const SocketContext = React.createContext<UserWebSocketReturn>({
   lastMessage: null,
   readyState: 3,
   fetchedNewTransactionsData: null,
+  fetchedAvailableIntegrationAccounts: null,
   clearFetchedTransactionsData: () => {},
 });
 
@@ -36,6 +43,11 @@ export const UserWebSocketProvider = ({
 }): JSX.Element => {
   const [fetchedNewTransactionsData, setFetchedNewTransactionsData] =
     useState<any>();
+
+  const [
+    fetchedAvailableIntegrationAccounts,
+    setFetchedAvailableIntegrationAccounts,
+  ] = useState<FetchedAvailableIntegrationAccountsData | null>(null);
 
   const onError = (error: WebSocketEventMap["error"]): void => {
     console.error("WebSocket error:", error);
@@ -56,10 +68,14 @@ export const UserWebSocketProvider = ({
   const onMessage = (event: WebSocketEventMap["message"]): void => {
     if (event.data) {
       const data = JSON.parse(event.data);
+      console.log("useWebSocket onMessage data =>", data);
       switch (data.topic) {
         case "fetchedNewTransactions":
           setFetchedNewTransactionsData(data.data);
 
+          break;
+        case "FetchAvailableIntegrationAccountsSuccess":
+          setFetchedAvailableIntegrationAccounts(data.data);
           break;
         default:
           break;
@@ -71,11 +87,7 @@ export const UserWebSocketProvider = ({
     setFetchedNewTransactionsData(null);
   };
 
-  const {
-    sendMessage,
-    lastMessage,
-    readyState,
-  } = useWebSocket(
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
     websocketUrl,
     {
       shouldReconnect: () => true,
@@ -97,9 +109,10 @@ export const UserWebSocketProvider = ({
       lastMessage,
       readyState,
       fetchedNewTransactionsData,
+      fetchedAvailableIntegrationAccounts,
       clearFetchedTransactionsData,
     }),
-    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData]
+    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedAvailableIntegrationAccounts]
   );
 
   return (
