@@ -94,6 +94,7 @@ export interface CurrencyMappingForAdd {
       id: string;
     };
   };
+  usePlaceholderCurrency?: boolean;
 }
 
 export interface AvailableAccount {

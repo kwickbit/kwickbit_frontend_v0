@@ -3,11 +3,6 @@ import React, { Fragment } from "react";
 import { DownArrowIcon } from "@/components/common/AppIcon";
 import { AvailableAccount } from "@/services/integrations/quickbooks";
 
-export interface SelectOption {
-  id: number | string;
-  title: string;
-  value: string;
-}
 
 interface Props {
   selected: AvailableAccount | null;
@@ -44,7 +39,7 @@ const CurrencySelect = ({
             {options.map((obj, index) => (
               <Listbox.Option
                 key={index}
-                className={({ active }):string =>
+                className={({ active }): string =>
                   `relative cursor-pointer select-none py-2 px-4 text-sm text-black font-poppins hover:bg-primary hover:text-white ${
                     active ? "bg-[#21254E] text-white" : "text-black"
                   }`

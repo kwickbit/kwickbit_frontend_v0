@@ -41,7 +41,7 @@ const QuickBooksSettingsModal = ({
   }, [shouldOpenModal.value, setAccountsSelections]);
 
   const handleSelectionChange = useCallback((currencyMapping: CurrencyMapping | undefined, accountType: string, selection: AvailableAccount): void => {
-    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-NATIVE` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`
+    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-native` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`
     setAccountsSelections((prevSelections) => ({
       ...prevSelections,
       [key]: {
@@ -58,6 +58,17 @@ const QuickBooksSettingsModal = ({
     }));
   }, []);
 
+  const handleSelectionRadioChange = useCallback((currencyMapping: CurrencyMapping | undefined, usePlaceholderCurrency: boolean): void => {
+    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-native` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`
+    setAccountsSelections((prevSelections) => ({
+      ...prevSelections,
+      [key]: {
+        ...prevSelections[key],
+        usePlaceholderCurrency,
+      },
+    }));
+  }, []);
+
   const onSubmit = (): void => {
     addCurrencyMappingsMutation.mutate(Object.values(accountsSelections));
     shouldOpenModal.onFalse();
@@ -69,12 +80,13 @@ const QuickBooksSettingsModal = ({
       const receivableDefined = accountsSelection.integrationRef?.accountsReceivable !== undefined;
       const payableDefined = accountsSelection.integrationRef?.accountsPayable !== undefined;
       const bankDefined = accountsSelection.integrationRef?.bank !== undefined;
+      const usePlaceholderCurrencyDefined = accountsSelection?.usePlaceholderCurrency !== undefined;
 
       // Count the number of truthy values among receivableDefined, payableDefined, and bankDefined
       const countDefined = [receivableDefined, payableDefined, bankDefined].filter(Boolean).length;
 
       // Check if one or two are defined, but not all three
-      return countDefined > 0 && countDefined < 3;
+      return (countDefined > 0 && countDefined < 3) || !usePlaceholderCurrencyDefined || (countDefined === 0 && usePlaceholderCurrencyDefined);
     });
     return isAccountsSelectionsEmpty || isThereAnyOnlyPartiallyDefined;
   };
@@ -114,6 +126,7 @@ const QuickBooksSettingsModal = ({
                 accountReceivableOptions={accountsReceivables}
                 bankOptions={accountBanks}
                 onSelectionChange={handleSelectionChange}
+                onRadioSelectionChange={handleSelectionRadioChange}
               />
             ))}
             </div>
