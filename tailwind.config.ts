@@ -13,7 +13,8 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       fontFamily: {
-        manrope: ["Manrope", "sans-serif"]
+        manrope: ["Manrope", "sans-serif"],
+        lexend: ["Lexend", "sans-serif"]
       }
     },
   },
