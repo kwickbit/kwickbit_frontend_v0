@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useMutationRequestState } from "./oauth2-providers/intuit";
+import { useMutationRequestState } from "./index";
 import { toast } from "react-toastify";
 
 const clientId = encodeURIComponent(
@@ -19,7 +19,7 @@ const useConnectToQuickbook = (): ReturnProps => {
 
   const queryClient = useQueryClient();
 
-  const handleConnecToQuickbook = async (): Promise<void> => {
+  const handleConnectToQuickbook = async (): Promise<void> => {
     requestState.mutate(undefined, {
       onSuccess: (data) => {
         const { state } = data;
@@ -64,7 +64,7 @@ const useConnectToQuickbook = (): ReturnProps => {
     });
   };
 
-  return { handleConnectToQuickbook: handleConnecToQuickbook };
+  return { handleConnectToQuickbook };
 };
 
 export default useConnectToQuickbook;
