@@ -42,7 +42,7 @@ const useQuickbookIntegrationModal = ({ shouldOpenModal }: Props): UseIntegratio
     if (shouldOpenModal.value && statusAcc === 'success' && (!accountsApiRes?.data || accountsApiRes.data.length === 0)) {
       // Ensure the mutation is not already in progress
       if (fetchAccountsMutation.isIdle) {
-        fetchAccountsMutation.mutate();
+        fetchAccountsMutation.mutate({});
       }
     }
   }, [shouldOpenModal.value, accountsApiRes, fetchAccountsMutation, statusAcc]);

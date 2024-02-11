@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { v4 as uuidv4 } from "uuid";
+import {Bill, Currencies, Invoice} from "@/components/integrations";
 
 
 export interface QuickBooksIntegrationFetchStateAPIResult {
@@ -114,6 +115,26 @@ export interface AvailableAccount {
 
 export type AvailableAccountMappedToCurrency = AvailableAccount & CurrencyMappingForAdd;
 
+export interface CurrenciesAPIResult {
+  data: Currencies;
+}
+
+export interface BillAPIResult {
+  data: Bill[];
+}
+
+export interface InvoiceAPIResult {
+  data: Invoice[];
+}
+
+export interface FetchIntegrationAllAttributesArgs {
+  batchId: string;
+  totalJobsCount: number;
+}
+
+export interface OptionalFetchIntegrationAllAttributesArgs {
+  batchId?: string;
+}
 
 export interface AvailableAccountsAPIResult {
   data: AvailableAccount[];
@@ -128,10 +149,11 @@ export const getCurrencyMappings = async (): Promise<CurrencyMappingAPIResult> =
   return data;
 };
 
-export const fetchQuickbookAccounts = async (): Promise<any> => {
+export const fetchQuickbookAccounts = async (args: OptionalFetchIntegrationAllAttributesArgs): Promise<any> => {
   const { data } = await apiClient.post("/fetch-accounts", {
     deduplicationId: uuidv4(),
     integrationProvider: "QuickBooks",
+    ...args,
   });
   return data;
 };
@@ -139,6 +161,13 @@ export const fetchQuickbookAccounts = async (): Promise<any> => {
 export const getAvailableAccounts = async (): Promise<AvailableAccountsAPIResult> => {
   const { data } = await apiClient.get(
     "/get-available-integration-accounts/QuickBooks"
+  );
+  return data;
+};
+
+export const getCurrencies = async (): Promise<CurrenciesAPIResult> => {
+  const { data } = await apiClient.get(
+      "/get-available-currencies/QuickBooks"
   );
   return data;
 };
@@ -151,3 +180,64 @@ export const addCurrencyMappings = async (mappings: CurrencyMappingForAdd[]): Pr
 };
 
 
+export const fetchInvoices = async (args: FetchIntegrationAllAttributesArgs): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    const ret = await apiClient.post("/fetch-invoices", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+      ...args,
+    });
+    console.log("fetchInvoices ret =>", ret.data);
+  } catch (error) {
+    console.log("fetchInvoices error =>", error);
+    return false;
+  }
+  return true;
+};
+
+export const getInvoices = async (): Promise<InvoiceAPIResult> => {
+  const { data } = await apiClient.post("/integrations/intuit/get-invoices", {
+    integrationProvider: "QuickBooks",
+  });
+  return data;
+};
+
+export const fetchBills = async (args: FetchIntegrationAllAttributesArgs): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    const ret = await apiClient.post("/fetch-bills", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+      ...args,
+    });
+    console.log("fetchBills ret =>", ret.data);
+  } catch (error) {
+    console.log("fetchBills error =>", error);
+    return false;
+  }
+  return true;
+};
+
+export const getBills = async (): Promise<BillAPIResult> => {
+  const {data} = await apiClient.post("/integrations/intuit/get-bills", {
+    integrationProvider: "QuickBooks",
+  });
+  return data;
+};
+
+export const fetchCurrencies = async (args: FetchIntegrationAllAttributesArgs): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    const ret = await apiClient.post("/fetch-currencies", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+      ...args,
+    });
+    console.log("fetchCurrencies ret =>", ret.data);
+  } catch (error) {
+    console.log("fetchCurrencies error =>", error);
+    return false;
+  }
+  return true;
+};
