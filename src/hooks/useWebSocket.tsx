@@ -11,13 +11,22 @@ export interface FetchedAvailableIntegrationAccountsData {
   messageDeduplicationId: string;
 }
 
+export interface FetchedUpdateIntegrationAllAttributes {
+  workspaceId: string;
+  topic: string;
+  batchId: string;
+  deduplicationId: string;
+}
+
 export interface UserWebSocketReturn {
   sendMessage: SendMessage;
   lastMessage: MessageEvent<any> | null;
   readyState: WebSocket["readyState"];
   fetchedNewTransactionsData: any;
   fetchedAvailableIntegrationAccounts: FetchedAvailableIntegrationAccountsData | null;
+  fetchedUpdateIntegrationAllAttributes: FetchedUpdateIntegrationAllAttributes | null;
   clearFetchedTransactionsData: () => void;
+  setFetchedUpdateIntegrationAllAttributes: React.Dispatch<React.SetStateAction<FetchedUpdateIntegrationAllAttributes | null>>;
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
@@ -31,7 +40,9 @@ export const SocketContext = React.createContext<UserWebSocketReturn>({
   readyState: 3,
   fetchedNewTransactionsData: null,
   fetchedAvailableIntegrationAccounts: null,
+  fetchedUpdateIntegrationAllAttributes: null,
   clearFetchedTransactionsData: () => {},
+  setFetchedUpdateIntegrationAllAttributes: () => {},
 });
 
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
@@ -48,6 +59,10 @@ export const UserWebSocketProvider = ({
     fetchedAvailableIntegrationAccounts,
     setFetchedAvailableIntegrationAccounts,
   ] = useState<FetchedAvailableIntegrationAccountsData | null>(null);
+
+  const [fetchedUpdateIntegrationAllAttributes,
+    setFetchedUpdateIntegrationAllAttributes,
+  ] = useState<FetchedUpdateIntegrationAllAttributes | null>(null);
 
   const onError = (error: WebSocketEventMap["error"]): void => {
     console.error("WebSocket error:", error);
@@ -68,7 +83,6 @@ export const UserWebSocketProvider = ({
   const onMessage = (event: WebSocketEventMap["message"]): void => {
     if (event.data) {
       const data = JSON.parse(event.data);
-      console.log("useWebSocket onMessage data =>", data);
       switch (data.topic) {
         case "fetchedNewTransactions":
           setFetchedNewTransactionsData(data.data);
@@ -77,6 +91,11 @@ export const UserWebSocketProvider = ({
         case "FetchAvailableIntegrationAccountsSuccess":
           setFetchedAvailableIntegrationAccounts(data.data);
           break;
+
+        case 'FetchAvailableIntegrationAllAttributesSuccess':
+          setFetchedUpdateIntegrationAllAttributes(data.data);
+          break;
+
         default:
           break;
       }
@@ -110,9 +129,11 @@ export const UserWebSocketProvider = ({
       readyState,
       fetchedNewTransactionsData,
       fetchedAvailableIntegrationAccounts,
+      fetchedUpdateIntegrationAllAttributes,
+      setFetchedUpdateIntegrationAllAttributes,
       clearFetchedTransactionsData,
     }),
-    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedAvailableIntegrationAccounts]
+    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedUpdateIntegrationAllAttributes, setFetchedUpdateIntegrationAllAttributes, fetchedAvailableIntegrationAccounts]
   );
 
   return (

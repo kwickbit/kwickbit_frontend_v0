@@ -1,18 +1,21 @@
 import React from "react";
 import MainHeader from "./MainHeader";
 import { UserWebSocketProvider } from "@/hooks/useWebSocket";
+import {QuickBooksDataProvider} from "@/hooks/useQuickBooksDataProvider";
 
 const MainLayout = ({
   children,
 }: {
-  children: JSX.Element | JSX.Element[];
-}): JSX.Element => {
+  children: React.JSX.Element | React.JSX.Element[];
+}): React.JSX.Element => {
   return (
     <UserWebSocketProvider>
-      <>
-        <MainHeader />
-        {children}
-      </>
+        <QuickBooksDataProvider>
+            <>
+                <MainHeader />
+                {children}
+            </>
+        </QuickBooksDataProvider>
     </UserWebSocketProvider>
   );
 };

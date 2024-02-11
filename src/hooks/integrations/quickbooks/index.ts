@@ -1,13 +1,15 @@
 import {
   addCurrencyMappings,
   AvailableAccountsAPIResult,
-  CurrencyMappingAPIResult, CurrencyMappingForAdd,
+  CurrencyMappingAPIResult,
+  CurrencyMappingForAdd,
   fetchIntegrationInformation,
   fetchQuickbookAccounts,
   fetchRequestState,
   getAvailableAccounts,
   getCurrencyMappings,
   GetInfoIntegration,
+  OptionalFetchIntegrationAllAttributesArgs,
   QuickBooksIntegrationFetchStateAPIResult
 } from "@/services/integrations/quickbooks";
 import {
@@ -59,16 +61,18 @@ export const useQueryQuickbookAccounts = (makeQuery: boolean): UseQueryResult<
 export const useMutationFetchQuickbookAccounts = (): UseMutationResult<
   any,
   Error,
-  void,
+  OptionalFetchIntegrationAllAttributesArgs,
   unknown
 > => {
   const queryClient = useQueryClient();
+  const key = 'quickbookAccounts';
 
   return useMutation({
+    mutationKey: [key],
     mutationFn: fetchQuickbookAccounts,
     onSuccess: () => {
       // Invalidate and refetch QuickBooks accounts data
-      queryClient.invalidateQueries({ queryKey: ['quickbookAccounts'] });
+      queryClient.invalidateQueries({ queryKey: [key] });
     },
   });
 };
@@ -92,4 +96,4 @@ export const useMutationAddCurrencyMappings = (): UseMutationResult<
       toast.error(error?.message ?? "Error while creating source");
     },
   });
-}
+};
