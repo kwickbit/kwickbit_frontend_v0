@@ -1,5 +1,4 @@
 import { apiClient } from "@/lib/api-client";
-import { v4 as uuidv4 } from "uuid";
 
 export interface Currency {
   fiat?: boolean;
@@ -336,50 +335,6 @@ export const getTransactions = async ({
     };
   }
   return data;
-};
-
-export const fetchInvoices = async (): Promise<boolean> => {
-  try {
-    const deduplicationId = uuidv4();
-    const ret = await apiClient.post("/fetch-invoices", {
-      integrationProvider: "QuickBooks",
-      deduplicationId,
-    });
-    console.log("fetchInvoices ret =>", ret.data);
-  } catch (error) {
-    console.log("fetchInvoices error =>", error);
-    return false;
-  }
-  return true;
-};
-
-export const getInvoices = async (): Promise<void> => {
-  const request = await apiClient.post("/integrations/intuit/get-invoices", {
-    integrationProvider: "QuickBooks",
-  });
-  console.log("getInvoices =>", request.data);
-};
-
-export const fetchBills = async (): Promise<boolean> => {
-  try {
-    const deduplicationId = uuidv4();
-    const ret = await apiClient.post("/fetch-bills", {
-      integrationProvider: "QuickBooks",
-      deduplicationId,
-    });
-    console.log("fetchBills ret =>", ret.data);
-  } catch (error) {
-    console.log("fetchBills error =>", error);
-    return false;
-  }
-  return true;
-};
-
-export const getBills = async (): Promise<void> => {
-  const request = await apiClient.post("/integrations/intuit/get-bills", {
-    integrationProvider: "QuickBooks",
-  });
-  console.log("getBills =>", request.data);
 };
 
 export interface AccountingTransactionAPIResult {
