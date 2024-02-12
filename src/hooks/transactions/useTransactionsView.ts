@@ -5,12 +5,12 @@ import {
   TransactionAPIResult,
   TransactionProps,
 } from "@/services/transactions";
-import { NonSetCurrencyProps } from "@/services/transactions";
 import { fetchAllTransactions, fetchWalletTransactions,getTransactions } from "@/services/transactions";
 import useUserWebSocket from "../useWebSocket";
-import * as _ from "lodash";
 import { useStorage } from "../useStorage";
 import { computeDeduplicationId } from "@/utils/utils";
+import { useTokenMappingContext } from "@/hooks/useTokenMappingsDataProvider";
+import { CurrencyMapping } from "@/services/integrations/quickbooks";
 
 interface TransactionAPIResultMeta {
   /**
@@ -50,8 +50,7 @@ export interface UserTransactionsViewReturnProps {
   isError: boolean;
   transactionsData: TransactionProps[];
   refreshTransactions: () => Promise<void>;
-  onCloseWarningAlert: () => void;
-  nonSetMappings: NonSetCurrencyProps[];
+  nonSetMappings: CurrencyMapping[];
   moveNext: () => Promise<void>;
   movePrev: () => Promise<void>;
   pageId: number;
@@ -73,12 +72,10 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
   const [data, setData] = useState<TransactionProps[]>([]);
-
-  const [nonSetMappings, setNonSetMappings] = useState<NonSetCurrencyProps[]>(
-    []
-  );
+  const {currencyMappings: {data: tokenMappings, refetch: refetchTokenMappings}} = useTokenMappingContext();
   const [isLoadingRefresh, setLoadingRefresh] = useState<boolean>(false);
   const [shouldFirstPull, setShouldFirstPull] = useState<boolean>(true);
+  const {isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse} = useUserWebSocket();
 
   const { data: chainAddress, setData: setChainAddress } =
     useStorage<ChainAddress | null>(chainAddressKey, null);
@@ -145,13 +142,6 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
         : [];
     setData(arrData);
 
-    const arr: NonSetCurrencyProps[] = [];
-    for (const transaction of arrData) {
-      if (transaction.currencyMapping?.nonSetMapping) {
-        arr.push(transaction.currencyMapping as NonSetCurrencyProps);
-      }
-    }
-    setNonSetMappings(arr);
   }, [page, transactions, initializedPage]);
 
   useEffect(() => {
@@ -184,6 +174,19 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
       setShouldFirstPull(false);
     }
   }, [shouldFirstPull, transactions]);
+
+  useEffect(() => {
+    const fetchData = async (): Promise<void> => {
+      if (isThereNewUpdateMappedCurrencies) {
+        await refetchTokenMappings();
+        setIsThereNewUpdateMappedCurrenciesToFalse();
+      }
+    };
+
+    fetchData();
+  }, [isThereNewUpdateMappedCurrencies, refetchTokenMappings, setIsThereNewUpdateMappedCurrenciesToFalse]);
+
+  const nonSetMappings = tokenMappings.filter(currencyMapping => !currencyMapping.isIntegrationRefDefined);
 
   const getTransactionResult = async (
     nextCursor?: any,
@@ -449,14 +452,6 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     }
   };
 
-  const onCloseWarningAlert = (): void => {
-    if (nonSetMappings.length > 0) {
-      const arr: NonSetCurrencyProps[] = _.cloneDeep(nonSetMappings);
-      arr.shift();
-      setNonSetMappings(arr);
-    }
-  };
-
   const refreshTransactions = async (): Promise<void> => {
     setLoadingRefresh(true);
     if( chainAddress ) {
@@ -511,7 +506,6 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     havePrev: page.pageId > 0,
     nonSetMappings,
     refreshTransactions,
-    onCloseWarningAlert,
     changeChainAddress,
   };
 };

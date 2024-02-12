@@ -10,7 +10,7 @@ import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import {v4 as uuidv4} from "uuid";
 import useUserWebSocket from "@/hooks/useWebSocket";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 import { useQuickBooksData } from '@/hooks/useQuickBooksDataProvider';
 
 
