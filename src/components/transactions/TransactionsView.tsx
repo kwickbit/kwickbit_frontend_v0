@@ -20,7 +20,6 @@ const TransactionsView = (): JSX.Element => {
     isError,
     transactionsData,
     refreshTransactions,
-    onCloseWarningAlert,
     nonSetMappings,
     moveNext,
     movePrev,
@@ -49,8 +48,7 @@ const TransactionsView = (): JSX.Element => {
       {nonSetMappings.length > 0 && (
         <WarningAlert
           shouldShow={nonSetMappings.length > 0}
-          nonSetMapping={nonSetMappings[0]}
-          onClose={onCloseWarningAlert}
+          nonSetMappings={nonSetMappings}
         />
       )}
       <div className="overflow-x-auto ">

@@ -4,6 +4,7 @@ import { isConnected } from "@/lib/session";
 import useWebSocket, { SendMessage } from "react-use-websocket";
 import { v4 as uuidv4 } from "uuid";
 import { WebSocketMessage } from "react-use-websocket/dist/lib/types";
+import { useBoolean } from "@/hooks/useBoolean";
 
 export interface FetchedAvailableIntegrationAccountsData {
   workspaceId: string;
@@ -27,6 +28,8 @@ export interface UserWebSocketReturn {
   fetchedUpdateIntegrationAllAttributes: FetchedUpdateIntegrationAllAttributes | null;
   clearFetchedTransactionsData: () => void;
   setFetchedUpdateIntegrationAllAttributes: React.Dispatch<React.SetStateAction<FetchedUpdateIntegrationAllAttributes | null>>;
+  isThereNewUpdateMappedCurrencies: boolean;
+  setIsThereNewUpdateMappedCurrenciesToFalse: () => void;
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
@@ -43,6 +46,8 @@ export const SocketContext = React.createContext<UserWebSocketReturn>({
   fetchedUpdateIntegrationAllAttributes: null,
   clearFetchedTransactionsData: () => {},
   setFetchedUpdateIntegrationAllAttributes: () => {},
+  isThereNewUpdateMappedCurrencies: false,
+  setIsThereNewUpdateMappedCurrenciesToFalse: () => {},
 });
 
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
@@ -64,6 +69,8 @@ export const UserWebSocketProvider = ({
     setFetchedUpdateIntegrationAllAttributes,
   ] = useState<FetchedUpdateIntegrationAllAttributes | null>(null);
 
+  const {value: isThereNewUpdateMappedCurrencies, onTrue: setIsThereNewUpdateMappedCurrenciesToTrue, onFalse: setIsThereNewUpdateMappedCurrenciesToFalse} = useBoolean(false);
+
   const onError = (error: WebSocketEventMap["error"]): void => {
     console.error("WebSocket error:", error);
   };
@@ -83,17 +90,26 @@ export const UserWebSocketProvider = ({
   const onMessage = (event: WebSocketEventMap["message"]): void => {
     if (event.data) {
       const data = JSON.parse(event.data);
+
       switch (data.topic) {
         case "fetchedNewTransactions":
           setFetchedNewTransactionsData(data.data);
-
           break;
+
         case "FetchAvailableIntegrationAccountsSuccess":
           setFetchedAvailableIntegrationAccounts(data.data);
           break;
 
         case 'FetchAvailableIntegrationAllAttributesSuccess':
           setFetchedUpdateIntegrationAllAttributes(data.data);
+          break;
+
+        case 'newNonMappedCurrencies':
+          setIsThereNewUpdateMappedCurrenciesToTrue();
+          break;
+
+        case 'newMappedCurrencies':
+          setIsThereNewUpdateMappedCurrenciesToTrue();
           break;
 
         default:
@@ -132,8 +148,10 @@ export const UserWebSocketProvider = ({
       fetchedUpdateIntegrationAllAttributes,
       setFetchedUpdateIntegrationAllAttributes,
       clearFetchedTransactionsData,
+      isThereNewUpdateMappedCurrencies,
+      setIsThereNewUpdateMappedCurrenciesToFalse,
     }),
-    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedUpdateIntegrationAllAttributes, setFetchedUpdateIntegrationAllAttributes, fetchedAvailableIntegrationAccounts]
+    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse, fetchedUpdateIntegrationAllAttributes, setFetchedUpdateIntegrationAllAttributes, fetchedAvailableIntegrationAccounts]
   );
 
   return (

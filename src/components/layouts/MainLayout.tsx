@@ -1,7 +1,8 @@
 import React from "react";
 import MainHeader from "./MainHeader";
 import { UserWebSocketProvider } from "@/hooks/useWebSocket";
-import {QuickBooksDataProvider} from "@/hooks/useQuickBooksDataProvider";
+import { QuickBooksDataProvider } from "@/hooks/useQuickBooksDataProvider";
+import { TokenMappingDataProvider } from "@/hooks/useTokenMappingsDataProvider";
 
 const MainLayout = ({
   children,
@@ -10,12 +11,14 @@ const MainLayout = ({
 }): React.JSX.Element => {
   return (
     <UserWebSocketProvider>
-        <QuickBooksDataProvider>
-            <>
-                <MainHeader />
-                {children}
-            </>
-        </QuickBooksDataProvider>
+        <TokenMappingDataProvider>
+            <QuickBooksDataProvider>
+                <>
+                    <MainHeader />
+                    {children}
+                </>
+            </QuickBooksDataProvider>
+        </TokenMappingDataProvider>
     </UserWebSocketProvider>
   );
 };
