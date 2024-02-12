@@ -1,19 +1,19 @@
-import { NonSetCurrencyProps } from "@/services/transactions";
-import { Warning, CircleClose } from "../common/AppIcon";
+import { Warning } from "../common/AppIcon";
 import Link from "next/link";
 import cn from "classnames";
+import { CurrencyMapping } from "@/services/integrations/quickbooks";
+import { Tooltip } from "react-tooltip";
+import React from "react";
 
 interface Props {
-  nonSetMapping: NonSetCurrencyProps;
+  nonSetMappings: CurrencyMapping[];
   shouldShow: boolean;
-  onClose: () => void;
 }
 
 const WarningAlert = ({
-  nonSetMapping,
+  nonSetMappings,
   shouldShow,
-  onClose,
-}: Props): JSX.Element => {
+}: Props): React.JSX.Element => {
   return (
     <div
       className={cn(
@@ -24,22 +24,39 @@ const WarningAlert = ({
     >
       <Warning />
       <span>
-        {`Current currency/token is not set on integration mapping: ${nonSetMapping.token}. Configure `}
+        {
+          nonSetMappings.length === 1 ?
+              `Current currency token is not set on integration mapping: ` :
+              `Current currencies tokens are not set on integration mapping: `
+        }
+        {
+          nonSetMappings.map((currencyMapping, index) => (
+              <React.Fragment key={index}>
+                <Tooltip id={`tooltip-${index}`}
+                    content={`Chain: ${currencyMapping.chain}, Issuer: ${currencyMapping.tokenMetadata.issuer}`}
+                />
+                <span data-tooltip-id={`tooltip-${index}`}
+                      className="text-white text-base font-bold underline decoration-white">
+          {currencyMapping.tokenMetadata.isNative ? `${currencyMapping.tokenMetadata}-native` : currencyMapping.tokenMetadata.code}
+        </span>
+                {index < nonSetMappings.length - 1 ? ', ' : ''}
+              </React.Fragment>
+          ))
+        }
+
+        <br/>
+        {'Define mappings in '}
         <Link
-          className="text-white text-base font-bold underline decoration-white"
-          href="#"
+            className="text-white text-base font-bold underline decoration-white"
+            href="/integrations"
         >
-          integration mapping
+          {'integration mapping'}
         </Link>
-        &nbsp; for TRT in order to be able to push this transaction to
-        Quickbooks.
+        {' section, in order to be able to push transactions involving'}
+        {
+          nonSetMappings.length === 1 ? ' this currency/token.' : ' these currencies/tokens.'
+        }
       </span>
-      <button
-        className="absolute top-1 right-1 appearance-none"
-        onClick={(): void => onClose()}
-      >
-        <CircleClose />
-      </button>
     </div>
   );
 };
