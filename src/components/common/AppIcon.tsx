@@ -1,4 +1,5 @@
 import cn from "classnames";
+import React from "react";
 
 export const Info = ({
   className = "",
@@ -125,14 +126,15 @@ export const Warning = (): JSX.Element => {
   );
 };
 
-export const CircleClose = (): JSX.Element => {
+export const CircleClose = ({onClick}: {onClick: () => void}): React.JSX.Element => {
   return (
-    <svg
+    <svg onClick={onClick}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="25"
       viewBox="0 0 24 25"
       fill="none"
+      style={{ cursor: 'pointer' }}
     >
       <path
         d="M12 2.5C6.47 2.5 2 6.97 2 12.5C2 18.03 6.47 22.5 12 22.5C17.53 22.5 22 18.03 22 12.5C22 6.97 17.53 2.5 12 2.5ZM12 20.5C7.59 20.5 4 16.91 4 12.5C4 8.09 7.59 4.5 12 4.5C16.41 4.5 20 8.09 20 12.5C20 16.91 16.41 20.5 12 20.5ZM15.59 7.5L12 11.09L8.41 7.5L7 8.91L10.59 12.5L7 16.09L8.41 17.5L12 13.91L15.59 17.5L17 16.09L13.41 12.5L17 8.91L15.59 7.5Z"
@@ -209,21 +211,50 @@ export const CircleLeftArrow = ({
   );
 };
 
-export const TransactionModalCloseIcon = ({
+export const CircleLeftAndRightArrow = ({
   className,
 }: {
   className: string;
-}): JSX.Element => {
+}): React.JSX.Element => {
   return (
     <svg
-      viewBox="0 0 512 512"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      className={cn(className)}
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        className={cn(className)}
     >
-      <circle cx="256" cy="256" r="256" fill="#39BFF070" />
+      <circle cx="12" cy="12" r="12" fill="#CFE2F3"/>
       <path
-        d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"
+          d="M12 24a12 12 0 1 1 12-12 12.013 12.013 0 0 1-12 12zm0-22a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2z"
+          fill="#39BFF0"
+      />
+      <path
+          d="M10.293 16.707 5.586 12l4.707-4.707 1.414 1.414L8.414 12l3.293 3.293-1.414 1.414z"
+          fill="#39BFF0"
+      />
+      <path
+          d="m13.707 16.707-1.414-1.414L15.586 12l-3.293-3.293 1.414-1.414L18.414 12l-4.707 4.707z"
+          fill="#39BFF0"
+      />
+      <path d="M7 11h9v2H7z" fill="#39BFF0"/>
+    </svg>
+  );
+};
+
+export const TransactionModalCloseIcon = ({
+                                            className,
+                                          }: {
+  className: string;
+}): JSX.Element => {
+  return (
+      <svg
+          viewBox="0 0 512 512"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          className={cn(className)}
+      >
+        <circle cx="256" cy="256" r="256" fill="#39BFF070"/>
+        <path
+            d="M256 48a208 208 0 1 1 0 416 208 208 0 1 1 0-416zm0 464A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c-9.4 9.4-9.4 24.6 0 33.9l47 47-47 47c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l47-47 47 47c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-47-47 47-47c9.4-9.4 9.4-24.6 0-33.9s-24.6-9.4-33.9 0l-47 47-47-47c-9.4-9.4-24.6-9.4-33.9 0z"
         fill="#39BFF0"
       />
     </svg>

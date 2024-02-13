@@ -1,10 +1,11 @@
 import { TransactionProps } from "@/services/transactions";
+import React from "react";
 
 interface Props {
   transaction: TransactionProps;
 }
 
-const BlockchainFee = ({ transaction }: Props): JSX.Element => {
+const BlockchainFee = ({ transaction }: Props): React.JSX.Element => {
   return (
     <div className="mb-5">
       <div className="grid grid-cols-[2fr,4.1fr] mb-2 gap-1">
@@ -27,7 +28,7 @@ const BlockchainFee = ({ transaction }: Props): JSX.Element => {
           <>
             <div>
               <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
-                {`${transaction.fee.mainCurrency?.amount.toFixed(5)} ${
+                {`${transaction.fee?.amount.toFixed(5)} ${
                   transaction.detail?.symbol
                 }`}
               </span>
