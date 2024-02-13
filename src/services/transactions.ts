@@ -1,80 +1,26 @@
 import { apiClient } from "@/lib/api-client";
+import { symbolFormatTransaction } from "@/lib/helpers";
+import {convertCurrency, Token} from "@/services/token_currencies_conversions";
 
-export interface Currency {
-  fiat?: boolean;
-  name: string;
-  symbol: string;
-  onchain?: {
-    chain: string;
-    token?: string;
-    tokenContractAddress: string;
-  };
+export enum Chain {
+  Stellar = 'stellar',
+}
+export enum Type {
+  OnChain = 'OnChain',
+  OffChain = 'OffChain',
 }
 
-export interface AccountTransactionBase {
-  id: string;
-  description: string;
-  amount: number;
-  currency: Currency;
-  included?: boolean;
+export enum Status {
+  Published = 'Published',
+  NonPublished = 'NonPublished',
 }
 
-export type OutgoingTransactionTypes = "BILL" | "EXP" | "SW_OUT";
-export type IncomingTransactionTypes = "INV" | "INC" | "SW_IN";
 
-export interface AccountTransaction {
-  id: string;
-  symbol: OutgoingTransactionTypes | IncomingTransactionTypes;
-  description: string;
-  amount: number;
-  currency: Currency;
-  included?: boolean;
-  from_account?: string; // Only for outgoing
-  to_account?: string; // Only for incoming,
-  mainCurrency?: {
-    name: string;
-    amount: number;
-  };
-}
 
-export interface TypeOption {
-  title: OutgoingTransactionTypes | IncomingTransactionTypes;
-  value: "bills" | "expenses" | "swapouts" | "invoices" | "incomes" | "swapins";
-}
-
-export const outgoingTypeOptions: TypeOption[] = [
-  {
-    title: "BILL", // Same as symbole
-    value: "bills", // Same as a key of accounting-transactions
-  },
-  {
-    title: "EXP",
-    value: "expenses",
-  },
-  {
-    title: "SW_OUT",
-    value: "swapouts",
-  },
-];
-
-export const incomingTypeOptions: TypeOption[] = [
-  {
-    title: "INV",
-    value: "invoices",
-  },
-  {
-    title: "INC",
-    value: "incomes",
-  },
-  {
-    title: "SW_IN",
-    value: "swapins",
-  },
-];
-
-export interface TransUser {
-  address: string;
-  type: "wallet" | "smart contract";
+export enum Direction {
+  Outgoing = 'Outgoing',
+  Incoming = 'Incoming',
+  Swap = 'Swap',
 }
 
 export interface TransactionProps {
@@ -82,50 +28,95 @@ export interface TransactionProps {
   hash?: string;
   atomicTransactionId: string;
   workspaceIdChainAddress: string;
-  type: "OnChain" | "OffChain";
-  assetMetadata?: {
-    code: string;
-    issuer: string;
-  };
+  type: Type;
+  tokenIncoming?: Token;
+  tokenOutgoing?: Token;
   labels: string[];
   createdAt: string;
   from: string;
   to: string;
-  asset: string;
-  status: "NonPublished" | "Published";
-  direction: "Incoming" | "Outgoing";
+  status: Status;
+  direction: Direction;
   workspaceId: string;
+  amountIncoming: string;
+  amountOutgoing: string;
   detail?: {
-    type: "currency" | "token";
-    symbol: string;
-    amount: number;
-    price: number;
+    symbolIncoming?: string;
+    priceInFiatIncoming?: {
+      amount: string;
+      reference: string;
+      symbol: string;
+    };
+    symbolOutgoing?: string;
+    priceInFiatOutgoing?: {
+      amount: string;
+      reference: string;
+      symbol: string;
+    };
     metadata?: {
       [key: string]: string;
     };
   };
   fee?: {
     amount: number;
-    price: number;
-    mainCurrency?: {
-      name: string;
-      amount: number;
+    priceInFiat: {
+      amount: string;
+      reference: string;
+      symbol: string;
     };
-  };
-  collection?: AccountTransaction[];
-  currencyMapping?: {
-    currency: string | null;
-    token: string | null;
-    nonSetMapping: boolean;
   };
   groupId?: number;
   resultId?: number;
   id?: number;
+  accountingLines: AccountingLine[];
 }
 
-export interface NonSetCurrencyProps {
-  currency: string;
-  token: string;
+export enum AccountingTransactionType {
+  Bill = 'Bill',
+  Invoice = 'Invoice',
+  Expense = 'Expense',
+  Income = 'Income',
+  Swap = 'Swap',
+}
+
+export interface AccountingLine {
+  accountingType?: AccountingTransactionType;
+  resource?: {
+    name: string;
+    reference: string;
+  };
+  resourceIncoming?: {
+    name: string;
+    reference: string;
+  };
+  resourceOutgoing?: {
+    name: string;
+    reference: string;
+  };
+  amount?: number;
+  priceInFiat?: {
+    amount: string;
+    reference: string;
+  };
+  amountIncoming?: number;
+  priceInFiatIncoming?: {
+    amount: string;
+    reference: string;
+  };
+  amountOutgoing?: number;
+  priceInFiatOutgoing?: {
+    amount: string;
+    reference: string;
+  };
+}
+
+export interface PublishTransactionsToIntegrationArgs {
+  integrationProvider: string;
+  deduplicationId: string;
+  batchId: string;
+  atomicTransactionId: string;
+  workspaceIdChainAddress: string;
+  accountingLines: AccountingLine[];
 }
 
 export interface TransactionAPIResult {
@@ -133,7 +124,6 @@ export interface TransactionAPIResult {
   message: string;
   nextCursors?: any;
   nextCursor?: any;
-  non_set_currencies?: NonSetCurrencyProps[];
 }
 
 interface GetTrasactionsSetting {
@@ -184,6 +174,8 @@ export const fetchWalletTransactions = async (
   return true;
 };
 
+const CONVERSION_RATE_XLM_USD: number = 0.11;
+
 /**
  * Get transactions from the database
  */
@@ -228,105 +220,48 @@ export const getTransactions = async ({
   }
   if (data.data) {
     const transactions = data.data.map((transaction) => {
-      const currency: string | null = "XLM";
-      let token: string | null = null;
+      const tokenIncoming = transaction.tokenIncoming;
+      const tokenOutgoing = transaction.tokenOutgoing;
 
-      if (transaction.asset === "native") {
-        transaction.detail = {
-          type: "currency",
-          symbol: "XLM",
-          amount: 1000, // fake data
-          price: 110, // fake data
-        };
-      } else {
-        transaction.detail = {
-          type: "token",
-          symbol: transaction.asset,
-          amount: 1000, // fake
-          price: 1000, // fake
-        };
+      if (tokenIncoming) {
+        const symbolIncoming = symbolFormatTransaction(tokenIncoming);
 
-        token = transaction.asset;
+        transaction.detail = {
+          symbolIncoming,
+          priceInFiatIncoming: {
+            amount: String(convertCurrency({from: tokenIncoming, to: {reference: 'USD'}, fromAmount: parseFloat(transaction.amountIncoming)})),
+            reference: 'USD',
+            symbol: '$',
+          }
+        };
+      }
+
+      if (tokenOutgoing) {
+        const symbolOutgoing = symbolFormatTransaction(tokenOutgoing);
+
+        transaction.detail = {
+          ...transaction.detail,
+          symbolOutgoing,
+          priceInFiatOutgoing: {
+            amount: String(convertCurrency({from: tokenOutgoing, to: {reference: 'USD'}, fromAmount: parseFloat(transaction.amountOutgoing)})),
+            reference: 'USD',
+            symbol: '$',
+          }
+        };
       }
 
       if (!transaction.fee) {
         transaction.fee = {
           amount: 0.012,
-          price: 15.5,
+          priceInFiat: {
+            amount: String(0.012 * CONVERSION_RATE_XLM_USD),
+            reference: 'USD',
+            symbol: '$',
+          },
         };
       }
 
-      if (!transaction.collection) {
-        if (transaction.direction === "Outgoing") {
-          transaction.collection = [
-            {
-              id: "bill-1",
-              symbol: "BILL",
-              from_account: "account1",
-              description: "Bill 1",
-              amount: 2500,
-              currency: {
-                fiat: true,
-                name: "dollar",
-                symbol: "$",
-              },
-            },
-            {
-              id: "expense-1",
-              symbol: "EXP",
-              from_account: "ledger1",
-              description: "Expense 1",
-              amount: 15,
-              currency: {
-                fiat: true,
-                name: "dollar",
-                symbol: "$",
-              },
-            },
-          ];
-        } else {
-          transaction.collection = [
-            {
-              id: "inv-1",
-              symbol: "INV",
-              description: "invoice 1",
-              amount: 2500,
-              currency: {
-                fiat: true,
-                name: "dollar",
-                symbol: "$",
-              },
-            },
-            {
-              id: "inc-1",
-              symbol: "INC",
-              to_account: "account5",
-              description: "rent",
-              amount: 100,
-              currency: {
-                fiat: true,
-                name: "dollar",
-                symbol: "$",
-              },
-            },
-          ];
-        }
-      }
-
-      let nonSetMapping = false;
-      if (data.non_set_currencies) {
-        nonSetMapping = !!data.non_set_currencies.find(
-          (item) => item.currency === currency && item.token === token
-        );
-      }
-      return {
-        ...transaction,
-        currencyMapping: {
-          currency,
-          token,
-          nonSetMapping,
-        },
-      };
+      return transaction;
     });
 
     return {
@@ -337,22 +272,11 @@ export const getTransactions = async ({
   return data;
 };
 
-export interface AccountingTransactionAPIResult {
-  bills?: AccountTransaction[];
-  expenses?: AccountTransaction[];
-  swapouts?: AccountTransaction[];
-  invoices?: AccountTransaction[];
-  incomes?: AccountTransaction[];
-  swapins?: AccountTransaction[];
-}
-
-export const fetchAccountingTransactions =
-  async (): Promise<AccountingTransactionAPIResult> => {
-    const ret = await fetch("/data/accounting-transactions.json");
-    if (!ret.ok) {
-      throw new Error(ret.statusText);
-    }
-
-    const data: AccountingTransactionAPIResult = await ret.json();
-    return data;
-  };
+export const publishTransactionToIntegration = async (data: PublishTransactionsToIntegrationArgs): Promise<boolean> => {
+  try {
+    await apiClient.post("/publish-transactions-to-integration", data);
+  } catch (err) {
+    return false;
+  }
+  return true;
+};

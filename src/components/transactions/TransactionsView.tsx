@@ -1,20 +1,13 @@
-import Loader from "../Loader";
-import ServerError from "../ServerError";
 import TransactionSelectSection from "./SelectSection";
 import TransactionListSection from "./TransactionListSection";
 import WarningAlert from "./WarningAlert";
 import useTransactionsView from "@/hooks/transactions/useTransactionsView";
 import Pagination from "../common/pagination";
-import { useQueryAccountingTransactions } from "@/hooks/transactions";
+import Loader from "@/components/Loader";
+import ServerError from "@/components/ServerError";
+import React from "react";
 
-const TransactionsView = (): JSX.Element => {
-  const {
-    data: accountingTrasactionsData,
-    isLoading: isLoadingAccountingTransactions,
-    isError: isErrorAccountingTransactions,
-    refetch: refreshAccountingTractions,
-  } = useQueryAccountingTransactions();
-
+const TransactionsView = (): React.JSX.Element => {
   const {
     isLoading,
     isError,
@@ -31,7 +24,7 @@ const TransactionsView = (): JSX.Element => {
     havePrev
   } = useTransactionsView();
 
-  if (isLoading || isLoadingAccountingTransactions) {
+  if (isLoading) {
     return (
       <div className="flex justify-center mt-8">
         <Loader />
@@ -39,7 +32,7 @@ const TransactionsView = (): JSX.Element => {
     );
   }
 
-  if (isError || isErrorAccountingTransactions) {
+  if (isError) {
     return <ServerError />;
   }
 
@@ -67,8 +60,7 @@ const TransactionsView = (): JSX.Element => {
           <TransactionListSection
             transactions={transactionsData}
             onRefreshTransactions={refreshTransactions}
-            accountingTransactions={accountingTrasactionsData}
-            onRefreshAccountingTrasactions={refreshAccountingTractions}
+            nonSetMappings={nonSetMappings}
           />
         </div>
       </div>

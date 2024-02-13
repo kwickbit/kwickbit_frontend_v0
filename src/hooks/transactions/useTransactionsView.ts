@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import {
+  Status,
   TransactionAPIResult,
   TransactionProps,
 } from "@/services/transactions";
@@ -103,8 +104,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     size: 0,
   });
 
-  const { fetchedNewTransactionsData, clearFetchedTransactionsData } =
-    useUserWebSocket();
+  const { fetchedNewTransactionsData, clearFetchedTransactionsData, publishedTransactionToIntegration, clearPublishedTransactionToIntegration } = useUserWebSocket();
 
   useEffect(() => {
     if (fetchedNewTransactionsData) {
@@ -117,6 +117,16 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
       clearFetchedTransactionsData();
     }
   }, [fetchedNewTransactionsData]);
+
+  useEffect(() => {
+    if (publishedTransactionToIntegration) {
+      const updatedTransactions = [...transactions];
+      const idxTransaction = updatedTransactions.findIndex(item => item.atomicTransactionId === publishedTransactionToIntegration.atomicTransactionId);
+      updatedTransactions[idxTransaction] = {...updatedTransactions[idxTransaction], status: Status.Published};
+      setTransactions(updatedTransactions);
+      clearPublishedTransactionToIntegration();
+    }
+  }, [publishedTransactionToIntegration, transactions]);
 
   useEffect(() => {
     let _pageSize = page.size;

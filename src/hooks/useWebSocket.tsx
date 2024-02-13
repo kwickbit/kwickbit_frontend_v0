@@ -19,6 +19,14 @@ export interface FetchedUpdateIntegrationAllAttributes {
   deduplicationId: string;
 }
 
+export interface PublishedTransactionToIntegration {
+  atomicTransactionId: string;
+  workspaceId: string;
+  topic: string;
+  batchId: string;
+  deduplicationId: string;
+}
+
 export interface UserWebSocketReturn {
   sendMessage: SendMessage;
   lastMessage: MessageEvent<any> | null;
@@ -30,6 +38,8 @@ export interface UserWebSocketReturn {
   setFetchedUpdateIntegrationAllAttributes: React.Dispatch<React.SetStateAction<FetchedUpdateIntegrationAllAttributes | null>>;
   isThereNewUpdateMappedCurrencies: boolean;
   setIsThereNewUpdateMappedCurrenciesToFalse: () => void;
+  publishedTransactionToIntegration: PublishedTransactionToIntegration | null;
+  clearPublishedTransactionToIntegration: () => void;
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
@@ -48,6 +58,8 @@ export const SocketContext = React.createContext<UserWebSocketReturn>({
   setFetchedUpdateIntegrationAllAttributes: () => {},
   isThereNewUpdateMappedCurrencies: false,
   setIsThereNewUpdateMappedCurrenciesToFalse: () => {},
+  publishedTransactionToIntegration: null,
+  clearPublishedTransactionToIntegration: () => {},
 });
 
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
@@ -56,7 +68,7 @@ export const UserWebSocketProvider = ({
   children,
 }: {
   children: JSX.Element | JSX.Element[];
-}): JSX.Element => {
+}): React.JSX.Element => {
   const [fetchedNewTransactionsData, setFetchedNewTransactionsData] =
     useState<any>();
 
@@ -68,6 +80,10 @@ export const UserWebSocketProvider = ({
   const [fetchedUpdateIntegrationAllAttributes,
     setFetchedUpdateIntegrationAllAttributes,
   ] = useState<FetchedUpdateIntegrationAllAttributes | null>(null);
+
+  const [publishedTransactionToIntegration,
+    setPublishedTransactionToIntegration,
+  ] = useState<PublishedTransactionToIntegration | null>(null);
 
   const {value: isThereNewUpdateMappedCurrencies, onTrue: setIsThereNewUpdateMappedCurrenciesToTrue, onFalse: setIsThereNewUpdateMappedCurrenciesToFalse} = useBoolean(false);
 
@@ -112,6 +128,10 @@ export const UserWebSocketProvider = ({
           setIsThereNewUpdateMappedCurrenciesToTrue();
           break;
 
+        case 'PublishedTransactionsToIntegrationSuccess':
+          setPublishedTransactionToIntegration(data.data);
+          break;
+
         default:
           break;
       }
@@ -120,6 +140,10 @@ export const UserWebSocketProvider = ({
 
   const clearFetchedTransactionsData = (): void => {
     setFetchedNewTransactionsData(null);
+  };
+
+  const clearPublishedTransactionToIntegration = (): void => {
+    setPublishedTransactionToIntegration(null);
   };
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
@@ -150,8 +174,10 @@ export const UserWebSocketProvider = ({
       clearFetchedTransactionsData,
       isThereNewUpdateMappedCurrencies,
       setIsThereNewUpdateMappedCurrenciesToFalse,
+      publishedTransactionToIntegration,
+      clearPublishedTransactionToIntegration,
     }),
-    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse, fetchedUpdateIntegrationAllAttributes, setFetchedUpdateIntegrationAllAttributes, fetchedAvailableIntegrationAccounts]
+    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedAvailableIntegrationAccounts, fetchedUpdateIntegrationAllAttributes, isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse, publishedTransactionToIntegration]
   );
 
   return (
