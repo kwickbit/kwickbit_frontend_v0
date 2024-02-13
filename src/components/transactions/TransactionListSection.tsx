@@ -1,66 +1,50 @@
-import { useState, useMemo, SyntheticEvent } from "react";
+import React, { SyntheticEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import {
-  AccountingTransactionAPIResult,
-  TransactionProps,
-} from "@/services/transactions";
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-  ColumnDef,
-} from "@tanstack/react-table";
+import { Direction, Status, TransactionProps } from "@/services/transactions";
+import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
 import cn from "classnames";
-import { Info, Refresh, Flow } from "../common/AppIcon";
-import { Tooltip } from "react-tooltip";
-import { YellowWarning } from "../common/AppIcon";
+import { Flow, Refresh } from "../common/AppIcon";
 import { useBoolean } from "@/hooks/useBoolean";
 import EditTransactionModal from "./EditTransactionModal";
 import { getLocaleDateString } from "@/utils/time-utils";
 import { abbreviateAddr } from "@/utils/utils";
+import { CurrencyMapping } from "@/services/integrations/quickbooks";
+import { WarningLine } from "@/components/transactions/WarningLine";
+import { formatNumberDigits } from "@/lib/helpers";
+import { reactNodeFormatterTransaction } from "@/lib/react-node-formatters";
+import useUserWebSocket from "@/hooks/useWebSocket";
 
 interface PageProps {
   transactions: TransactionProps[] | undefined;
   onRefreshTransactions: () => Promise<any>;
-  accountingTransactions: AccountingTransactionAPIResult | undefined;
-  onRefreshAccountingTrasactions: () => Promise<any>;
-}
-
-function getMetadataString(
-  metadata: { [key: string]: string } | undefined
-): JSX.Element | JSX.Element[] {
-  if (metadata) {
-    const keys = Object.keys(metadata);
-    return keys.map((key, idx) => (
-      <p key={idx} className="text-white text-xs">
-        <span className="capitalize">{key}</span>:
-        <span className="uppercase underline">{metadata[key]}</span>
-      </p>
-    ));
-  }
-
-  return <></>;
+  nonSetMappings: CurrencyMapping[];
 }
 
 const TransactionListSection = ({
   transactions = [],
   onRefreshTransactions,
-  accountingTransactions,
-  onRefreshAccountingTrasactions,
-}: PageProps): JSX.Element => {
+  nonSetMappings,
+}: PageProps): React.JSX.Element => {
   const [selectedItems, setSelectedItems] = useState<(number | string)[]>([]);
   const editTransaction = useBoolean(false);
-  const [selectedTransaction, setSelectedTransaction] = useState<
-    TransactionProps | undefined
-  >();
-  const data = useMemo<TransactionProps[]>(
-    () =>
-      transactions.map((item, idx) => ({
-        ...item,
-        id: idx,
-      })),
-    [transactions]
+  const [selectedTransaction, setSelectedTransaction] = useState<TransactionProps | undefined>();
+  const { publishedTransactionToIntegration, clearPublishedTransactionToIntegration } = useUserWebSocket();
+
+  const data = useMemo<TransactionProps[]>(() =>
+    transactions.map((item, idx) => ({
+      ...item,
+      id: idx,
+    })),
+  [transactions]
   );
+
+  useEffect(() => {
+    if (publishedTransactionToIntegration && selectedTransaction && publishedTransactionToIntegration.atomicTransactionId === selectedTransaction.atomicTransactionId) {
+      const updatedSelectedTransaction = {...selectedTransaction, status: Status.Published};
+      setSelectedTransaction(updatedSelectedTransaction);
+      clearPublishedTransactionToIntegration();
+    }
+  }, [clearPublishedTransactionToIntegration, publishedTransactionToIntegration, selectedTransaction, setSelectedTransaction]);
 
   const columns: ColumnDef<TransactionProps>[] = [
     {
@@ -90,8 +74,7 @@ const TransactionListSection = ({
       id: "date",
       cell: ({ row }): JSX.Element | string => {
         const date = new Date(row.original.createdAt);
-        const dateStr = getLocaleDateString(date);
-        return dateStr;
+        return getLocaleDateString(date);
       },
       header: "Date&Time",
     },
@@ -116,7 +99,7 @@ const TransactionListSection = ({
       cell: (): JSX.Element => {
         return <Flow />;
       },
-      header: "",
+      header: "___",
     },
     {
       id: "to_address",
@@ -129,10 +112,9 @@ const TransactionListSection = ({
             </>
           );
         }
-
         return "";
       },
-      header: "",
+      header: "To",
     },
     {
       id: "type",
@@ -140,75 +122,21 @@ const TransactionListSection = ({
       cell: ({ row }): JSX.Element | string => (
         <span className="capitalize">{row.original.direction}</span>
       ),
-      header: "",
-    },
-    {
-      id: "from_detail",
-      cell: ({ row }): JSX.Element | string => {
-        if (row.original.direction === "Outgoing") {
-          return (
-            <>
-              {row.original.detail && (
-                <div className="flex flex-col items-center">
-                  <span className="text-center uppercase inline-block relative">
-                    {`${row.original.detail.amount.toFixed(2)} ${
-                      row.original.detail.symbol
-                    }`}
-                    {row.original.detail.metadata && (
-                      <>
-                        <span
-                          data-tooltip-id="info-fulltime"
-                          className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
-                        >
-                          <Info className="w-4 h-4" />
-                        </span>
-                        <Tooltip id="info-fulltime" place="top" variant="info">
-                          {getMetadataString(row.original.detail.metadata)}
-                        </Tooltip>
-                      </>
-                    )}
-                  </span>
-                  <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
-                    2
-                  )}`}</span>
-                </div>
-              )}
-            </>
-          );
-        }
-        return "";
-      },
-      header: "",
+      header: "Direction",
     },
     {
       id: "to_detail",
       cell: ({ row }): JSX.Element | string => {
-        if (row.original.direction === "Incoming") {
+        if (row.original.direction === Direction.Incoming || row.original.direction === Direction.Swap) {
           return (
             <>
               {row.original.detail && (
                 <div className="flex flex-col items-center">
                   <span className="text-center uppercase inline-block relative">
-                    {`${row.original.detail.amount.toFixed(2)} ${
-                      row.original.detail.symbol
-                    }`}
-                    {row.original.detail.metadata && (
-                      <>
-                        <span
-                          data-tooltip-id="info-fulltime"
-                          className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
-                        >
-                          <Info className="w-4 h-4" />
-                        </span>
-                        <Tooltip id="info-fulltime" place="top" variant="info">
-                          {getMetadataString(row.original.detail.metadata)}
-                        </Tooltip>
-                      </>
-                    )}
+                    {`${formatNumberDigits(row.original.amountIncoming, 2)} `}
+                    {row.original.tokenIncoming?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenIncoming, row.original.atomicTransactionId, 'list-incoming') : row.original.detail.symbolIncoming}
                   </span>
-                  <span className="text-center uppercase">{`$${row.original.detail.price.toFixed(
-                    2
-                  )}`}</span>
+                  <span className="text-center uppercase">{`${row.original.detail.priceInFiatIncoming?.symbol}${formatNumberDigits(row.original.detail.priceInFiatIncoming?.amount as string, 2)}`}</span>
                 </div>
               )}
             </>
@@ -217,7 +145,29 @@ const TransactionListSection = ({
 
         return "";
       },
-      header: "",
+      header: "Incoming Amount",
+    },
+    {
+      id: "from_detail",
+      cell: ({ row }): JSX.Element | string => {
+        if (row.original.direction === Direction.Outgoing || row.original.direction === Direction.Swap) {
+          return (
+              <>
+                {row.original.detail && (
+                    <div className="flex flex-col items-center">
+                  <span className="text-center uppercase inline-block relative">
+                    {`${formatNumberDigits(row.original.amountOutgoing, 2)} `}
+                    {row.original.tokenOutgoing?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenOutgoing, row.original.atomicTransactionId, 'list-outgoing') : row.original.detail.symbolOutgoing}
+                  </span>
+                      <span className="text-center uppercase">{`${row.original.detail.priceInFiatOutgoing?.symbol}${formatNumberDigits(row.original.detail.priceInFiatOutgoing?.amount as string, 2)}`}</span>
+                    </div>
+                )}
+              </>
+          );
+        }
+        return "";
+      },
+      header: "Outgoing Amount",
     },
     {
       id: "fee",
@@ -227,19 +177,19 @@ const TransactionListSection = ({
           return (
             <>
               <p className="uppercase">{`${row.original.fee.amount}`}</p>
-              <p className="uppercase">{`$${row.original.fee.price}`}</p>
+              <p className="uppercase">{`$${row.original.fee.priceInFiat.amount}`}</p>
             </>
           );
         }
 
         return "";
       },
-      header: "FEE",
+      header: "Fees",
     },
     {
       id: "chain",
       accessorKey: "chain",
-      header: (): JSX.Element | string => "Cahin",
+      header: (): React.JSX.Element | string => "Chain",
     },
     {
       id: "published",
@@ -311,7 +261,6 @@ const TransactionListSection = ({
   const onRefreshData = async (): Promise<void> => {
     setLoading(true);
     await onRefreshTransactions();
-    await onRefreshAccountingTrasactions();
     setLoading(false);
   };
 
@@ -341,9 +290,9 @@ const TransactionListSection = ({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => `${row.createdAt}-${row.id}`, //good to have guaranteed unique row ids/keys for rendering
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: true,
+    debugTable: false,
+    debugHeaders: false,
+    debugColumns: false,
   });
 
   return (
@@ -352,7 +301,7 @@ const TransactionListSection = ({
         <EditTransactionModal
           editTransaction={editTransaction}
           transaction={selectedTransaction}
-          accountingTransactions={accountingTransactions}
+          nonSetMappings={nonSetMappings}
         />
       )}
       <div className="pt-5 pb-4">
@@ -394,14 +343,7 @@ const TransactionListSection = ({
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </div>
               ))}
-              {row.original.currencyMapping?.nonSetMapping && (
-                <div className="absolute bottom-2 right-4 text-[#ECB90D] text-sm font-bold space-y-0.5">
-                  <div className="flex justify-end">
-                    <YellowWarning />
-                  </div>
-                  {`Configure Mapping for token ${row.original.currencyMapping.token} to integrate this transaction`}
-                </div>
-              )}
+              <WarningLine transaction={row.original} nonSetMappings={nonSetMappings} />
             </div>
           ))
         ) : (

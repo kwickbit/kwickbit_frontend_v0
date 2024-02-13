@@ -1,12 +1,14 @@
-import { Warning } from "../common/AppIcon";
+import {CircleClose, Warning} from "../common/AppIcon";
 import cn from "classnames";
+import React from "react";
 
 interface Props {
   message: string;
   shouldShow: boolean;
+  onClose: () => void;
 }
 
-const CommonWarningAlert = ({ shouldShow, message }: Props): JSX.Element => {
+const CommonWarningAlert = ({ shouldShow, message, onClose }: Props): React.JSX.Element => {
   return (
     <div
       className={cn(
@@ -17,6 +19,7 @@ const CommonWarningAlert = ({ shouldShow, message }: Props): JSX.Element => {
     >
       <Warning />
       <span>{message}</span>
+      <CircleClose onClick={onClose} />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import cn from "classnames";
 import { CurrencyMapping } from "@/services/integrations/quickbooks";
 import { Tooltip } from "react-tooltip";
 import React from "react";
+import {symbolFormatTransaction, tooltipFormatterTransaction} from "@/lib/helpers";
 
 interface Props {
   nonSetMappings: CurrencyMapping[];
@@ -33,11 +34,11 @@ const WarningAlert = ({
           nonSetMappings.map((currencyMapping, index) => (
               <React.Fragment key={index}>
                 <Tooltip id={`tooltip-${index}`}
-                    content={`Chain: ${currencyMapping.chain}, Issuer: ${currencyMapping.tokenMetadata.issuer}`}
+                    content={tooltipFormatterTransaction(currencyMapping.token)}
                 />
                 <span data-tooltip-id={`tooltip-${index}`}
                       className="text-white text-base font-bold underline decoration-white">
-          {currencyMapping.tokenMetadata.isNative ? `${currencyMapping.tokenMetadata}-native` : currencyMapping.tokenMetadata.code}
+          {symbolFormatTransaction(currencyMapping.token)}
         </span>
                 {index < nonSetMappings.length - 1 ? ', ' : ''}
               </React.Fragment>

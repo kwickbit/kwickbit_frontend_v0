@@ -4,6 +4,7 @@ import { StellarLogo } from "@/components/common/AppIcon";
 import { Tooltip } from "react-tooltip";
 import { Info } from "@/components/common/AppIcon";
 import React, { useEffect, useState } from "react";
+import {keyFormatTransaction} from "@/lib/helpers";
 
 interface Props {
   currencyMapping: CurrencyMapping;
@@ -69,32 +70,32 @@ const CurrencyLine = ({
         onRadioSelectionChange(currencyMapping, usePlaceholder);
     };
 
-    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-native` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`;
+    const key = currencyMapping.token ? keyFormatTransaction(currencyMapping.token) : '';
 
     return (
         <div className="py-4 mb-4 grid grid-cols-[180px,200px,200px,200px]">
             <>
-                {currencyMapping.tokenMetadata.isNative ? (
+                {currencyMapping.token.isNative ? (
                     <div className="w-[105px] flex justify-center">
                         <StellarLogo/>
                     </div>
                 ) : (
                     <>
                         <div className="w-[105px] flex justify-center text-sm text-[#171A1F] text-wrap relative">
-                            {currencyMapping.tokenMetadata.code}
+                            {currencyMapping.token.assetMetadata?.code}
                             <span
-                                data-tooltip-id={`help-${currencyMapping.tokenMetadata.issuer}`}
+                                data-tooltip-id={`help-${currencyMapping.token.assetMetadata?.issuer}`}
                                 className="absolute bottom-4 lg:top-0.5 -right-5 cursor-pointer"
                             >
                 <Info className="w-4 h-4"/>
               </span>
                         </div>
                         <Tooltip
-                            id={`help-${currencyMapping.tokenMetadata.issuer}`}
+                            id={`help-${currencyMapping.token.assetMetadata?.issuer}`}
                             place="right"
                             variant="info"
                         >
-                            {`issuer: ${currencyMapping.tokenMetadata.issuer}`}
+                            {`issuer: ${currencyMapping.token.assetMetadata?.issuer}`}
                         </Tooltip>
                     </>
                 )}
@@ -138,9 +139,9 @@ const CurrencyLine = ({
             <div className="mt-4 col-span-4 flex items-center justify-between">
                 <div className="text-base font-semibold flex items-center gap-1">
                     {currencyMapping.isIntegrationRefDefined ? (
-                        <>How this {currencyMapping.tokenMetadata.isNative ? 'native crypto currency' : 'crypto token'} is handled:</>
+                        <>How this {currencyMapping.token.isNative ? 'native crypto currency' : 'crypto token'} is handled:</>
                     ) : (
-                        <>How do you want to handle this {currencyMapping.tokenMetadata.isNative ? 'native crypto currency' : 'crypto token'}?</>
+                        <>How do you want to handle this {currencyMapping.token.isNative ? 'native crypto currency' : 'crypto token'}?</>
                     )}
                     <span data-tooltip-id={`tooltip_handle_currency_${key}`} className="bottom-4 right-1 cursor-pointer">
                         <Info className="w-4 h-4"/>

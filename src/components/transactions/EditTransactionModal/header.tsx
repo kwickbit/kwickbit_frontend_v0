@@ -1,11 +1,13 @@
-import { TransactionProps } from "@/services/transactions";
-import { UseBooleanReturnProps } from "@/hooks/useBoolean";
+import {Direction, TransactionProps} from "@/services/transactions";
+import {UseBooleanReturnProps} from "@/hooks/useBoolean";
 import {
+  CircleLeftAndRightArrow,
   CircleLeftArrow,
   CircleRightArrow,
   TransactionModalCloseIcon,
 } from "@/components/common/AppIcon";
-import { getLocaleDateString } from "@/utils/time-utils";
+import {getLocaleDateString} from "@/utils/time-utils";
+import React from "react";
 
 interface Props {
   transaction: TransactionProps;
@@ -15,18 +17,22 @@ interface Props {
 const EditTransactionModalHeader = ({
   transaction,
   editTransaction,
-}: Props): JSX.Element => {
+}: Props): React.JSX.Element => {
+
+  const arrowHeader = (direction: Direction): React.JSX.Element => {
+    if (direction === Direction.Incoming) return <CircleRightArrow className="w-8 h-8" />;
+    else if (direction === Direction.Outgoing) return <CircleLeftArrow className="w-8 h-8" />;
+    else if (direction === Direction.Swap) return <CircleLeftAndRightArrow className="w-8 h-8" />;
+    else return <></>;
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-2">
-          {transaction.direction == "Outgoing" ? (
-            <CircleRightArrow className="w-8 h-8" />
-          ) : (
-            <CircleLeftArrow className="w-8 h-8" />
-          )}
+          {arrowHeader(transaction.direction)}
           <h2 className="text-lg text-[#171A1F]">
-            {transaction.direction === "Outgoing" ? "Outgoing" : "Incoming"}
+            {transaction.direction}
           </h2>
         </div>
         <button

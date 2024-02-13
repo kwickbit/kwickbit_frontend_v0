@@ -10,6 +10,7 @@ import {
   CurrencyMapping
 } from "@/services/integrations/quickbooks";
 import {useMutationAddCurrencyMappings} from "@/hooks/integrations/quickbooks";
+import {keyFormatTransaction} from "@/lib/helpers";
 
 interface Props {
   shouldOpenModal: UseBooleanReturnProps;
@@ -41,13 +42,13 @@ const QuickBooksSettingsModal = ({
   }, [shouldOpenModal.value, setAccountsSelections]);
 
   const handleSelectionChange = useCallback((currencyMapping: CurrencyMapping | undefined, accountType: string, selection: AvailableAccount): void => {
-    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-native` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`
+
+    const key = currencyMapping?.token ? keyFormatTransaction(currencyMapping.token) : '';
     setAccountsSelections((prevSelections) => ({
       ...prevSelections,
       [key]: {
         ...prevSelections[key],
-        chain: currencyMapping?.chain as string,
-        ...(currencyMapping?.tokenMetadata ? {tokenMetadata: currencyMapping.tokenMetadata} : {}),
+        ...(currencyMapping?.token ? {token: currencyMapping.token} : {}),
         integrationRef: {
           [accountType]: {
             id: selection.id,
@@ -59,7 +60,8 @@ const QuickBooksSettingsModal = ({
   }, []);
 
   const handleSelectionRadioChange = useCallback((currencyMapping: CurrencyMapping | undefined, usePlaceholderCurrency: boolean): void => {
-    const key = currencyMapping?.tokenMetadata.isNative ? `${currencyMapping.chain}-native` : `${currencyMapping?.chain}-${currencyMapping?.tokenMetadata.code}-${currencyMapping?.tokenMetadata.issuer}`
+    const key = currencyMapping?.token ? keyFormatTransaction(currencyMapping.token) : '';
+
     setAccountsSelections((prevSelections) => ({
       ...prevSelections,
       [key]: {

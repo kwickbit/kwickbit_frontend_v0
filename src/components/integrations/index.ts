@@ -11,6 +11,7 @@ export interface Invoice {
     integrationWorkspaceId: string;
     integration: Integration;
     invoiceId: string;
+    integrationInvoiceId: string;
     invoiceDateTime: string;
     totalAmount: number;
     lines: LineInvoice[];
@@ -42,6 +43,7 @@ export interface LineInvoice {
 export interface Bill {
     workspaceId: string;
     integrationWorkspaceId: string;
+    integrationBillId: string;
     integration: Integration;
     billId: string;
     billDateTime: string;
@@ -96,4 +98,14 @@ export interface LineBill {
             value: string;
         }
     }
+}
+
+export interface Item {
+    id: string;
+    name: string;
+    integration: string;
+    realmId: string;
+    workspaceId: string;
+    integrationWorkspaceId: string;
+    itemType: string;
 }

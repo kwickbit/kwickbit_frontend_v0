@@ -2,18 +2,19 @@ import { TransactionProps } from "@/services/transactions";
 import Image from "next/image";
 import cn from "classnames";
 import { ArrowUpLine } from "@/components/common/AppIcon";
+import React from "react";
 
 interface Props {
   transaction: TransactionProps;
   publishTransaction: () => void;
-  disabledPublish?: boolean;
+  disabledPublish: boolean;
 }
 
 const EditTransactionModalFooter = ({
   transaction,
   publishTransaction,
   disabledPublish = false
-}: Props): JSX.Element => {
+}: Props): React.JSX.Element => {
   return (
     <div className="bg-[#F1F1F1] border shadow px-3 py-4 flex gap-10">
       <div className="flex items-center gap-3">
@@ -49,8 +50,8 @@ const EditTransactionModalFooter = ({
         </span>
         {transaction.status === 'NonPublished' && (
           <button
-            className={cn("bg-[#4ADDB6] rounded-md text-[#082C22] text-sm px-3 py-2 flex items-center gap-2",
-            {"hover:scale-95": !disabledPublish })}
+              className={`bg-[#4ADDB6] rounded-xl text-[#082C22] text-sm px-5 py-3 flex items-center gap-2 
+                        ${disabledPublish ? 'hover:cursor-not-allowed opacity-50' : 'hover:scale-95'}`}
             disabled={disabledPublish}
             onClick={():void => publishTransaction()}
           >

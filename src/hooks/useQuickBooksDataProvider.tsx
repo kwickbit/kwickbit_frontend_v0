@@ -17,15 +17,15 @@ import {
     fetchBills,
     fetchCurrencies,
     FetchIntegrationAllAttributesArgs,
-    fetchInvoices,
+    fetchInvoices, fetchItems,
     fetchQuickbookAccounts,
     getAvailableAccounts,
     getBills,
     getCurrencies,
-    getInvoices,
-    InvoiceAPIResult
+    getInvoices, getItems,
+    InvoiceAPIResult, ItemAPIResult
 } from "@/services/integrations/quickbooks";
-import {Bill, Invoice} from "@/components/integrations";
+import {Bill, Invoice, Item} from "@/components/integrations";
 
 interface Props {
     children: React.ReactNode | React.JSX.Element[];
@@ -58,6 +58,13 @@ interface QuickBooksData {
         isLoading: boolean;
         isError: boolean;
         refetch: UseQueryResult<BillAPIResult>['refetch'];
+    };
+
+    items: {
+        data: Item[];
+        isLoading: boolean;
+        isError: boolean;
+        refetch: UseQueryResult<ItemAPIResult>['refetch'];
     };
 
     fetchUpdateAllAttributes: UseMutationResult<any, Error, FetchIntegrationAllAttributesArgs, unknown>;
@@ -114,6 +121,13 @@ const defaultContextValue: QuickBooksData = {
         refetch: noOpAsync as unknown as ((options?: RefetchOptions | undefined) => Promise<QueryObserverResult<BillAPIResult>>),
     },
 
+    items: {
+        data: [],
+        isLoading: false,
+        isError: false,
+        refetch: noOpAsync as unknown as ((options?: RefetchOptions | undefined) => Promise<QueryObserverResult<ItemAPIResult>>),
+    },
+
     fetchUpdateAllAttributes: defaultMutationResult,
 }
 
@@ -129,18 +143,20 @@ export const QuickBooksDataProvider = ({ children }: Props): React.JSX.Element =
     const { data: currenciesAPIResult, isLoading: isLoadingCurrencies, isError: isErrorCurrencies, refetch: refetchCurrencies } = useQuery({queryKey: ['getCurrencies'], queryFn: getCurrencies});
     const { data: invoicesAPIResult, isLoading: isLoadingInvoices, isError: isErrorInvoices, refetch: refetchInvoices } = useQuery({queryKey: ['getInvoices'], queryFn: getInvoices});
     const { data: billsAPIResult, isLoading: isLoadingBills, isError: isErrorBills, refetch: refetchBills } = useQuery({queryKey: ['getBills'], queryFn: getBills});
+    const { data: itemsAPIResult, isLoading: isLoadingItems, isError: isErrorItems, refetch: refetchItems } = useQuery({queryKey: ['getItems'], queryFn: getItems});
 
     const key = 'fetch-integration-all-attributes';
     const fetchUpdateAllAttributes = useMutation({
         mutationKey: [key],
-        onSuccess: (): void => {
-            queryClient.invalidateQueries({queryKey: [key]});
+        onSuccess: async (): Promise<void> => {
+            await queryClient.invalidateQueries({queryKey: [key]});
         },
         mutationFn: async (args: FetchIntegrationAllAttributesArgs): Promise<void> => {
             await fetchCurrencies(args);
             await fetchQuickbookAccounts(args);
             await fetchBills(args);
             await fetchInvoices(args);
+            await fetchItems(args);
         },
     });
 
@@ -149,6 +165,7 @@ export const QuickBooksDataProvider = ({ children }: Props): React.JSX.Element =
         currencies: { data: currenciesAPIResult?.data || {currencies: []}, isLoading: isLoadingCurrencies, isError: isErrorCurrencies, refetch: refetchCurrencies },
         invoices: { data: invoicesAPIResult?.data || [], isLoading: isLoadingInvoices, isError: isErrorInvoices, refetch: refetchInvoices },
         bills: { data: billsAPIResult?.data || [], isLoading: isLoadingBills, isError: isErrorBills, refetch: refetchBills },
+        items: { data: itemsAPIResult?.data || [], isLoading: isLoadingItems, isError: isErrorItems, refetch: refetchItems },
         fetchUpdateAllAttributes,
     };
 

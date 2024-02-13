@@ -23,7 +23,7 @@ const CurrencySelect = ({
       <div className="relative">
         <Listbox.Button className="relative rounded border-[#9095A1] border text-[#171A1F] text-sm pl-3 pr-7 py-2 w-48 flex items-center">
           <span className="block truncate text-left w-full">
-            { selected? selected.name: placeholder}
+            { selected? `(${selected.currencyRef.reference}) - ${selected.name}` : placeholder}
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
             <DownArrowIcon className="w-4 h-4" />
@@ -53,7 +53,7 @@ const CurrencySelect = ({
                         selected ? "font-medium" : "font-normal"
                       }`}
                     >
-                      {obj.name}
+                      {`(${obj.currencyRef.reference}) - ${obj.name}`}
                     </span>
                   </>
                 )}
