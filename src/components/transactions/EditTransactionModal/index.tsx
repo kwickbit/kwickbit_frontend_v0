@@ -32,18 +32,18 @@ interface Props {
 
 const initializeAccountingLinesIncoming = (transaction: TransactionProps): AccountingLine[] => {
   if (transaction.direction === Direction.Swap) {
-    const accountingLinesSwapIn = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType);
+    const accountingLinesSwapIn = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType) || [];
     if (!accountingLinesSwapIn || accountingLinesSwapIn.length === 0) return [{accountingType: AccountingTransactionType.Swap}];
     else return accountingLinesSwapIn;
-  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Income, AccountingTransactionType.Invoice].includes(accountingLine.accountingType));
+  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Income, AccountingTransactionType.Invoice].includes(accountingLine.accountingType)) || [];
 };
 
 const initializeAccountingLinesOutgoing = (transaction: TransactionProps): AccountingLine[] => {
   if (transaction.direction === Direction.Swap) {
-    const accountingLinesSwapOut = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType);
+    const accountingLinesSwapOut = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType) || [];
     if (!accountingLinesSwapOut || accountingLinesSwapOut.length === 0) return [{accountingType: AccountingTransactionType.Swap}];
     else return accountingLinesSwapOut;
-  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Expense, AccountingTransactionType.Bill].includes(accountingLine.accountingType));
+  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Expense, AccountingTransactionType.Bill].includes(accountingLine.accountingType)) || [];
 };
 
 const EditTransactionModal = ({

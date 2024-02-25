@@ -1,6 +1,19 @@
+
+![KwickBit logo](https://raw.githubusercontent.com/kwickbit/.github/main/resources/logos/kwickbit-logo-default-positive-16_9.png)
 # Kwickbit Frontend Application V0
+---
+[![CI](https://github.com/kwickbit/kwickbit_frontend_v0/actions/workflows/push_workflow.yml/badge.svg?branch=main&event=push)](https://github.com/kwickbit/kwickbit_frontend_v0/actions/workflows/push_workflow.yml)
 
 This repository contains the frontend application for Kwickbit, built with Next.js and TypeScript. The application is served as static code with no server-side rendering.
+
+<div style="text-align: center">
+  <img src="https://raw.githubusercontent.com/kwickbit/.github/main/resources/screenshots/kwickbit_frontend_v0/login_page.png" alt="Login page" width="49%" />
+  <img src="https://raw.githubusercontent.com/kwickbit/.github/main/resources/screenshots/kwickbit_frontend_v0/transactions_page.png" alt="Transactions page" width="49%%" />
+</div>
+<div style="text-align: center">
+  <img src="https://raw.githubusercontent.com/kwickbit/.github/main/resources/screenshots/kwickbit_frontend_v0/transaction_detail_to_publish.png" alt="Transaction detail page" width="49%" />
+  <img src="https://raw.githubusercontent.com/kwickbit/.github/main/resources/screenshots/kwickbit_frontend_v0/integrations_page.png" alt="Integrations page" width="49%%" />
+</div>
 
 ## Development Setup
 
