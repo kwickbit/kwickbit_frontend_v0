@@ -29,7 +29,7 @@ const BlockchainFee = ({ transaction }: Props): React.JSX.Element => {
             <div>
               <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
                 {`${transaction.fee?.amount.toFixed(5)} ${
-                  transaction.detail?.symbol
+                  transaction.detail?.symbolIncoming
                 }`}
               </span>
             </div>

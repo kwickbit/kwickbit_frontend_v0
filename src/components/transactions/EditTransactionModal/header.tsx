@@ -20,8 +20,8 @@ const EditTransactionModalHeader = ({
 }: Props): React.JSX.Element => {
 
   const arrowHeader = (direction: Direction): React.JSX.Element => {
-    if (direction === Direction.Incoming) return <CircleRightArrow className="w-8 h-8" />;
-    else if (direction === Direction.Outgoing) return <CircleLeftArrow className="w-8 h-8" />;
+    if (direction === Direction.Incoming) return <CircleLeftArrow className="w-8 h-8" />;
+    else if (direction === Direction.Outgoing) return <CircleRightArrow className="w-8 h-8" />;
     else if (direction === Direction.Swap) return <CircleLeftAndRightArrow className="w-8 h-8" />;
     else return <></>;
   };

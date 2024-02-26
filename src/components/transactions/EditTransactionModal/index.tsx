@@ -117,13 +117,13 @@ const EditTransactionModal = ({
   const isSumMismatchedIncoming = useMemo((): boolean => {
     if ([Direction.Incoming, Direction.Swap].includes(transaction?.direction as Direction)) {
       return Math.abs(accountingLinesIncoming.map(accountingLine => accountingLine.amount as number).reduce((total, num) => total + num, 0) - parseFloat(transaction?.amountIncoming || '0')) > 0.5;
-    } else return true;
+    } else return false;
   }, [accountingLinesIncoming, transaction?.amountIncoming, transaction?.direction]);
 
   const isSumMismatchedOutgoing = useMemo((): boolean => {
     if ([Direction.Outgoing, Direction.Swap].includes(transaction?.direction as Direction)) {
       return Math.abs(accountingLinesOutgoing.map(accountingLine => accountingLine.amount as number).reduce((total, num) => total + num, 0) - parseFloat(transaction?.amountOutgoing || '0')) > 0.5;
-    } else return true;
+    } else return false;
   }, [accountingLinesOutgoing, transaction?.amountOutgoing, transaction?.direction]);
 
   const disabledPublish = useMemo((): boolean => {
@@ -145,7 +145,10 @@ const EditTransactionModal = ({
   }, [accountingLinesIncoming, accountingLinesOutgoing, isTokenNonMapped, transaction?.direction]);
 
   const publishTransaction = (): void => {
-    if (isSumMismatchedIncoming || isSumMismatchedOutgoing) showMismatchAmount.onTrue();
+    if (isSumMismatchedIncoming || isSumMismatchedOutgoing) {
+      showMismatchAmount.onTrue();
+      return;
+    }
 
     let accountingLines: AccountingLine[] = [];
     if (transaction?.direction === Direction.Incoming) {
