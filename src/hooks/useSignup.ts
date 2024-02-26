@@ -58,14 +58,20 @@ const useSignup = (): ReturnProps => {
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
-    signup.mutate(data, {
-      onSuccess: () => {
-        router.push("/signup/success");
-      },
-      onError: () => {
-        //API Should return a error message
-        toast.error("Something went wrong, please try again.");
-      },
+    window.grecaptcha.ready(async () => {
+      const tokenRecaptchaResponse = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_GOOGLE_RE_CAPTCHA_V3_PUBLIC_KEY as string, {action: 'SIGNUP'});
+      // Append the reCAPTCHA token to your form data
+      const enhancedData = {...data, tokenRecaptchaResponse};
+
+      signup.mutate(enhancedData, {
+        onSuccess: () => {
+          router.push("/signup/success");
+        },
+        onError: () => {
+          //API Should return a error message
+          toast.error("Something went wrong, please try again.");
+        },
+      });
     });
   });
 

@@ -12,6 +12,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_QUICKBOOK_CLIENT_ID=${NEXT_PUBLIC_API_QUICKBOOK_CLIENT_ID}
+      - NEXT_PUBLIC_GOOGLE_RE_CAPTCHA_V3_PUBLIC_KEY=${NEXT_PUBLIC_GOOGLE_RE_CAPTCHA_V3_PUBLIC_KEY}
     volumes:
       - .:/app
       - /app/node_modules
