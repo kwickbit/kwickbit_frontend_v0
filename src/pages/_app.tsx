@@ -31,17 +31,19 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
       !authExcludedRoutes.includes(route) &&
       !isConnected() &&
       !isRefreshTokenExpired()
-    )
+    ) {
       refreshToken();
+    }
     else if (
       !authExcludedRoutes.includes(route) &&
       !isConnected() &&
       isRefreshTokenExpired()
     ) {
-      replace(`/login?redirect=${route}`);
-    } else if (nonAuthExclusiveRoutes.includes(route) && isConnected())
+      replace(`/login.html?redirect=${route}`);
+    } else if (nonAuthExclusiveRoutes.includes(route) && isConnected() && route !== '/') {
       replace("/");
-  }, [route, replace]);
+    }
+  }, [replace, route]);
 
   return (
     <>
