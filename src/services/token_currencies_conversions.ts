@@ -42,6 +42,12 @@ export const convertCurrency = ({from, to, fromAmount }: ConvertCurrencyArgs): n
         'XLM:yXLM': 1,
         'USD:yXLM': 1/0.1140,
         'EUR:yXLM': 1/0.1066,
+        'USDC:EUR': 0.93,
+        'EUR:USDC': 1.075268817204301,
+        'USDC:USD': 0.93,
+        'USD:USDC': 1.075268817204301,
+        'XLM:USDC': 0.1140,
+        'USDC:XLM': 1 / 0.1140,
     };
 
     // Helper function to get the currency code

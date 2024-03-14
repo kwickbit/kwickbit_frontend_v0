@@ -1,10 +1,10 @@
-import {Direction, TransactionProps} from "@/services/transactions";
+import { Direction, TransactionProps } from "@/services/transactions";
 import { CurrencyMapping } from "@/services/integrations/quickbooks";
 import { YellowWarning } from "@/components/common/AppIcon";
 import { reactNodeFormatterTransaction } from "@/lib/react-node-formatters";
-import React, {useMemo} from "react";
-import {keyFormatTransaction} from "@/lib/helpers";
-import {Token} from "@/services/token_currencies_conversions";
+import React, { useMemo } from "react";
+import { keyFormatTransaction } from "@/lib/helpers";
+import { Token } from "@/services/token_currencies_conversions";
 
 
 interface Props {
@@ -35,8 +35,10 @@ export const WarningLine = ({transaction, nonSetMappings}: Props): React.JSX.Ele
                     <div className="flex justify-end">
                         <YellowWarning />
                     </div>
-                    {'Configure Mapping for token '}
-                    {nonSetMappedTokensFromTransaction.map((token, idx) => reactNodeFormatterTransaction(token, transaction.atomicTransactionId, `warning-${transaction.atomicTransactionId}-${idx}`))}
+                    {'Configure Mapping for token(s) '}
+                    {nonSetMappedTokensFromTransaction.map((token, idx) =>
+                        reactNodeFormatterTransaction(token, `warning-${transaction.atomicTransactionId}-${idx}`, idx < nonSetMappedTokensFromTransaction.length - 1 ? ', ' : '')
+                    )}
                     {' to integrate this transaction'}
                 </div>
             )}

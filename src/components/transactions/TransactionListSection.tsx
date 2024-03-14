@@ -134,7 +134,7 @@ const TransactionListSection = ({
                 <div className="flex flex-col items-center">
                   <span className="text-center uppercase inline-block relative">
                     {`${formatNumberDigits(row.original.amountIncoming, 2)} `}
-                    {row.original.tokenIncoming?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenIncoming, row.original.atomicTransactionId, 'list-incoming') : row.original.detail.symbolIncoming}
+                    {row.original.tokenIncoming?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenIncoming, `list-incoming-${row.original.atomicTransactionId}`) : row.original.detail.symbolIncoming}
                   </span>
                   <span className="text-center uppercase">{`${row.original.detail.priceInFiatIncoming?.symbol}${formatNumberDigits(row.original.detail.priceInFiatIncoming?.amount as string, 2)}`}</span>
                 </div>
@@ -157,7 +157,7 @@ const TransactionListSection = ({
                     <div className="flex flex-col items-center">
                   <span className="text-center uppercase inline-block relative">
                     {`${formatNumberDigits(row.original.amountOutgoing, 2)} `}
-                    {row.original.tokenOutgoing?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenOutgoing, row.original.atomicTransactionId, 'list-outgoing') : row.original.detail.symbolOutgoing}
+                    {row.original.tokenOutgoing?.assetMetadata ? reactNodeFormatterTransaction(row.original.tokenOutgoing, `list-outgoing-${row.original.atomicTransactionId}`) : row.original.detail.symbolOutgoing}
                   </span>
                       <span className="text-center uppercase">{`${row.original.detail.priceInFiatOutgoing?.symbol}${formatNumberDigits(row.original.detail.priceInFiatOutgoing?.amount as string, 2)}`}</span>
                     </div>

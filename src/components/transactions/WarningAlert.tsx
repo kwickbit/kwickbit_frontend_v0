@@ -2,9 +2,8 @@ import { Warning } from "../common/AppIcon";
 import Link from "next/link";
 import cn from "classnames";
 import { CurrencyMapping } from "@/services/integrations/quickbooks";
-import { Tooltip } from "react-tooltip";
 import React from "react";
-import {symbolFormatTransaction, tooltipFormatterTransaction} from "@/lib/helpers";
+import {reactNodeFormatterTransaction} from "@/lib/react-node-formatters";
 
 interface Props {
   nonSetMappings: CurrencyMapping[];
@@ -32,16 +31,7 @@ const WarningAlert = ({
         }
         {
           nonSetMappings.map((currencyMapping, index) => (
-              <React.Fragment key={index}>
-                <Tooltip id={`tooltip-${index}`}
-                    content={tooltipFormatterTransaction(currencyMapping.token)}
-                />
-                <span data-tooltip-id={`tooltip-${index}`}
-                      className="text-white text-base font-bold underline decoration-white">
-          {symbolFormatTransaction(currencyMapping.token)}
-        </span>
-                {index < nonSetMappings.length - 1 ? ', ' : ''}
-              </React.Fragment>
+              reactNodeFormatterTransaction(currencyMapping.token, `transactions-page-warning-alert-${index}`, index < nonSetMappings.length - 1 ? ', ' : '')
           ))
         }
 

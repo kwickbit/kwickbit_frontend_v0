@@ -4,16 +4,18 @@ import {symbolFormatTransaction, tooltipFormatterTransaction} from "@/lib/helper
 import {Token} from "@/services/token_currencies_conversions";
 
 
-export const reactNodeFormatterTransaction = (token: Token, atomicTransactionId: string, nonce: string): ReactNode => {
+
+export const reactNodeFormatterTransaction = (token: Token, nonce: string, separator: string = ''): ReactNode => {
     return (
-        <React.Fragment >
-            <Tooltip id={`tooltip-non-set-mapping-${atomicTransactionId}-${nonce}`}
+        <React.Fragment key={nonce}>
+            <Tooltip id={`tooltip-non-set-mapping-${nonce}`}
                      content={tooltipFormatterTransaction(token)}
             />
-            <span data-tooltip-id={`tooltip-non-set-mapping-${atomicTransactionId}-${nonce}`}
+            <span data-tooltip-id={`tooltip-non-set-mapping-${nonce}`}
               className="text-base font-bold underline decoration-white">
                 {symbolFormatTransaction(token)}
             </span>
+            {separator}
         </React.Fragment>
     );
 };

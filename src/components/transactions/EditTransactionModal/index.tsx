@@ -16,7 +16,10 @@ import React, {useCallback, useMemo, useState} from "react";
 import {CurrencyMapping} from "@/services/integrations/quickbooks";
 import CommonWarningAlert from "@/components/common/WarningAlert";
 import cn from "classnames";
-import {formatNumberDigits, keyFormatTransaction} from "@/lib/helpers";
+import {
+  formatNumberDigits,
+  keyFormatTransaction,
+} from "@/lib/helpers";
 import {reactNodeFormatterTransaction} from "@/lib/react-node-formatters";
 import {useMutationPublishTransaction} from "@/hooks/transactions";
 import {computeDeduplicationId} from "@/utils/utils";
@@ -104,14 +107,14 @@ const EditTransactionModal = ({
     showMismatchAmount.onFalse();
   }, [showMismatchAmount]);
 
-  const isTokenNonMapped = useMemo((): boolean => {
+  const nonMappedTokensOfTransaction = useMemo((): Token[] => {
     const nonMappedTokens = nonSetMappings.filter(tokenMapping => tokenMapping.token.chain === transaction?.tokenIncoming?.chain || tokenMapping.token.chain === transaction?.tokenOutgoing?.chain)
-      .map(tokenMapping => keyFormatTransaction(tokenMapping.token));
-    if (transaction?.direction === Direction.Incoming) return nonMappedTokens.includes(keyFormatTransaction(transaction?.tokenIncoming as Token));
-    else if (transaction?.direction === Direction.Outgoing) return nonMappedTokens.includes(keyFormatTransaction(transaction?.tokenOutgoing as Token));
+        .map(tokenMapping => tokenMapping.token);
+    if (transaction?.direction === Direction.Incoming) return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenIncoming as Token));
+    else if (transaction?.direction === Direction.Outgoing) return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenOutgoing as Token));
     else if (transaction?.direction === Direction.Swap) {
-      return nonMappedTokens.includes(keyFormatTransaction(transaction?.tokenIncoming as Token)) || nonMappedTokens.includes(keyFormatTransaction(transaction?.tokenOutgoing as Token));
-    } else return false;
+      return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenIncoming as Token) || keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenOutgoing as Token));
+    } else return [];
   }, [nonSetMappings, transaction]);
 
   const isSumMismatchedIncoming = useMemo((): boolean => {
@@ -127,7 +130,7 @@ const EditTransactionModal = ({
   }, [accountingLinesOutgoing, transaction?.amountOutgoing, transaction?.direction]);
 
   const disabledPublish = useMemo((): boolean => {
-    if (isTokenNonMapped) return true;
+    if (nonMappedTokensOfTransaction.length > 0) return true;
 
     if ([Direction.Incoming, Direction.Swap].includes(transaction?.direction as Direction)) {
       if (accountingLinesIncoming.some(accountingLine => accountingLine.accountingType === undefined || accountingLine.resource === undefined || accountingLine.amount === undefined)) {
@@ -142,7 +145,7 @@ const EditTransactionModal = ({
     }
 
     return accountingLinesIncoming.length + accountingLinesOutgoing.length === 0
-  }, [accountingLinesIncoming, accountingLinesOutgoing, isTokenNonMapped, transaction?.direction]);
+  }, [accountingLinesIncoming, accountingLinesOutgoing, nonMappedTokensOfTransaction, transaction?.direction]);
 
   const publishTransaction = (): void => {
     if (isSumMismatchedIncoming || isSumMismatchedOutgoing) {
@@ -284,12 +287,14 @@ const EditTransactionModal = ({
                 publishTransaction={publishTransaction}
                 disabledPublish={disabledPublish}
             />
-            {isTokenNonMapped && (
+            {nonMappedTokensOfTransaction.length > 0 && (
             <div className="absolute bottom-3 left-7 text-[#ECB90D] text-sm font-bold flex items-center gap-2">
               <YellowWarning/>
-              {'Configure Mapping for token'}
-              {reactNodeFormatterTransaction(transaction.tokenIncoming as Token, transaction.atomicTransactionId, 'modal')}
-              {'to integrate this transaction'}
+              {'Configure Mapping for token '}
+              {nonMappedTokensOfTransaction.map((token, index) => (
+                  reactNodeFormatterTransaction(token, `edit-modal-warning-tooltip-${index}`, index < nonMappedTokensOfTransaction.length - 1 ? ', ' : '')
+              ))}
+              {' to integrate this transaction'}
             </div>
             )}
           </div>
