@@ -40,3 +40,14 @@ const keyFormatters: Record<string, (token: Token) => string> = {
 export const keyFormatTransaction = (token: Token): string => {
     return keyFormatters[token.chain](token);
 };
+
+export const parseAmount = (amount: string): number => {
+    const parsed = parseFloat(amount);
+    return isNaN(parsed) ? 0.0 : parsed;
+};
+
+export const doFloatsMatch = (float1: number, float2: number, epsilon = 0.00001): boolean => {
+    return Math.abs(float1 - float2) < epsilon;
+};
+
+export const toLocaleDate = (dateString: string): string => new Date(dateString).toLocaleDateString();

@@ -16,14 +16,18 @@ import {
     CurrenciesAPIResult,
     fetchBills,
     fetchCurrencies,
+    fetchEntries,
     FetchIntegrationAllAttributesArgs,
-    fetchInvoices, fetchItems,
+    fetchInvoices,
+    fetchItems,
     fetchQuickbookAccounts,
     getAvailableAccounts,
     getBills,
     getCurrencies,
-    getInvoices, getItems,
-    InvoiceAPIResult, ItemAPIResult
+    getInvoices,
+    getItems,
+    InvoiceAPIResult,
+    ItemAPIResult
 } from "@/services/integrations/quickbooks";
 import {Bill, Invoice, Item} from "@/components/integrations";
 
@@ -157,6 +161,7 @@ export const QuickBooksDataProvider = ({ children }: Props): React.JSX.Element =
             await fetchBills(args);
             await fetchInvoices(args);
             await fetchItems(args);
+            await fetchEntries(args);
         },
     });
 

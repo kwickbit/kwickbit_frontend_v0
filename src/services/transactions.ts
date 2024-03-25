@@ -15,8 +15,6 @@ export enum Status {
   NonPublished = 'NonPublished',
 }
 
-
-
 export enum Direction {
   Outgoing = 'Outgoing',
   Incoming = 'Incoming',
@@ -176,6 +174,16 @@ export const fetchWalletTransactions = async (
 
 const CONVERSION_RATE_XLM_USD: number = 0.11;
 
+export interface GetTransactionsParams {
+  chain?: string;
+  address?: string;
+  nextCursor?: any;
+  // These dates seem to be strings in the backend.
+  // Can we change them to be strings here as well?
+  dateTimeMin?: any;
+  dateTimeMax?: any;
+}
+
 /**
  * Get transactions from the database
  */
@@ -185,13 +193,7 @@ export const getTransactions = async ({
   nextCursor,
   dateTimeMin,
   dateTimeMax,
-}: {
-  chain?: string;
-  address?: string;
-  nextCursor?: any;
-  dateTimeMin?: any;
-  dateTimeMax?: any;
-}): Promise<TransactionAPIResult> => {
+}: GetTransactionsParams): Promise<TransactionAPIResult> => {
   const setting: GetTransactionsSetting = {};
   if (nextCursor) {
     setting.cursors = nextCursor;

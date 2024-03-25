@@ -270,3 +270,18 @@ export const fetchCurrencies = async (args: FetchIntegrationAllAttributesArgs): 
   }
   return true;
 };
+
+export const fetchEntries = async (args: FetchIntegrationAllAttributesArgs): Promise<boolean> => {
+  try {
+    const deduplicationId = uuidv4();
+    await apiClient.post("/fetch-entries", {
+      integrationProvider: "QuickBooks",
+      deduplicationId,
+      ...args,
+    });
+  } catch (error) {
+    console.error("fetchEntries error =>", error);
+    return false;
+  }
+  return true;
+};
