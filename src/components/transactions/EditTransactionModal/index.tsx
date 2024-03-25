@@ -226,7 +226,7 @@ const EditTransactionModal = ({
                 <div className="mb-4">
                   <h2
                       className={cn(
-                          "text-lg font-bold  font-manrope",
+                          "text-lg font-bold font-manrope",
                           fontColor(Direction.Outgoing),
                       )}
                   >
@@ -240,7 +240,7 @@ const EditTransactionModal = ({
                 <div className="mb-4">
                   <h2
                       className={cn(
-                          "text-lg font-bold  font-manrope",
+                          "text-lg font-bold font-manrope",
                           fontColor(Direction.Incoming),
                       )}
                   >
