@@ -7,6 +7,10 @@ import useMounted from "@/hooks/useMounted";
 
 const headerList = [
   {
+    link: "/reports",
+    title: "Reports"
+  },
+  {
     link: "/sources",
     title: "Sources",
   },
