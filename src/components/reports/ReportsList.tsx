@@ -1,9 +1,9 @@
 import { ReactNode, SyntheticEvent, useState } from "react";
+import { AccountingReport } from "@/services/reports";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
-// import CreateReportButton from "./create/CreateReportButton";
+import CreateItemButton from "../common/CreateItemButton";
 import ReportItem from "./ReportItem";
 // import ReportsHeader from "./ReportsHeader";
-import { AccountingReport } from "@/services/reports";
 
 interface Props {
   className: string;
@@ -14,7 +14,7 @@ interface Props {
 const ReportsList = ({
   className,
   reports,
-  // createReport,
+  createReport,
 }: Props): ReactNode => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -46,7 +46,7 @@ const ReportsList = ({
         <div className="flex flex-col items-center justify-center mt-16">
           <p className="text-center">No reports yet, please add report</p>
           <div className="mt-24">
-            {/* <CreateReportButton createReport={createReport} /> */}
+            <CreateItemButton shouldCreate={createReport} itemName="Report" />
           </div>
         </div>
       ) : (

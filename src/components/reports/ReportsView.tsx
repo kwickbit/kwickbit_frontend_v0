@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { useBoolean } from "@/hooks/useBoolean";
 import { useQueryReports } from "@/hooks/reports";
-// import CreateReportButton from "./create/CreateReportButton";
+import CreateItemButton from "../common/CreateItemButton";
 // import CreateReportModal from "./create/CreateReportModal";
 import Loader from "../Loader";
 import ServerError from "../ServerError";
@@ -30,7 +30,7 @@ const ReportsView = (): ReactNode => {
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
           <div className="flex justify-end">
-            {/* <CreateReportButton createReport={createReport} /> */}
+            <CreateItemButton shouldCreate={createReport} itemName="Report" />
           </div>
           <ReportsList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto"

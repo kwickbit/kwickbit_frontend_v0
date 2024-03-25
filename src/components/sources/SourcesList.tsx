@@ -1,7 +1,7 @@
 import { ReactNode, SyntheticEvent, useState } from "react";
 import { SourceWallet } from "@/services/sources";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
-import CreateSourceButton from "../common/CreateItemButton";
+import CreateItemButton from "../common/CreateItemButton";
 import SourceItem from "./SourceItem";
 import SourcesHeader from "./SourcesHeader";
 
@@ -45,7 +45,7 @@ const SourcesList = ({
         <div className="flex flex-col items-center justify-center mt-6">
           <p className="text-center">No wallet yet, please add source</p>
           <div className="mt-12">
-            <CreateSourceButton createSource={createSource} itemName="Source"/>
+            <CreateItemButton shouldCreate={createSource} itemName="Source"/>
           </div>
         </div>
       ) : (

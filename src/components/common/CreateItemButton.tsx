@@ -4,15 +4,15 @@ import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import PrimaryButton from "@/components/PrimaryButton";
 
 interface Props {
-  createSource: UseBooleanReturnProps;
+  shouldCreate: UseBooleanReturnProps;
   itemName: string
 }
 
-const CreateItemButton = ({ createSource, itemName }: Props): ReactNode => {
+const CreateItemButton = ({ shouldCreate, itemName }: Props): ReactNode => {
   return (
     <PrimaryButton
       className="flex items-center gap-2"
-      onClick={createSource.onTrue}
+      onClick={shouldCreate.onTrue}
     >
       <FaPlusCircle /> Add {itemName}
     </PrimaryButton>

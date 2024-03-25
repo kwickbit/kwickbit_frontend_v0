@@ -32,7 +32,7 @@ const SourcesView = (): ReactNode => {
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
           {maybeData.length && <div className="flex justify-end">
-            <CreateSourceButton createSource={createSource} itemName="Source" />
+            <CreateSourceButton shouldCreate={createSource} itemName="Source" />
           </div>}
           <SourcesList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto"

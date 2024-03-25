@@ -14,7 +14,7 @@ import {
 
 import { TransactionProps } from "@/services/transactions";
 
-const key = "reports";
+// const key = "reports";
 
 export const useQueryReports = (): Partial<UseQueryResult<
   GetReportsAPIResponse,
