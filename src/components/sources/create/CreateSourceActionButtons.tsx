@@ -18,7 +18,7 @@ const CreateSourceActionButtons = ({
         onClick={onClickSecondary}
         type="button"
         className={classNames(
-          "flex items-center bg-[#F3F4F6FF] rounded-md font-bold text-lg  px-6 py-2 gap-2 my-6",
+          "flex items-center bg-[#F3F4F6FF] rounded-md font-bold text-lg px-6 py-2 gap-2 my-6",
           isLoading && "opacity-50 cursor-not-allowed"
         )}
       >

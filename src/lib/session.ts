@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const isConnected = (): boolean => {
     const tokenExpirationDateTimeCookie = Cookies.get('x-auth-kwickbit-token-expiration-date');
-    return tokenExpirationDateTimeCookie !== undefined  && (new Date(tokenExpirationDateTimeCookie as string).getTime() - new Date().getTime() > 30000);
+    return tokenExpirationDateTimeCookie !== undefined && (new Date(tokenExpirationDateTimeCookie as string).getTime() - new Date().getTime() > 30000);
 };
 
 export const isRefreshTokenExpired = (): boolean => {
