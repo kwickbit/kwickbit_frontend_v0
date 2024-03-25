@@ -33,7 +33,7 @@ const RHFTextField = ({
             <label className="font-semibold">{label}</label>
             <div className="flex justify-between items-center gap-2">
               <input
-                className="bg-transparent  outline-none w-full"
+                className="bg-transparent outline-none w-full"
                 type={showPassword ? "text" : type}
                 {...field}
                 {...rest}

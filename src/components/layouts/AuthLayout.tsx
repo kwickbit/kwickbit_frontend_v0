@@ -14,7 +14,7 @@ const AuthLayout = ({ children, title }: Props): ReactNode => {
       <div className="col-span-12 lg:col-span-7 flex justify-center sm:p-12 p-4">
         <div className="flex flex-col items-center gap-4 max-w-[450px] w-full">
           <Logo width={300} height={100} className="w-full" />
-          <h2 className="text-4xl font-bold  pb-8">{title}</h2>
+          <h2 className="text-4xl font-bold pb-8">{title}</h2>
           {children}
         </div>
       </div>

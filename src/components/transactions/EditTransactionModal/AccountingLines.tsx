@@ -49,7 +49,14 @@ export const AccountingLines = ({
                     <div className="flex justify-center items-center text-sm text-[#565D6D] font-bold py-4">
                         Amount
                     </div>
-                    <div/>
+                    {(transaction.status === 'NonPublished' && !isSwap) && (
+                        <button
+                            className="relative top-3 right-0.5 w-7 h-8 flex items-center justify-center"
+                            onClick={(): void => handleAddNewLine()}
+                        >
+                            <CirclePlus className="w-6 h-6"/>
+                        </button>
+                    )}
                 </div>
             </div>
             <div className="grid grid-cols-[2fr,4.1fr] mt-3 gap-1 relative">
@@ -72,14 +79,6 @@ export const AccountingLines = ({
                             token={token}
                         />
                     ))}
-                    {(transaction.status === 'NonPublished' && !isSwap) && (
-                        <button
-                            className="absolute -bottom-12 right-0.5 w-7 h-8 flex items-center justify-center"
-                            onClick={(): void => handleAddNewLine()}
-                        >
-                            <CirclePlus className="w-6 h-6"/>
-                        </button>
-                    )}
                 </div>
             </div>
         </div>

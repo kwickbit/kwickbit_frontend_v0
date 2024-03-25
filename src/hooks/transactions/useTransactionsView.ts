@@ -6,7 +6,7 @@ import {
   TransactionAPIResult,
   TransactionProps,
 } from "@/services/transactions";
-import { fetchAllTransactions, fetchWalletTransactions,getTransactions } from "@/services/transactions";
+import { fetchAllTransactions, fetchWalletTransactions, getTransactions } from "@/services/transactions";
 import useUserWebSocket from "../useWebSocket";
 import { useStorage } from "../useStorage";
 import { computeDeduplicationId } from "@/utils/utils";
@@ -60,23 +60,23 @@ export interface UserTransactionsViewReturnProps {
   toCount: number;
   haveNext: boolean;
   havePrev: boolean;
-  changeChainAddress: (chain?: string, address?: string, walletId?:string) => void;
+  changeChainAddress: (chain?: string, address?: string, walletId?: string) => void;
 }
 
 const pageSize = 10;
 const chainAddressKey = "chainAddress";
 const allGroupsKey = "transactionsResultGroups";
 const allPageKey = "transactionsPage";
-const allTrasactionsKey = "Transactions";
+const allTransactionsKey = "Transactions";
 
 const useTransactionsView = (): UserTransactionsViewReturnProps => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
   const [data, setData] = useState<TransactionProps[]>([]);
-  const {currencyMappings: {data: tokenMappings, refetch: refetchTokenMappings}} = useTokenMappingContext();
+  const { currencyMappings: { data: tokenMappings, refetch: refetchTokenMappings } } = useTokenMappingContext();
   const [isLoadingRefresh, setLoadingRefresh] = useState<boolean>(false);
   const [shouldFirstPull, setShouldFirstPull] = useState<boolean>(true);
-  const {isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse} = useUserWebSocket();
+  const { isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse } = useUserWebSocket();
 
   const { data: chainAddress, setData: setChainAddress } =
     useStorage<ChainAddress | null>(chainAddressKey, null);
@@ -91,7 +91,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     data: transactions,
     setData: setTransactions,
     changeStorageKey: changeStorageKeyTransactions,
-  } = useStorage<TransactionProps[]>(allTrasactionsKey, []);
+  } = useStorage<TransactionProps[]>(allTransactionsKey, []);
 
   const {
     data: page,
@@ -122,7 +122,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     if (publishedTransactionToIntegration) {
       const updatedTransactions = [...transactions];
       const idxTransaction = updatedTransactions.findIndex(item => item.atomicTransactionId === publishedTransactionToIntegration.atomicTransactionId);
-      updatedTransactions[idxTransaction] = {...updatedTransactions[idxTransaction], status: Status.Published};
+      updatedTransactions[idxTransaction] = { ...updatedTransactions[idxTransaction], status: Status.Published };
       setTransactions(updatedTransactions);
       clearPublishedTransactionToIntegration();
     }
@@ -146,9 +146,9 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     const arrData =
       _pageSize > 0
         ? transactions.slice(
-            page.startTransactionId,
-            page.startTransactionId + _pageSize
-          )
+          page.startTransactionId,
+          page.startTransactionId + _pageSize
+        )
         : [];
     setData(arrData);
 
@@ -163,11 +163,11 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
       const { chain, address } = chainAddress;
       const addKey = `${chain}_${address}`;
       resultGroupsKey = `${allGroupsKey}_${addKey}`;
-      transactionsKey = `${allTrasactionsKey}_${addKey}`;
+      transactionsKey = `${allTransactionsKey}_${addKey}`;
       pageKey = `${allPageKey}_${addKey}`;
     } else {
       resultGroupsKey = allGroupsKey;
-      transactionsKey = allTrasactionsKey;
+      transactionsKey = allTransactionsKey;
       pageKey = allPageKey;
     }
 
@@ -347,7 +347,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
         const startResultId = transactionResultGroups[groupId].results.length;
         const lastResult =
           transactionResultGroups[groupId].results[
-            transactionResultGroups[groupId].results.length - 1
+          transactionResultGroups[groupId].results.length - 1
           ];
 
         let tStartId = lastResult.tStartId + lastResult.totalTransactions;
@@ -464,7 +464,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
 
   const refreshTransactions = async (): Promise<void> => {
     setLoadingRefresh(true);
-    if( chainAddress ) {
+    if (chainAddress) {
       const deduplicationObj = {
         chainAddress,
         date: Date.now()
