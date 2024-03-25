@@ -1,21 +1,21 @@
-import { ReactNode } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import PrimaryButton from "@/components/PrimaryButton";
 
 interface Props {
-  createSource: UseBooleanReturnProps;
+  showModal: UseBooleanReturnProps;
+  itemName: string;
 }
 
-const CreateSourceButton = ({ createSource }: Props): ReactNode => {
+const CreateItemButton = ({ showModal, itemName }: Props): React.JSX.Element => {
   return (
     <PrimaryButton
       className="flex items-center gap-2"
-      onClick={createSource.onTrue}
+      onClick={showModal.onTrue}
     >
-      <FaPlusCircle /> Add Source
+      <FaPlusCircle /> Add {itemName}
     </PrimaryButton>
   );
 };
 
-export default CreateSourceButton;
+export default CreateItemButton;
