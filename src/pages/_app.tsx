@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps): React.ReactNode {
       !isConnected() &&
       isRefreshTokenExpired()
     ) {
-      replace(`/login.html?redirect=${route}`);
+      replace(`/login?redirect=${route}`);
     } else if (nonAuthExclusiveRoutes.includes(route) && isConnected() && route !== '/') {
       replace("/");
     }

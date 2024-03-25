@@ -42,9 +42,9 @@ const SourcesList = ({
   return (
     <div className={className}>
       {sources.length === 0 ? (
-        <div className="flex flex-col items-center justify-center mt-16">
+        <div className="flex flex-col items-center justify-center mt-6">
           <p className="text-center">No wallet yet, please add source</p>
-          <div className="mt-24">
+          <div className="mt-12">
             <CreateSourceButton createSource={createSource} />
           </div>
         </div>
@@ -52,7 +52,7 @@ const SourcesList = ({
         <>
           <SourcesHeader onSelectAll={handleSelectAll} />
           <div className="flex flex-col gap-4 h-full pb-8">
-            {sources && sources.map((source, idx) => (
+            {sources.map((source, idx) => (
               <SourceItem
                 source={source}
                 key={idx}

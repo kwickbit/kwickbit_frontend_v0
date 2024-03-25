@@ -19,7 +19,7 @@ interface Props {
 const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
   const { walletId, address, name } = source;
   return (
-    <div className="grid grid-cols-6  bg-white  text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
+    <div className="grid grid-cols-6 bg-white text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
       <div className="col-span-1 flex items-center gap-8">
         <input
           className="checkbox-round"
@@ -54,7 +54,7 @@ const SourceItem = ({ source, onSelect, isSelected }: Props): ReactNode => {
       </div>
       <div className="col-span-1 flex gap-4 justify-center">
         <BiPencil className="w-6 h-6 cursor-pointer text-neutral-900" />
-        <CiSearch  className="w-6 h-6 cursor-pointer text-neutral-900" />
+        <CiSearch className="w-6 h-6 cursor-pointer text-neutral-900" />
       </div>
     </div>
   );
