@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { useBoolean } from "@/hooks/useBoolean";
 import { useQuerySources } from "@/hooks/sources";
-import CreateSourceButton from "./create/CreateSourceButton";
+import CreateSourceButton from "../common/CreateItemButton";
 import CreateSourceModal from "./create/CreateSourceModal";
 import Loader from "../Loader";
 import ServerError from "../ServerError";
@@ -32,7 +32,7 @@ const SourcesView = (): ReactNode => {
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
           {maybeData.length && <div className="flex justify-end">
-            <CreateSourceButton createSource={createSource} />
+            <CreateSourceButton createSource={createSource} itemName="Source" />
           </div>}
           <SourcesList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto"

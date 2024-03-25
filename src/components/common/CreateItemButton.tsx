@@ -5,17 +5,18 @@ import PrimaryButton from "@/components/PrimaryButton";
 
 interface Props {
   createSource: UseBooleanReturnProps;
+  itemName: string
 }
 
-const CreateSourceButton = ({ createSource }: Props): ReactNode => {
+const CreateItemButton = ({ createSource, itemName }: Props): ReactNode => {
   return (
     <PrimaryButton
       className="flex items-center gap-2"
       onClick={createSource.onTrue}
     >
-      <FaPlusCircle /> Add Source
+      <FaPlusCircle /> Add {itemName}
     </PrimaryButton>
   );
 };
 
-export default CreateSourceButton;
+export default CreateItemButton;
