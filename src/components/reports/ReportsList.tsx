@@ -3,7 +3,6 @@ import { AccountingReport } from "@/services/reports";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import CreateItemButton from "../common/CreateItemButton";
 import ReportItem from "./ReportItem";
-// import ReportsHeader from "./ReportsHeader";
 
 interface Props {
   className: string;
@@ -29,16 +28,6 @@ const ReportsList = ({
       setSelectedItems((prev) => prev.filter((item) => item !== id));
     }
   };
-
-  // const handleSelectAll = (
-  //   e: SyntheticEvent<HTMLInputElement, Event>
-  // ): void => {
-  //   if (e.currentTarget.checked) {
-  //     setSelectedItems(reports.map((report) => report.reportType));
-  //   } else {
-  //     setSelectedItems([]);
-  //   }
-  // };
 
   return (
     <div className={className}>
