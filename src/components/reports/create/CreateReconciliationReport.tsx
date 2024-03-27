@@ -1,28 +1,40 @@
 import { ReactNode } from "react";
+import { useQueryTransactions } from "@/hooks/reports";
+import { TransactionProps } from "@/services/transactions";
+import Loader from "@/components/Loader";
+import ServerError from "@/components/ServerError";
 
 const CreateReconciliationReport = (): ReactNode => {
+  const { data, isLoading, isError } = useQueryTransactions()
 
-  // Mock transactions; later, these will be mapped from state
-  const transactions = [
-    "paid 100 XLM to John for lunch",
-    "received 50 XLM from Alice for concert tickets",
-    "paid 20 XLM to Bob for coffee",
-  ]
+  if (isLoading) {
+    return (
+      <div className="flex justify-center mt-8">
+        <Loader />
+      </div>
+    );
+  }
 
-  const displayTransaction = (transaction: string, index: number): React.JSX.Element => (
+  if (isError) {
+    return <ServerError />;
+  }
+
+  const transactions = data?.data ?? []
+
+  const displayTransaction = (transaction: TransactionProps, index: number): React.JSX.Element => (
     // Later, when the transaction is complete, we'll have some better key here
     <div key={index} className="mb-2">
       <li
         className="outline-none border border-gray-500 py-3 px-3 w-full rounded-md col-span-5"
       >
-        {transaction}
+        Txn {transaction?.hash ?? "(no hash)"}: {transaction.amountIncoming ?? 0} in, {transaction.amountOutgoing ?? 0} out, with {transaction.accountingLines?.length ?? "no"} accounting lines.
       </li>
     </div>
   )
 
   return (
     <>
-      <span className="text-base text-[#21254E] mx-12">You have {transactions.length} unreconciled transactions.</span>
+      <span className="text-base text-[#21254E] mx-12">You have {transactions.length ?? "no"} unreconciled transactions.</span>
       <div className="col-span-1 flex items-center gap-8 mx-12 my-6">
         <ul>
           {transactions.map(displayTransaction)}

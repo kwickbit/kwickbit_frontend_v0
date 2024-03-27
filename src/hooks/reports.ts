@@ -1,20 +1,6 @@
-import {
-  //   CreateReportAPIProps,
-  GetReportsAPIResponse,
-  //   fetchCreateReport,
-  //   fetchReports,
-} from "@/services/reports";
-import {
-  // UseMutationResult,
-  UseQueryResult,
-  // useMutation,
-  // useQuery,
-  // useQueryClient,
-} from "@tanstack/react-query";
-
-import { TransactionProps } from "@/services/transactions";
-
-// const key = "reports";
+import { UseQueryResult, useQuery } from "@tanstack/react-query";
+import { GetReportsAPIResponse } from "@/services/reports";
+import { TransactionAPIResult, TransactionProps, getTransactions } from "@/services/transactions";
 
 export const useQueryReports = (): Partial<UseQueryResult<
   GetReportsAPIResponse,
@@ -28,17 +14,13 @@ export const useQueryReports = (): Partial<UseQueryResult<
   return ({ isLoading: false, isError: false, data: { data, message: "LOL wut", nextCursor: {} } });
 };
 
-// export const useMutationCreateReport = (): UseMutationResult<
-//   any,
-//   Error,
-//   CreateReportAPIProps,
-//   unknown
-// > => {
-//   const queryClient = useQueryClient();
-//   return useMutation({
-//     mutationFn: fetchCreateReport,
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: [key] });
-//     },
-//   });
-// };
+export const useQueryTransactions = (): UseQueryResult<
+  TransactionAPIResult,
+  Error
+> => {
+  const args = {}
+  return useQuery({
+    queryKey: ["reconciliationTransactions", args],
+    queryFn: () => getTransactions(args)
+  })
+}
