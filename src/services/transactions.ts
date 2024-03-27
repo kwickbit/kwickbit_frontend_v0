@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api-client";
 import { symbolFormatTransaction } from "@/lib/helpers";
-import {convertCurrency, Token} from "@/services/token_currencies_conversions";
+import { convertCurrency, Token } from "@/services/token_currencies_conversions";
 
 export enum Chain {
   Stellar = 'stellar',
@@ -229,7 +229,7 @@ export const getTransactions = async ({
         transaction.detail = {
           symbolIncoming,
           priceInFiatIncoming: {
-            amount: String(convertCurrency({from: tokenIncoming, to: {reference: 'USD'}, fromAmount: parseFloat(transaction.amountIncoming)})),
+            amount: String(convertCurrency({ from: tokenIncoming, to: { reference: 'USD' }, fromAmount: parseFloat(transaction.amountIncoming) })),
             reference: 'USD',
             symbol: '$',
           }
@@ -243,7 +243,7 @@ export const getTransactions = async ({
           ...transaction.detail,
           symbolOutgoing,
           priceInFiatOutgoing: {
-            amount: String(convertCurrency({from: tokenOutgoing, to: {reference: 'USD'}, fromAmount: parseFloat(transaction.amountOutgoing)})),
+            amount: String(convertCurrency({ from: tokenOutgoing, to: { reference: 'USD' }, fromAmount: parseFloat(transaction.amountOutgoing) })),
             reference: 'USD',
             symbol: '$',
           }
