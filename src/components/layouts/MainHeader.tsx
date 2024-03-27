@@ -50,7 +50,7 @@ const MainHeader = (): JSX.Element | null => {
                 key={`hnv-${idx}`}
                 className={classNames(
                   "cursor-pointer px-4 py-2 text-base font-bold text-[#9095A1] hover:text-[#565D6D] font-manrope hover:bg-[#D7F0FB] rounded-lg transition-all duration-200 ease-in-out relative capitalize ",
-                  pathname === item.link ? "bg-[#D7F0FB]" : "bg-transparent"
+                  pathname.startsWith(item.link) ? "bg-[#D7F0FB]" : "bg-transparent"
                 )}
                 href={item.link}
               >
