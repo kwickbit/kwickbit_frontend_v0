@@ -126,7 +126,7 @@ export interface TransactionAPIResult {
   nextCursor?: any;
 }
 
-interface GetTrasactionsSetting {
+interface GetTransactionsSetting {
   cursors?: any;
   dateTimeMin?: any;
   dateTimeMax?: any;
@@ -192,7 +192,7 @@ export const getTransactions = async ({
   dateTimeMin?: any;
   dateTimeMax?: any;
 }): Promise<TransactionAPIResult> => {
-  const setting: GetTrasactionsSetting = {};
+  const setting: GetTransactionsSetting = {};
   if (nextCursor) {
     setting.cursors = nextCursor;
   } else {

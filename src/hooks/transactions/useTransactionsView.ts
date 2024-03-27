@@ -67,7 +67,7 @@ const pageSize = 10;
 const chainAddressKey = "chainAddress";
 const allGroupsKey = "transactionsResultGroups";
 const allPageKey = "transactionsPage";
-const allTrasactionsKey = "Transactions";
+const allTransactionsKey = "Transactions";
 
 const useTransactionsView = (): UserTransactionsViewReturnProps => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -91,7 +91,7 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
     data: transactions,
     setData: setTransactions,
     changeStorageKey: changeStorageKeyTransactions,
-  } = useStorage<TransactionProps[]>(allTrasactionsKey, []);
+  } = useStorage<TransactionProps[]>(allTransactionsKey, []);
 
   const {
     data: page,
@@ -163,11 +163,11 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
       const { chain, address } = chainAddress;
       const addKey = `${chain}_${address}`;
       resultGroupsKey = `${allGroupsKey}_${addKey}`;
-      transactionsKey = `${allTrasactionsKey}_${addKey}`;
+      transactionsKey = `${allTransactionsKey}_${addKey}`;
       pageKey = `${allPageKey}_${addKey}`;
     } else {
       resultGroupsKey = allGroupsKey;
-      transactionsKey = allTrasactionsKey;
+      transactionsKey = allTransactionsKey;
       pageKey = allPageKey;
     }
 
