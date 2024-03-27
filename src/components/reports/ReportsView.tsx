@@ -29,9 +29,11 @@ const ReportsView = (): ReactNode => {
       <CreateReportModal createReport={createReport} />
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
-          <div className="flex justify-end">
-            <CreateItemButton shouldCreate={createReport} itemName="Report" />
-          </div>
+          {data?.data.length ?
+            <div className="flex justify-end">
+              <CreateItemButton shouldCreate={createReport} itemName="Report" />
+            </div> :
+            <></>}
           <ReportsList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto"
             reports={data?.data ?? []}

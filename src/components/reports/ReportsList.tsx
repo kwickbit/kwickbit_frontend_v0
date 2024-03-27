@@ -43,9 +43,9 @@ const ReportsList = ({
   return (
     <div className={className}>
       {reports.length === 0 ? (
-        <div className="flex flex-col items-center justify-center mt-16">
+        <div className="flex flex-col items-center justify-center mt-6">
           <p className="text-center">No reports yet, please add report</p>
-          <div className="mt-24">
+          <div className="mt-12">
             <CreateItemButton shouldCreate={createReport} itemName="Report" />
           </div>
         </div>
