@@ -1,11 +1,11 @@
 import { AccountingReport } from "@/services/reports";
-import { ReactNode, SyntheticEvent } from "react";
+import { ReactNode } from "react";
 import { BiPencil } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 
 interface Props {
   report: AccountingReport;
-  onSelect: (e: SyntheticEvent<HTMLInputElement, Event>, id: string) => void;
+  onSelect: (isChecked: boolean, id: string) => void;
   isSelected?: boolean;
 }
 
@@ -18,7 +18,7 @@ const ReportItem = ({ report, onSelect, isSelected }: Props): ReactNode => {
         <input
           className="checkbox-round"
           type="checkbox"
-          onChange={(e): void => onSelect(e, reportType)}
+          onChange={(event): void => onSelect(event.currentTarget.checked, reportType)}
           checked={isSelected}
         />
       </div>

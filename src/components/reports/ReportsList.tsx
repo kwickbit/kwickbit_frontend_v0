@@ -1,4 +1,4 @@
-import { ReactNode, SyntheticEvent, useState } from "react";
+import { ReactNode, useState } from "react";
 import { AccountingReport } from "@/services/reports";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import CreateItemButton from "../common/CreateItemButton";
@@ -17,12 +17,8 @@ const ReportsList = ({
 }: Props): ReactNode => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
-  // TODO: check if this is fully shared with Sources and, if so, extract
-  const handleSelectItem = (
-    e: SyntheticEvent<HTMLInputElement, Event>,
-    id: string
-  ): void => {
-    if (e.currentTarget.checked) {
+  const handleSelectItem = (isChecked: boolean, id: string): void => {
+    if (isChecked) {
       setSelectedItems((prev) => [...prev, id]);
     } else {
       setSelectedItems((prev) => prev.filter((item) => item !== id));
