@@ -29,13 +29,13 @@ const ReportsView = (): ReactNode => {
       <CreateReportModal shouldDisplay={showModal} />
       <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
         <div className="overflow-auto">
-          {data?.data.length &&
+          {data?.reports.length &&
             <div className="flex justify-end">
               <CreateItemButton showModal={showModal} itemName="Report" />
             </div>}
           <ReportsList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto my-6"
-            reports={data?.data ?? []}
+            reports={data?.reports ?? []}
             showModal={showModal}
           />
         </div>
