@@ -1,5 +1,4 @@
 import { AccountingReport } from "@/services/reports";
-import { ReactNode } from "react";
 import { BiPencil } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 
@@ -9,7 +8,7 @@ interface Props {
   isSelected?: boolean;
 }
 
-const ReportItem = ({ report, onSelect, isSelected }: Props): ReactNode => {
+const ReportItem = ({ report, onSelect, isSelected }: Props): React.JSX.Element => {
   const { reportType, sourceTransactions, localTransactions } = report;
   return (
     <div className="grid grid-cols-5 bg-white text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">

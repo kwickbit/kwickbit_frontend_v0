@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { useBoolean } from "@/hooks/useBoolean";
 import { useQueryReports } from "@/hooks/reports";
 import CreateItemButton from "../common/CreateItemButton";
@@ -7,7 +6,7 @@ import Loader from "../Loader";
 import ServerError from "../ServerError";
 import ReportsList from "./ReportsList";
 
-const ReportsView = (): ReactNode => {
+const ReportsView = (): React.JSX.Element => {
   const { data, isLoading, isError } = useQueryReports();
 
   const showModal = useBoolean();

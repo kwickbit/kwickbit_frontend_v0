@@ -1,9 +1,8 @@
-import { ReactNode } from "react";
 import Head from "next/head";
 import ReportsView from "@/components/reports/ReportsView";
 import MainLayout from "@/components/layouts/MainLayout";
 
-const ReportsPage = (): ReactNode => {
+const ReportsPage = (): React.JSX.Element => {
   return (
     <>
       <Head>

@@ -1,10 +1,9 @@
-import { ReactNode } from "react";
 import { useQueryTransactions } from "@/hooks/reports";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import { ReconciliationTransactionList } from "./ReconciliationTransactionList";
 
-export const CreateReconciliationReport = (): ReactNode => {
+export const CreateReconciliationReport = (): React.JSX.Element => {
   const { data, isLoading, isError } = useQueryTransactions();
 
   if (isLoading) {

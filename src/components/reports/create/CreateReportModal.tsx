@@ -1,4 +1,3 @@
-import { ReactNode } from "react"
 import Link from "next/link";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import useCreateReportModal from "@/hooks/useCreateReportModal";
@@ -9,9 +8,9 @@ interface Props {
   shouldDisplay: UseBooleanReturnProps;
 }
 
-const CreateReportModal = ({ shouldDisplay }: Props): ReactNode => {
+const CreateReportModal = ({ shouldDisplay }: Props): React.JSX.Element => {
   const { reportTypes } = useCreateReportModal();
-  const renderLabel = (): ReactNode => <span>{reportTypes[0]}</span>
+  const renderLabel = (): React.JSX.Element => <span>{reportTypes[0]}</span>
 
   return (
     <>

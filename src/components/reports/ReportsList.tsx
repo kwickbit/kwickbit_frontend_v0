@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { AccountingReport } from "@/services/reports";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import CreateItemButton from "../common/CreateItemButton";
@@ -14,7 +14,7 @@ const ReportsList = ({
   className,
   reports,
   showModal,
-}: Props): ReactNode => {
+}: Props): React.JSX.Element => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleSelectItem = (isChecked: boolean, id: string): void => {
