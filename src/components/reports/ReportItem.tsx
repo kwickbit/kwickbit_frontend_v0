@@ -12,7 +12,6 @@ interface Props {
 const ReportItem = ({ report, onSelect, isSelected }: Props): ReactNode => {
   const { reportType, sourceTransactions, localTransactions } = report;
   return (
-    // TODO: have a separate component for this "frame" of the list item?
     <div className="grid grid-cols-5 bg-white text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
       <div className="col-span-1 flex items-center gap-8">
         <input

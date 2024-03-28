@@ -1,8 +1,8 @@
-import { TransactionProps } from "@/services/transactions"
-import ReconciliationTransaction from "./ReconciliationTransaction"
+import { TransactionProps } from "@/services/transactions";
+import ReconciliationTransaction from "./ReconciliationTransaction";
 
 interface Props {
-  transactions: TransactionProps[]
+  transactions: TransactionProps[];
 }
 
 const ReconciliationTransactionList = ({ transactions }: Props): React.JSX.Element => {
@@ -17,7 +17,7 @@ const ReconciliationTransactionList = ({ transactions }: Props): React.JSX.Eleme
         )}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default ReconciliationTransactionList
+export default ReconciliationTransactionList;

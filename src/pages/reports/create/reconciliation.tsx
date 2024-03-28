@@ -1,7 +1,7 @@
-import { ReactNode } from "react"
-import Head from "next/head"
-import MainLayout from "@/components/layouts/MainLayout"
-import CreateReconciliationReport from "@/components/reports/create/CreateReconciliationReport"
+import { ReactNode } from "react";
+import Head from "next/head";
+import MainLayout from "@/components/layouts/MainLayout";
+import CreateReconciliationReport from "@/components/reports/create/CreateReconciliationReport";
 
 const CreateReconciliationReportPage = (): ReactNode => {
   return (
@@ -11,9 +11,9 @@ const CreateReconciliationReportPage = (): ReactNode => {
       </Head>
       <CreateReconciliationReport />
     </>
-  )
-}
+  );
+};
 
-CreateReconciliationReportPage.Layout = MainLayout
+CreateReconciliationReportPage.Layout = MainLayout;
 
-export default CreateReconciliationReportPage
+export default CreateReconciliationReportPage;

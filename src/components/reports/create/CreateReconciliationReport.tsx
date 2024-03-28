@@ -5,7 +5,7 @@ import ServerError from "@/components/ServerError";
 import ReconciliationTransactionList from "./ReconciliationTransactionList";
 
 const CreateReconciliationReport = (): ReactNode => {
-  const { data, isLoading, isError } = useQueryTransactions()
+  const { data, isLoading, isError } = useQueryTransactions();
 
   if (isLoading) {
     return (
@@ -19,14 +19,14 @@ const CreateReconciliationReport = (): ReactNode => {
     return <ServerError />;
   }
 
-  const transactions = data?.data ?? []
+  const transactions = data?.data ?? [];
 
   return (
     <>
       <span className="text-base text-[#21254E] mx-16">You have {transactions.length ?? "no"} unreconciled transactions.</span>
       <ReconciliationTransactionList transactions={transactions} />
     </>
-  )
-}
+  );
+};
 
-export default CreateReconciliationReport
+export default CreateReconciliationReport;

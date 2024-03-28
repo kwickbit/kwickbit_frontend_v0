@@ -1,13 +1,13 @@
 enum ReportType {
-  Reconciliation = "Reconciliation"
+  Reconciliation = "Reconciliation",
 }
 
 interface ReturnProps {
-  reportTypes: ReportType[]
+  reportTypes: ReportType[];
 }
 
 const useCreateReportModal = (): ReturnProps => {
-  const reportTypes = ["Reconciliation"] as ReportType[]
+  const reportTypes = ["Reconciliation"] as ReportType[];
 
   return { reportTypes };
 };
