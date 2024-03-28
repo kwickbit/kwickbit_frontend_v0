@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { AccountingLine, TransactionProps } from "@/services/transactions";
 
 interface Props {
-  transaction: TransactionProps
+  transaction: TransactionProps;
 }
 
-const ReconciliationTransaction = ({ transaction }: Props): React.JSX.Element => {
+export const ReconciliationTransaction = ({ transaction }: Props): React.JSX.Element => {
   const displayAccountingLine = (line: AccountingLine): React.JSX.Element => {
-    let element
+    let element;
     if (line.accountingType && line.amount) {
       element = (
         <>
@@ -18,11 +18,11 @@ const ReconciliationTransaction = ({ transaction }: Props): React.JSX.Element =>
             <></>
           }
         </>
-      )
+      );
     } else {
-      element = <p>Transaction has insufficient data to display</p>
+      element = <p>Transaction has insufficient data to display</p>;
     }
-    return element
+    return element;
   }
 
   return (
@@ -45,7 +45,5 @@ const ReconciliationTransaction = ({ transaction }: Props): React.JSX.Element =>
         </li>
       </div>
     </>
-  )
-}
-
-export default ReconciliationTransaction
+  );
+};

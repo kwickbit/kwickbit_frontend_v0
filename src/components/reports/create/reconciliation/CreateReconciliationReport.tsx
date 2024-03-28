@@ -2,9 +2,9 @@ import { ReactNode } from "react";
 import { useQueryTransactions } from "@/hooks/reports";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
-import ReconciliationTransactionList from "./ReconciliationTransactionList";
+import { ReconciliationTransactionList } from "./ReconciliationTransactionList";
 
-const CreateReconciliationReport = (): ReactNode => {
+export const CreateReconciliationReport = (): ReactNode => {
   const { data, isLoading, isError } = useQueryTransactions();
 
   if (isLoading) {
@@ -28,5 +28,3 @@ const CreateReconciliationReport = (): ReactNode => {
     </>
   );
 };
-
-export default CreateReconciliationReport;

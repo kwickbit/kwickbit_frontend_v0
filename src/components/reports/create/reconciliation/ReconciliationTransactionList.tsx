@@ -1,11 +1,11 @@
 import { TransactionProps } from "@/services/transactions";
-import ReconciliationTransaction from "./ReconciliationTransaction";
+import { ReconciliationTransaction } from "./ReconciliationTransaction";
 
 interface Props {
   transactions: TransactionProps[];
 }
 
-const ReconciliationTransactionList = ({ transactions }: Props): React.JSX.Element => {
+export const ReconciliationTransactionList = ({ transactions }: Props): React.JSX.Element => {
   return (
     <div className="col-span-1 flex items-center mx-12 my-6">
       <ul className="w-full">
@@ -19,5 +19,3 @@ const ReconciliationTransactionList = ({ transactions }: Props): React.JSX.Eleme
     </div>
   );
 };
-
-export default ReconciliationTransactionList;
