@@ -10,7 +10,7 @@ import ReportsList from "./ReportsList";
 const ReportsView = (): ReactNode => {
   const { data, isLoading, isError } = useQueryReports();
 
-  const createReport = useBoolean();
+  const showModal = useBoolean();
 
   if (isLoading) {
     return (
@@ -26,18 +26,17 @@ const ReportsView = (): ReactNode => {
 
   return (
     <>
-      <CreateReportModal createReport={createReport} />
+      <CreateReportModal shouldDisplay={showModal} />
       <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
         <div className="overflow-auto">
-          {data?.data.length ?
+          {data?.data.length &&
             <div className="flex justify-end">
-              <CreateItemButton shouldCreate={createReport} itemName="Report" />
-            </div> :
-            <></>}
+              <CreateItemButton showModal={showModal} itemName="Report" />
+            </div>}
           <ReportsList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto my-6"
             reports={data?.data ?? []}
-            createReport={createReport}
+            showModal={showModal}
           />
         </div>
       </div>

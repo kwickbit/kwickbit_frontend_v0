@@ -6,10 +6,10 @@ import Modal from "@/components/Modal"
 import Select from "@/components/common/Select";
 
 interface Props {
-  createReport: UseBooleanReturnProps;
+  shouldDisplay: UseBooleanReturnProps;
 }
 
-const CreateReportModal = ({ createReport }: Props): ReactNode => {
+const CreateReportModal = ({ shouldDisplay }: Props): ReactNode => {
   const { reportTypes } = useCreateReportModal();
   const renderLabel = (): ReactNode => <span>{reportTypes[0]}</span>
 
@@ -18,8 +18,8 @@ const CreateReportModal = ({ createReport }: Props): ReactNode => {
       <Modal
         title="Create new accounting report"
         modalClassNames="max-w-2xl"
-        show={createReport.value}
-        closeModal={(): void => { createReport.onFalse() }}
+        show={shouldDisplay.value}
+        closeModal={(): void => { shouldDisplay.onFalse() }}
       >
         <span className="text-sm text-[#565D6D] font-bold py-4">Report type</span>
             <Select

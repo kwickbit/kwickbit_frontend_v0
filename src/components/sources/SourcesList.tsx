@@ -45,7 +45,7 @@ const SourcesList = ({
         <div className="flex flex-col items-center justify-center mt-6">
           <p className="text-center">No wallet yet, please add source</p>
           <div className="mt-12">
-            <CreateItemButton shouldCreate={createSource} itemName="Source"/>
+            <CreateItemButton showModal={createSource} itemName="Source"/>
           </div>
         </div>
       ) : (

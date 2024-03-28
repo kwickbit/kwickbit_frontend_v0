@@ -7,13 +7,13 @@ import ReportItem from "./ReportItem";
 interface Props {
   className: string;
   reports: AccountingReport[];
-  createReport: UseBooleanReturnProps;
+  showModal: UseBooleanReturnProps;
 }
 
 const ReportsList = ({
   className,
   reports,
-  createReport,
+  showModal,
 }: Props): ReactNode => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -31,12 +31,11 @@ const ReportsList = ({
         <div className="flex flex-col items-center justify-center mt-6">
           <p className="text-center">No reports yet, please add report</p>
           <div className="mt-12">
-            <CreateItemButton shouldCreate={createReport} itemName="Report" />
+            <CreateItemButton showModal={showModal} itemName="Report" />
           </div>
         </div>
       ) : (
         <>
-          {/* <ReportsHeader onSelectAll={handleSelectAll} /> */}
           <div className="flex flex-col gap-4 h-full pb-8">
             {reports.map((report, idx) => (
               <ReportItem
