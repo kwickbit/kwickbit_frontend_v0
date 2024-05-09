@@ -19,6 +19,10 @@ const headerList = [
     title: "Transactions",
   },
   {
+    link: "/api_keys",
+    title: "API Keys"
+  },
+  {
     link: "/integrations",
     title: "Integrations",
   },
