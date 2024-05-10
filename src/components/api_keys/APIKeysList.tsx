@@ -1,5 +1,6 @@
 import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import { APIKey } from "@/services/apiKeys";
+import { ShowAPIKey } from "./ShowAPIKey";
 
 interface Props {
   className: string;
@@ -8,5 +9,9 @@ interface Props {
 }
 
 export const APIKeysList = (props: Props): React.JSX.Element => {
-  return <p>{JSON.stringify(props.apiKeys)}</p>
+  return (<>
+    {props.apiKeys.map(keyObj =>
+      <ShowAPIKey key={keyObj.apiKey} apiKey={keyObj} />
+    )}
+  </>)
 };

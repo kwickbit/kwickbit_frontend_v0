@@ -199,7 +199,7 @@ export const fetchInvoices = async (args: FetchIntegrationAllAttributesArgs): Pr
       ...args,
     });
   } catch (error) {
-    console.log("fetchInvoices error =>", error);
+    console.error("fetchInvoices error =>", error);
     return false;
   }
   return true;

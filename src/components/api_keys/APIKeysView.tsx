@@ -22,8 +22,6 @@ export const APIKeysView = (): React.JSX.Element => {
     return <ServerError />;
   }
 
-  console.log(data?.data)
-
   return (
     <>
       {/* <CreateAPIKeyModal createAPIKey={createAPIKey} /> */}
