@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import CreateItemButton from "@/components/common/CreateItemButton";
 import { APIKeysList } from "./APIKeysList";
+import { CreateAPIKeyModal } from "./create/CreateAPIKeyModal";
 
 export const APIKeysView = (): React.JSX.Element => {
   const { data, isLoading, isError } = useQueryAPIKeys();
@@ -24,7 +25,7 @@ export const APIKeysView = (): React.JSX.Element => {
 
   return (
     <>
-      {/* <CreateAPIKeyModal createAPIKey={createAPIKey} /> */}
+      <CreateAPIKeyModal createAPIKey={createAPIKey} />
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
           <div className="flex justify-end">
