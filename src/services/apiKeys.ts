@@ -17,25 +17,7 @@ export interface APIKey {
 }
 
 export const getAPIKeys = async (): Promise<GetAPIKeysAPIResponse> => {
-  // const { data } = await apiClient.get("/api-management/list");
-  // console.log(data)
-  const data = {
-    nextCursor: {},
-    message: "ALL YOUR BASE ARE BELONG TO US",
-    data: [
-      {
-        apiKey: "12345678**************87654321",
-        expiresIn: "some day soon, be prepared",
-        idWithinDatabase: "key1Id"
-      },
-      {
-        apiKey: "22345678**************87654322",
-        expiresIn: "MEMENTO MORI",
-        idWithinDatabase: "key2Id"
-      },
-    ]
-  };
-
+  const { data } = await apiClient.get("/api-management/list");
   return data;
 };
 
