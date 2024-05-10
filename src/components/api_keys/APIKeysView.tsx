@@ -1,3 +1,4 @@
+import { useQueryAPIKeys } from "@/hooks/apiKeys";
 import { useBoolean } from "@/hooks/useBoolean";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
@@ -5,7 +6,7 @@ import CreateItemButton from "@/components/common/CreateItemButton";
 import { APIKeysList } from "./APIKeysList";
 
 export const APIKeysView = (): React.JSX.Element => {
-  const { data, isLoading, isError } = { data: { data: [] }, isLoading: false, isError: false };
+  const { data, isLoading, isError } = useQueryAPIKeys();
 
   const createAPIKey = useBoolean();
 
@@ -20,6 +21,8 @@ export const APIKeysView = (): React.JSX.Element => {
   if (isError) {
     return <ServerError />;
   }
+
+  console.log(data?.data)
 
   return (
     <>

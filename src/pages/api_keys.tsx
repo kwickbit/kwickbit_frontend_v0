@@ -6,7 +6,7 @@ const APIKeysPage = (): React.JSX.Element => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>API Keys</title>
       </Head>
       <APIKeysView />
     </>
