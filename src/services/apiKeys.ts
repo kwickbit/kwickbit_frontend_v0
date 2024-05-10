@@ -1,9 +1,13 @@
-// import { apiClient } from "@/lib/api-client";
+import { apiClient } from "@/lib/api-client";
 
 export interface GetAPIKeysAPIResponse {
   message: string;
   data: APIKey[];
   nextCursor: object;
+}
+
+export interface CreateAPIKeyAPIProps {
+  expiresInWeeks: number;
 }
 
 export interface APIKey {
@@ -12,7 +16,7 @@ export interface APIKey {
   idWithinDatabase: string,
 }
 
-export const fetchAPIKeys = async (): Promise<GetAPIKeysAPIResponse> => {
+export const getAPIKeys = async (): Promise<GetAPIKeysAPIResponse> => {
   // const { data } = await apiClient.get("/api-management/list");
   // console.log(data)
   const data = {
@@ -32,5 +36,12 @@ export const fetchAPIKeys = async (): Promise<GetAPIKeysAPIResponse> => {
     ]
   };
 
+  return data;
+};
+
+export const postCreateAPIKey = async (
+  props: CreateAPIKeyAPIProps
+): Promise<any> => {
+  const { data } = await apiClient.post("/api-management/add", props);
   return data;
 };
