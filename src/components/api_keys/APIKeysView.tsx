@@ -9,7 +9,7 @@ import { CreateAPIKeyModal } from "./create/CreateAPIKeyModal";
 export const APIKeysView = (): React.JSX.Element => {
   const { data, isLoading, isError } = useQueryAPIKeys();
 
-  const createAPIKey = useBoolean();
+  const shouldCreateAPIKey = useBoolean();
 
   if (isLoading) {
     return (
@@ -25,16 +25,16 @@ export const APIKeysView = (): React.JSX.Element => {
 
   return (
     <>
-      <CreateAPIKeyModal createAPIKey={createAPIKey} />
+      <CreateAPIKeyModal shouldCreateAPIKey={shouldCreateAPIKey} />
       <div className="max-w-7xl mx-auto mt-12 px-4 pb-12">
         <div className="overflow-auto">
           <div className="flex justify-end">
-            <CreateItemButton showModal={createAPIKey} itemName="API key"/>
+            <CreateItemButton showModal={shouldCreateAPIKey} itemName="API key"/>
           </div>
           <APIKeysList
             className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto"
             apiKeys={data?.data ?? []}
-            createAPIKey={createAPIKey}
+            shouldCreateAPIKey={shouldCreateAPIKey}
           />
         </div>
       </div>
