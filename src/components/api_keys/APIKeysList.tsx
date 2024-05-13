@@ -4,6 +4,7 @@ import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import { APIKey } from "@/services/apiKeys";
 import { getLocaleDateString } from "@/utils/time-utils";
 import { abbreviateAddr } from "@/utils/utils";
+import { DeleteAPIKeyButton } from "./DeleteAPIKeyButton";
 
 interface Props {
   className: string;
@@ -37,8 +38,8 @@ export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {
     },
     {
       id: "delete_key",
-      cell: (): React.JSX.Element => {
-        return <p>I am a delete key button!</p>
+      cell: ({ row: { original: { idWithinDatabase } } }): React.JSX.Element => {
+        return <DeleteAPIKeyButton keyId={idWithinDatabase} />
       },
       header: "Delete key"
     },
