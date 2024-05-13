@@ -13,10 +13,8 @@ const MainLayout = ({
     <UserWebSocketProvider>
         <TokenMappingDataProvider>
             <QuickBooksDataProvider>
-                <>
-                    <MainHeader />
-                    {children}
-                </>
+                <MainHeader />
+                {children}
             </QuickBooksDataProvider>
         </TokenMappingDataProvider>
     </UserWebSocketProvider>
