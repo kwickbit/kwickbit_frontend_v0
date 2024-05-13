@@ -1,8 +1,14 @@
-import { useForm } from "react-hook-form";
+import type { BaseSyntheticEvent } from "react";
+import { type UseFormReturn, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useMutationCreateAPIKey } from "@/hooks/apiKeys";
 
-export const useCreateAPIKeyModal = (): any => {
+interface ReturnProps {
+  submitForm: (event?: BaseSyntheticEvent) => Promise<void>;
+  methods: UseFormReturn<{ expiresInWeeks: string }>;
+}
+
+export const useCreateAPIKeyModal = (): ReturnProps => {
   const postNewAPIKey = useMutationCreateAPIKey();
 
   const methods = useForm({
