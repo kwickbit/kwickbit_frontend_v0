@@ -26,9 +26,12 @@ export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {
     },
     {
       id: "expiry_date",
-      cell: (): string => {
-        const date = new Date();
-        return getLocaleDateString(date);
+      cell: ({ row: { original: { expirationMillisecond } } }): string => {
+        if (expirationMillisecond) {
+          const date = new Date(expirationMillisecond);
+          return getLocaleDateString(date);
+        }
+        return "This key does not expire."
       },
       header: "Expires at"
     },

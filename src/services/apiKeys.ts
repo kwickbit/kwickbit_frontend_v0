@@ -12,7 +12,7 @@ export interface CreateAPIKeyAPIProps {
 
 export interface APIKey {
   apiKey: string;
-  expiresIn?: string | number;
+  expirationMillisecond?: number;
   idWithinDatabase: string,
 }
 
