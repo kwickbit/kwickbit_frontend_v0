@@ -8,6 +8,7 @@ import {
 import {
   CreateAPIKeyAPIProps,
   GetAPIKeysAPIResponse,
+  deleteAPIKey,
   getAPIKeys,
   postCreateAPIKey,
 } from "@/services/apiKeys";
@@ -21,6 +22,18 @@ export const useQueryAPIKeys = (): UseQueryResult<
   return useQuery({
     queryKey,
     queryFn: getAPIKeys
+  });
+};
+
+export const useQueryDeleteAPIKey = (): UseMutationResult<
+  any,
+  Error,
+  string
+> => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteAPIKey,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey })
   });
 };
 

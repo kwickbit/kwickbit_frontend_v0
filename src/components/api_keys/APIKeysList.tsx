@@ -63,7 +63,7 @@ export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {
             {headerGroup.headers.map(header => (
               <div
                 key={header.id}
-                className="text-[#21254E] text-base font-normal pr-2 flex justify-center items-center"
+                className="text-[#21254E] text-base font-normal flex justify-center items-center"
               >
                 {header.isPlaceholder
                   ? null
@@ -81,12 +81,12 @@ export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {
         {table.getRowModel().rows.map(row => (
           <div
             key={row.id}
-            className="relative px-4 py-8 bg-white hover:border-[#39bff0] transition-all rounded-xl shadow border grid grid-cols-3"
+            className="py-8 bg-white hover:border-[#39bff0] transition-all rounded-xl shadow border grid grid-cols-3"
           >
             {row.getVisibleCells().map(cell => (
               <div
                 key={cell.id}
-                className="flex flex-col justify-center items-center h-full px-1 text-base font-bold text-[#BDC1CA]"
+                className="flex flex-col justify-center items-center h-full text-base font-bold text-[#BDC1CA]"
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>

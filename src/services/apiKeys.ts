@@ -27,3 +27,8 @@ export const postCreateAPIKey = async (
   const { data } = await apiClient.post("/api-management/add", props);
   return data;
 };
+
+export const deleteAPIKey = async (idWithinDatabase: string): Promise<any> => {
+  const { data } = await apiClient.delete(`/api-management/delete/${idWithinDatabase}`);
+  return data;
+};
