@@ -1,35 +1,21 @@
-import { toast } from "react-toastify";
-import { useMutationCreateAPIKey } from "@/hooks/apiKeys";
+import { FaPlusCircle } from "react-icons/fa";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean"
-import { CreateAPIKeyAPIProps } from "@/services/apiKeys";
 import Modal from "@/components/Modal"
 import PrimaryButton from "@/components/PrimaryButton";
+import FormProvider from "@/components/FormProvider";
+import RHFTextField from "@/components/RHFTextField";
+import { useCreateAPIKeyModal } from "@/hooks/apiKeys/useCreateAPIKeyModal";
 
 interface Props {
   shouldCreateAPIKey: UseBooleanReturnProps;
 }
 
 export const CreateAPIKeyModal = ({ shouldCreateAPIKey }: Props): React.JSX.Element => {
-  const postNewAPIKey = useMutationCreateAPIKey();
+  const { submitForm, methods } = useCreateAPIKeyModal();
 
-  const expiresInWeeks = 52;
-
-  const newAPIKey: CreateAPIKeyAPIProps = {
-    expiresInWeeks,
-  };
-
-  const createAPIKey = (): void => {
-    postNewAPIKey.mutate(
-      newAPIKey,
-      {
-        onSuccess: (data: any) => {
-          toast.success(data?.message ?? "API key created successfully.");
-        },
-        onError: (error: any) => {
-          toast.error(error?.message ?? "Error while creating API key.");
-        },
-      }
-    );
+  const onSubmit = (): void => {
+    submitForm();
+    shouldCreateAPIKey.onFalse();
   };
 
   return (
@@ -39,13 +25,29 @@ export const CreateAPIKeyModal = ({ shouldCreateAPIKey }: Props): React.JSX.Elem
       show={shouldCreateAPIKey.value}
       closeModal={shouldCreateAPIKey.onFalse}
     >
-      <p>Creating an API key to expire in {expiresInWeeks} weeks.</p>
-      <PrimaryButton
-        className="flex items-center gap-2"
-        onClick={createAPIKey}
+      <FormProvider
+        onSubmit={onSubmit}
+        methods={methods}
+        className="w-full flex flex-col gap-4"
       >
-        Create
-      </PrimaryButton>
+        <RHFTextField
+          name="expiresInWeeks"
+          label="API key expiration in weeks"
+          placeholder="4"
+          min="1"
+          type="number"
+          horizontal="true"
+          required
+        />
+        <div className="flex justify-center">
+          <PrimaryButton
+            className="flex items-center gap-2 w-fit"
+            type="submit"
+          >
+            <FaPlusCircle />Create key
+          </PrimaryButton>
+        </div>
+      </FormProvider>
     </Modal>
   );
 };
