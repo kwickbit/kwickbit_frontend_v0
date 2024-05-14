@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classNames from "classnames";
 import { Controller, useFormContext } from "react-hook-form";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 
@@ -29,11 +30,19 @@ const RHFTextField = ({
       control={control}
       render={({ field, fieldState: { error } }): React.ReactElement => (
         <div className="w-full">
-          <div className="bg-[#F3F4F6FF] flex flex-col px-4 py-2 rounded w-full">
+          <div
+            className={classNames(
+              "bg-[#F3F4F6FF] flex px-4 py-2 rounded w-full",
+              rest.horizontal ? "justify-between" : "flex-col"
+            )}
+          >
             <label className="font-semibold">{label}</label>
             <div className="flex justify-between items-center gap-2">
               <input
-                className="bg-transparent outline-none w-full"
+                className={classNames(
+                  "bg-transparent outline-none w-full",
+                  rest.horizontal ? "w-12" : ""
+                )}
                 type={showPassword ? "text" : type}
                 {...field}
                 {...rest}

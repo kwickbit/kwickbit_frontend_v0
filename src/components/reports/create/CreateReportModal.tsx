@@ -64,7 +64,7 @@ const CreateReportModal = ({ shouldDisplay }: Props): React.JSX.Element => {
         <div className="flex justify-center mt-6">
           <button
             className={classNames(
-              "bg-sky-400 rounded-md font-bold text-lg text-white px-6 py-2",
+              "rounded-md font-bold text-lg text-white px-6 py-2",
               areDatesValid() ? "bg-sky-400" : "bg-gray-500"
             )}
             disabled={!areDatesValid()}
