@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { UseBooleanReturnProps } from "@/hooks/useBoolean";
 import { APIKey } from "@/services/apiKeys";
 import { getLocaleDateString } from "@/utils/time-utils";
 import { abbreviateAddr } from "@/utils/utils";
@@ -9,7 +8,6 @@ import { DeleteAPIKeyButton } from "./DeleteAPIKeyButton";
 interface Props {
   className: string;
   apiKeys: APIKey[];
-  shouldCreateAPIKey: UseBooleanReturnProps;
 }
 
 export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {

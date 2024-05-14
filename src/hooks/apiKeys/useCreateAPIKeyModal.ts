@@ -1,14 +1,23 @@
-import type { BaseSyntheticEvent } from "react";
+import type { BaseSyntheticEvent, Dispatch, SetStateAction } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useMutationCreateAPIKey } from "@/hooks/apiKeys";
+import { UseBooleanReturnProps } from "@/hooks/useBoolean";
+
+interface Props {
+  shouldShowNewAPIKey: UseBooleanReturnProps;
+  setNewAPIKey: Dispatch<SetStateAction<string>>;
+}
 
 interface ReturnProps {
   submitForm: (event?: BaseSyntheticEvent) => Promise<void>;
   methods: UseFormReturn<{ expiresInWeeks: string }>;
 }
 
-export const useCreateAPIKeyModal = (): ReturnProps => {
+export const useCreateAPIKeyModal = ({
+  shouldShowNewAPIKey,
+  setNewAPIKey,
+}: Props): ReturnProps => {
   const postNewAPIKey = useMutationCreateAPIKey();
 
   const methods = useForm({
@@ -26,6 +35,8 @@ export const useCreateAPIKeyModal = (): ReturnProps => {
       {
         onSuccess: (data: any) => {
           toast.success(data?.message ?? "API key created successfully.");
+          setNewAPIKey(data.apiKey)
+          shouldShowNewAPIKey.onTrue();
         },
         onError: (error: any) => {
           toast.error(error?.message ?? "Error while creating API key.");

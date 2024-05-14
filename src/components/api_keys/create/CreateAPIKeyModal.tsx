@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { FaPlusCircle } from "react-icons/fa";
 import { UseBooleanReturnProps } from "@/hooks/useBoolean"
 import Modal from "@/components/Modal"
@@ -8,12 +9,18 @@ import { useCreateAPIKeyModal } from "@/hooks/apiKeys/useCreateAPIKeyModal";
 
 interface Props {
   shouldCreateAPIKey: UseBooleanReturnProps;
+  shouldShowNewAPIKey: UseBooleanReturnProps;
+  setNewAPIKey: Dispatch<SetStateAction<string>>;
 }
 
-export const CreateAPIKeyModal = ({ shouldCreateAPIKey }: Props): React.JSX.Element => {
-  const { submitForm, methods } = useCreateAPIKeyModal();
+export const CreateAPIKeyModal = ({
+  shouldCreateAPIKey,
+  shouldShowNewAPIKey,
+  setNewAPIKey
+}: Props): React.JSX.Element => {
+  const { submitForm, methods } = useCreateAPIKeyModal({ shouldShowNewAPIKey, setNewAPIKey });
 
-  const onSubmit = (): void => {
+  const onSubmit = async (): Promise<void> => {
     submitForm();
     shouldCreateAPIKey.onFalse();
   };
