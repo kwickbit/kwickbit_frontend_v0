@@ -41,7 +41,7 @@ const RHFTextField = ({
               <input
                 className={classNames(
                   "bg-transparent outline-none w-full",
-                  rest.horizontal ? "w-16" : ""
+                  rest.horizontal ? "w-12" : ""
                 )}
                 type={showPassword ? "text" : type}
                 {...field}
