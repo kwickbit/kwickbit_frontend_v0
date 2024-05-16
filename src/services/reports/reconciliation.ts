@@ -85,6 +85,7 @@ export const getIntegrationEntries = async (): Promise<GetIntegrationEntriesAPIR
   const { data } = await apiClient.post("/integration-entries/list", {
     integrationProvider: "QuickBooks",
   });
+
   return data;
 };
 

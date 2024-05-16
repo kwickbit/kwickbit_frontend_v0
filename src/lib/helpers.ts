@@ -1,4 +1,6 @@
 import { Token } from "@/services/token_currencies_conversions";
+import { TransactionProps } from "@/services/transactions";
+import { IntegrationTransactionEntry } from "@/services/reports/reconciliation";
 
 
 const tooltipFormatterStellar = (token: Token): string => {
@@ -40,6 +42,19 @@ const keyFormatters: Record<string, (token: Token) => string> = {
 export const keyFormatTransaction = (token: Token): string => {
     return keyFormatters[token.chain](token);
 };
+
+export const calculateTransactionAmount = (transaction: TransactionProps): number => {
+  const amountIncoming = parseAmount(transaction.amountIncoming);
+  const amountOutgoing = parseAmount(transaction.amountOutgoing);
+  return Math.abs(amountIncoming - amountOutgoing);
+}
+
+export const sumEntryAmounts = (entries: IntegrationTransactionEntry[]): number =>
+  entries.reduce(
+    (total: number, entry: IntegrationTransactionEntry): number =>
+      total + parseAmount(entry.reconvertedAmount),
+    0.0
+  );
 
 export const parseAmount = (amount: string): number => {
     const parsed = parseFloat(amount);
