@@ -32,7 +32,7 @@ export const ReconciliationReportView = ({ reportId }: Props): React.JSX.Element
         <h5>Reconciliation report of {toLocaleDate(report.reportDate)}</h5>
         <p>This report covers transactions between {toLocaleDate(report.transactionsStartDate)} and {toLocaleDate(report.transactionsEndDate)}.</p>
         <div className="flex flex-col">
-          {report.reportReconciliations.map(
+          {report.reconciledTransactions.map(
             (reconciliation, index) =>
               <div key={index} className={index % 2 === 0 ? "" : "bg-sky-100"}>
                 <Reconciliation reconciliation={reconciliation} />

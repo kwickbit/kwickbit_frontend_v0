@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo, useState } from "react";
-import { isConnected } from "@/lib/session";
 import useWebSocket, { SendMessage } from "react-use-websocket";
-import { v4 as uuidv4 } from "uuid";
 import { WebSocketMessage } from "react-use-websocket/dist/lib/types";
+import { v4 as uuidv4 } from "uuid";
+import { isConnected } from "@/lib/session";
+import { GainsReport } from "@/services/reports/gains";
 import { useBoolean } from "@/hooks/useBoolean";
 
 export interface FetchedAvailableIntegrationAccountsData {
@@ -40,6 +41,7 @@ export interface UserWebSocketReturn {
   setIsThereNewUpdateMappedCurrenciesToFalse: () => void;
   publishedTransactionToIntegration: PublishedTransactionToIntegration | null;
   clearPublishedTransactionToIntegration: () => void;
+  newGainsReport: GainsReport | null,
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
@@ -60,6 +62,8 @@ export const SocketContext = React.createContext<UserWebSocketReturn>({
   setIsThereNewUpdateMappedCurrenciesToFalse: () => {},
   publishedTransactionToIntegration: null,
   clearPublishedTransactionToIntegration: () => {},
+  newGainsReport: null,
+
 });
 
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
@@ -86,6 +90,8 @@ export const UserWebSocketProvider = ({
   ] = useState<PublishedTransactionToIntegration | null>(null);
 
   const {value: isThereNewUpdateMappedCurrencies, onTrue: setIsThereNewUpdateMappedCurrenciesToTrue, onFalse: setIsThereNewUpdateMappedCurrenciesToFalse} = useBoolean(false);
+
+  const [newGainsReport, setNewGainsReport] = useState<GainsReport | null>(null);
 
   const onError = (error: WebSocketEventMap["error"]): void => {
     console.error("WebSocket error:", error);
@@ -132,6 +138,10 @@ export const UserWebSocketProvider = ({
           setPublishedTransactionToIntegration(data.data);
           break;
 
+        case 'builtGainsReport':
+          setNewGainsReport(data.report);
+          break;
+
         default:
           break;
       }
@@ -164,20 +174,36 @@ export const UserWebSocketProvider = ({
 
   const values = useMemo(
     () => ({
-      sendMessage,
+      // properly websocket stuff
       lastMessage,
       readyState,
-      fetchedNewTransactionsData,
-      fetchedAvailableIntegrationAccounts,
-      fetchedUpdateIntegrationAllAttributes,
-      setFetchedUpdateIntegrationAllAttributes,
+      sendMessage,
+      // stuff we use the websocket for
       clearFetchedTransactionsData,
-      isThereNewUpdateMappedCurrencies,
-      setIsThereNewUpdateMappedCurrenciesToFalse,
-      publishedTransactionToIntegration,
       clearPublishedTransactionToIntegration,
+      fetchedAvailableIntegrationAccounts,
+      fetchedNewTransactionsData,
+      fetchedUpdateIntegrationAllAttributes,
+      newGainsReport,
+      isThereNewUpdateMappedCurrencies,
+      publishedTransactionToIntegration,
+      setFetchedUpdateIntegrationAllAttributes,
+      setIsThereNewUpdateMappedCurrenciesToFalse,
     }),
-    [sendMessage, lastMessage, readyState, fetchedNewTransactionsData, fetchedAvailableIntegrationAccounts, fetchedUpdateIntegrationAllAttributes, isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse, publishedTransactionToIntegration]
+    [
+      // properly websocket stuff
+      lastMessage,
+      readyState,
+      sendMessage,
+      // stuff we use the websocket for
+      fetchedAvailableIntegrationAccounts,
+      fetchedNewTransactionsData,
+      fetchedUpdateIntegrationAllAttributes,
+      isThereNewUpdateMappedCurrencies,
+      newGainsReport,
+      publishedTransactionToIntegration,
+      setIsThereNewUpdateMappedCurrenciesToFalse,
+    ]
   );
 
   return (

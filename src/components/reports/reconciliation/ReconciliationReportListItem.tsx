@@ -17,7 +17,7 @@ export const ReconciliationReportListItem = ({ report }: Props): React.JSX.Eleme
 
   return (
     <Link href={`reconciliation/${reportId}`}>
-      <div className="flex bg-white text-[#BDC1CA] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
+      <div className="flex bg-white text-[#9095A1] font-bold items-center shadow p-6 rounded-lg border hover:border-[#39bff0] transition-all">
         <div className="col-span-1 flex flex-col justify-center grow">
           <span className="">Reconciliation report created on {toLocaleDate(reportDate)}</span>
           <span>Covers transactions between {toLocaleDate(transactionsStartDate)} and {toLocaleDate(transactionsEndDate)}</span>
