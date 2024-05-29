@@ -1,4 +1,4 @@
-import { IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports";
+import { IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports/reconciliation";
 import { PickReconciliationEntries } from "./PickReconciliationEntries";
 
 interface Props {

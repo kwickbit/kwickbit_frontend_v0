@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { doFloatsMatch, parseAmount } from "@/lib/helpers";
 import { Direction, TransactionProps } from "@/services/transactions";
 import { ChainTransactionForReconciliation } from "@/components/reports/reconciliation/ChainTransactionForReconciliation";
-import { ReconciliationReportItem, IntegrationTransactionEntry } from "@/services/reports";
+import { ReconciliationReportItem, IntegrationTransactionEntry } from "@/services/reports/reconciliation";
 import { ReconciliationTransactionEntries } from "./ReconciliationTransactionEntries";
 
 interface Props {

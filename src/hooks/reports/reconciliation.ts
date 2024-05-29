@@ -14,7 +14,7 @@ import {
   GetSummaryReportsAPIResult,
   GetReconciliationReportAPIResult,
   getReconciliationReport,
-} from "@/services/reports";
+} from "@/services/reports/reconciliation";
 import {
   GetTransactionsParams,
   TransactionAPIResult,
@@ -22,7 +22,7 @@ import {
 } from "@/services/transactions";
 
 
-export const useQueryReportSummaries = (): UseQueryResult<
+export const useQueryReconciliationReportSummaries = (): UseQueryResult<
   GetSummaryReportsAPIResult,
   Error
 > => {

@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import classNames from "classnames";
-import { ReconciliationEntrySources } from "@/services/reports";
+import { ReconciliationEntrySources } from "@/services/reports/reconciliation";
 
 interface Props {
   entriesSource: ReconciliationEntrySources;

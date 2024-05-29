@@ -1,4 +1,4 @@
-import { IntegrationTransactionEntry, ReconciledTransaction } from "@/services/reports"
+import { IntegrationTransactionEntry, ReconciledTransaction } from "@/services/reports/reconciliation"
 import { ChainTransactionForReconciliation } from "./ChainTransactionForReconciliation";
 import { ReconciliationEntry } from "./ReconciliationEntry";
 import { parseAmount } from "@/lib/helpers";

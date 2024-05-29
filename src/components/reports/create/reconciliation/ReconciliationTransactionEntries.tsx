@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports";
+import { IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports/reconciliation";
 import { EntriesSelector } from "./EntriesSelector";
 import { EntrySourceButtons } from "./EntrySourceButtons";
 

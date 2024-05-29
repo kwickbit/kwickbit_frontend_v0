@@ -1,9 +1,9 @@
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
-import { useQueryReconciliationReport } from "@/hooks/reports";
+import { useQueryReconciliationReport } from "@/hooks/reports/reconciliation";
 import { toLocaleDate } from "@/lib/helpers";
-import { ReconciliationReport } from "@/services/reports";
-import { Reconciliation } from "./Reconciliation";
+import { ReconciliationReport } from "@/services/reports/reconciliation";
+import { Reconciliation } from "@/components/reports/reconciliation/Reconciliation";
 
 interface Props {
   reportId: string;
