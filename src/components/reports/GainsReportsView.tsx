@@ -1,16 +1,31 @@
-import { useState } from "react";
-import { useQueryGainsReport } from "@/hooks/reports/gains";
-import { toLocaleDate } from "@/lib/helpers";
-import { CostingMethod, GainsReport } from "@/services/reports/gains";
+import { useEffect, useState } from "react";
+import { useBoolean } from "@/hooks/useBoolean";
+import useUserWebSocket from "@/hooks/useWebSocket";
+import { useQueryAllGainsReports } from "@/hooks/reports/gains";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
-import { GainsReportTable } from "@/components/reports/gains/GainsReportTable";
+import CreateItemButton from "@/components/common/CreateItemButton";
+import CreateGainsReportModal from "@/components/reports/gains/CreateGainsReportModal";
+import { GainsReportList } from "@/components/reports/gains/GainsReportList";
 
+export const GainsReportsView = (): JSX.Element => {
+  const { data, isLoading, isError } = useQueryAllGainsReports();
+  const showModal = useBoolean();
+  const { newGainsReport: newReport } = useUserWebSocket();
+  const [reports, setReports] = useState(data?.data ?? []);
+  const [newReportId, setNewReportId] = useState<string | undefined>(undefined);
 
-export const GainsReportsView = (): React.JSX.Element => {
-  const [selectedMethod, setSelectedMethod] = useState<CostingMethod>(CostingMethod.FIFO);
+  useEffect(() => {
+    setReports(data?.data?? []);
+  }, [data]);
 
-  const { data, isLoading, isError } = useQueryGainsReport();
+  useEffect(() => {
+    if (newReport) {
+      setReports(prevReports => [newReport, ...prevReports]);
+      setNewReportId(newReport.reportId);
+      setTimeout(() => setNewReportId(undefined), 10_000);
+    }
+  }, [newReport]);
 
   if (isLoading) {
     return (
@@ -24,31 +39,13 @@ export const GainsReportsView = (): React.JSX.Element => {
     return <ServerError />;
   }
 
-  const report = data?.data as GainsReport;
-
   return (
     <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
-      <h2 className="text-lg underline mb-4">Gains report</h2>
-      <div className="flex mb-12 space-x-4">
-        <span className="flex-grow">Covering the period of {toLocaleDate(report?.reportStartDate)} to {toLocaleDate(report?.reportEndDate)}</span>
-        <div className="flex items-center space-x-2">
-          <span>Costing method:</span>
-          {Object.values(CostingMethod).map(
-            method => <div key={method}>
-              <input
-                type="radio"
-                name="method"
-                id={method}
-                value={method}
-                checked={selectedMethod === method}
-                onChange={(): void => setSelectedMethod(method)}
-              />
-              <label htmlFor={method}>{method.toUpperCase()}</label>
-            </div>
-          )}
-        </div>
+      <CreateGainsReportModal shouldDisplay={showModal} />
+      <div className="flex justify-end">
+        <CreateItemButton showModal={showModal} itemName="Report" />
       </div>
-      <GainsReportTable assets={report?.assets} selectedMethod={selectedMethod} />
+      <GainsReportList reports={reports} newReportId={newReportId} />
     </div>
   );
 };

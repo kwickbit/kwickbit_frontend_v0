@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api-client";
 import { Direction, TransactionProps } from "@/services/transactions";
 import { Token } from "@/services/token_currencies_conversions";
+import { BaseAccountingReport } from "@/services/reports";
 
 export interface GetSummaryReportsAPIResult {
   message: string;
@@ -21,14 +22,7 @@ export interface CreateReportAPIProps {
   reconciliations: ReconciliationReportItem[]
 }
 
-interface BaseReconciliationReport {
-  reportDate: string;
-  reportId: string;
-  transactionsStartDate: string;
-  transactionsEndDate: string;
-}
-
-export interface ReconciliationReportSummary extends BaseReconciliationReport {
+export interface ReconciliationReportSummary extends BaseAccountingReport {
   reconciliationCount: number;
 }
 
@@ -37,8 +31,8 @@ export interface ReconciledTransaction {
   matchingEntries: IntegrationTransactionEntry[];
 }
 
-export interface ReconciliationReport extends BaseReconciliationReport {
-  reportReconciliations: ReconciledTransaction[];
+export interface ReconciliationReport extends BaseAccountingReport {
+  reconciledTransactions: ReconciledTransaction[];
 }
 
 export interface GetIntegrationEntriesAPIResult {

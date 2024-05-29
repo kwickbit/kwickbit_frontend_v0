@@ -31,18 +31,34 @@ export const GainsReportTable = ({ assets, selectedMethod }: Props): React.JSX.E
       ],
     }),
     columnHelper.group({
-      header: `Earnings (USD, ${selectedMethod.toUpperCase()} basis)`,
+      header: "Balance",
       columns: [
+        {
+          accessorKey: "tokenBalance",
+          header: "We want this not to render either",
+          cell: data => data.row.original.tokenBalance,
+        },
+      ],
+    }),
+    columnHelper.group({
+      header: `Amounts (USD, ${selectedMethod.toUpperCase()} basis)`,
+      columns: [
+        {
+          accessorKey: "totalCosts",
+          cell: data => data.row.original.totalCosts[selectedMethod].toFixed(2),
+          header: "Total cost",
+          id: "totalCosts",
+        },
         {
           accessorKey: "realizedGains",
           cell: data => data.row.original.realizedGains[selectedMethod].toFixed(2),
-          header: "Realized",
+          header: "Realized gains",
           id: "realizedGains",
         },
         {
           accessorKey: "unrealizedGains",
           cell: data => data.row.original.unrealizedGains[selectedMethod].toFixed(2),
-          header: "Unrealized",
+          header: "Unrealized gains",
           id: "unrealizedGains",
         },
       ],
@@ -58,9 +74,9 @@ export const GainsReportTable = ({ assets, selectedMethod }: Props): React.JSX.E
   });
 
   const calculateRowSpan = (header: Header<GainsReportAsset, unknown>): number => {
-    if (header.depth === 0 && header.index === 0) {
+    if (header.depth === 0 && (header.index === 0 || header.index === 1)) {
       return 2;
-    } else if (header.index === 0) {
+    } else if ((header.index === 0 || header.index === 1)) {
       return 0;
     } else {
       return 1;
@@ -68,11 +84,11 @@ export const GainsReportTable = ({ assets, selectedMethod }: Props): React.JSX.E
   };
 
   return <table className="w-full border-collapse rounded-lg overflow-hidden">
-    <thead className="bg-[#21254EFF] text-white border border-gray-300">
+    <thead className="bg-[#D7F0FB] border border-gray-300">
       {table.getHeaderGroups().map(headerGroup => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map(header =>
-            header.id === "token"
+            (header.id === "token" || header.id === "tokenBalance")
               ? null
               : <th
                   key={header.id}

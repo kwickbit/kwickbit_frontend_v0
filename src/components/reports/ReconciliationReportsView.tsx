@@ -3,8 +3,8 @@ import { useQueryReconciliationReportSummaries } from "@/hooks/reports/reconcili
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import CreateItemButton from "@/components/common/CreateItemButton";
-import CreateReportModal from "@/components/reports/create/CreateReportModal";
 import { ReconciliationReportsList } from "@/components/reports/reconciliation/ReconciliationReportsList";
+import CreateReconciliationReportModal from "@/components/reports/create/reconciliation/CreateReconciliationReportModal";
 
 
 const ReconciliationReportsView = (): React.JSX.Element => {
@@ -28,7 +28,7 @@ const ReconciliationReportsView = (): React.JSX.Element => {
 
   return (
     <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
-      <CreateReportModal shouldDisplay={showModal} />
+      <CreateReconciliationReportModal shouldDisplay={showModal} />
       <div className="overflow-auto">
         {reports.length ?
           <div className="flex justify-end">
@@ -36,7 +36,6 @@ const ReconciliationReportsView = (): React.JSX.Element => {
           </div>
           : <></>}
         <ReconciliationReportsList
-          className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto my-6"
           reports={reports}
           showModal={showModal}
         />
