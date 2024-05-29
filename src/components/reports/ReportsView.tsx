@@ -1,49 +1,17 @@
-import { useBoolean } from "@/hooks/useBoolean";
-import { useQueryReportSummaries } from "@/hooks/reports";
-import CreateItemButton from "../common/CreateItemButton";
-import CreateReportModal from "./create/CreateReportModal";
-import Loader from "../Loader";
-import ServerError from "../ServerError";
-import ReportsList from "./ReportsList";
+import Link from "next/link";
+import { reportTypes } from "@/lib/report-types";
 
-const ReportsView = (): React.JSX.Element => {
-  const { data, isLoading, isError } = useQueryReportSummaries();
-
-  const showModal = useBoolean();
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center mt-8">
-        <Loader />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return <ServerError />;
-  }
-
-  const reports = data?.data ?? [];
-
-  return (
-    <>
-      <CreateReportModal shouldDisplay={showModal} />
-      <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
-        <div className="overflow-auto">
-          {reports.length ?
-            <div className="flex justify-end">
-              <CreateItemButton showModal={showModal} itemName="Report" />
-            </div>
-            : <></>}
-          <ReportsList
-            className="max-w-7xl mx-auto min-w-[800px] overflow-x-auto my-6"
-            reports={reports}
-            showModal={showModal}
-          />
-        </div>
-      </div>
-    </>
-  );
+export const ReportsView = (): React.JSX.Element => {
+  return <div className="max-w-7xl mx-auto mt-6 px-4 pb-12">
+    <h2>Available reports:</h2>
+    <ul>
+      {reportTypes.map(type =>
+        <li key={type.title}>
+          <p><Link className="font-bold underline" href={type.link}>
+            {type.title}
+          </Link> - {type.description}</p>
+        </li>
+      )}
+    </ul>
+  </div>;
 };
-
-export default ReportsView;

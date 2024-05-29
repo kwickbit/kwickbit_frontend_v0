@@ -5,10 +5,6 @@ import { convertCurrency, Token } from "@/services/token_currencies_conversions"
 export enum Chain {
   Stellar = 'stellar',
 }
-export enum Type {
-  OnChain = 'OnChain',
-  OffChain = 'OffChain',
-}
 
 export enum Status {
   Published = 'Published',
@@ -26,7 +22,7 @@ export interface TransactionProps {
   hash?: string;
   atomicTransactionId: string;
   workspaceIdChainAddress: string;
-  type: Type;
+  isOnChain: boolean;
   tokenIncoming?: Token;
   tokenOutgoing?: Token;
   labels: string[];

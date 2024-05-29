@@ -1,6 +1,6 @@
 import Head from "next/head";
-import ReportsView from "@/components/reports/ReportsView";
 import MainLayout from "@/components/layouts/MainLayout";
+import { ReportsView } from "@/components/reports/ReportsView";
 
 const ReportsPage = (): React.JSX.Element => {
   return (

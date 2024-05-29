@@ -1,15 +1,12 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import classNames from "classnames";
-import Link from "next/link";
-import Logo from "../Logo";
 import useLogout from "@/hooks/useLogout";
 import useMounted from "@/hooks/useMounted";
+import Logo from "@/components/Logo";
+import { ReportsDropdown } from "@/components/reports/ReportsDropdown";
 
 const headerList = [
-  {
-    link: "/reports",
-    title: "Reports"
-  },
   {
     link: "/sources",
     title: "Sources",
@@ -49,6 +46,7 @@ const MainHeader = (): JSX.Element | null => {
             <Logo width={158} height={24} className="" />
           </Link>
           <div className="flex items-center gap-5 xl:gap-7">
+            <ReportsDropdown pathname={pathname} />
             {headerList.map((item, idx) => (
               <Link
                 key={`hnv-${idx}`}

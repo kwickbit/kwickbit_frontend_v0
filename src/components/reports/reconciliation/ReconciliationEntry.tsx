@@ -1,5 +1,5 @@
 import { symbolFormatTransaction } from "@/lib/helpers";
-import { IntegrationTransactionEntry } from "@/services/reports";
+import { IntegrationTransactionEntry } from "@/services/reports/reconciliation";
 import classNames from "classnames";
 
 interface Props {

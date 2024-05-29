@@ -6,17 +6,18 @@ import {
   useMutationCreateReport,
   useQueryIntegrationEntries,
   useQueryTransactions
-} from "@/hooks/reports";
+} from "@/hooks/reports/reconciliation";
 import { parseAmount } from "@/lib/helpers";
 import {
   CreateReportAPIProps,
   IntegrationTransactionEntry,
   ReconciliationReportItem
-} from "@/services/reports";
+} from "@/services/reports/reconciliation";
 import { Direction, TransactionProps } from "@/services/transactions";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import { ReconciliationTransaction } from "./ReconciliationTransaction";
+
 
 export const CreateReconciliationReport = (): React.JSX.Element => {
   const router = useRouter();

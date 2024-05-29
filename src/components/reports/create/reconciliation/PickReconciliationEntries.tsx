@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { IntegrationTransactionEntry } from "@/services/reports";
+import { IntegrationTransactionEntry } from "@/services/reports/reconciliation";
 import { UnreconciledEntries } from "./UnreconciledEntries";
 import { ReconciliationEntry } from "@/components/reports/reconciliation/ReconciliationEntry";
 
