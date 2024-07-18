@@ -18,22 +18,47 @@ const QuickBooksIntegrationCard: React.FC = (): React.JSX.Element => {
     const { handleConnectToQuickbook } = useConnectToQuickbook();
     const { data, isLoading, isError } = useQueryIntegrationInformation();
     const editIntegrationModal = useBoolean(false);
-    const { fetchUpdateAllAttributes, bills, accounts, invoices, currencies } = useQuickBooksData();
-    const { fetchedUpdateIntegrationAllAttributes, setFetchedUpdateIntegrationAllAttributes } = useUserWebSocket();
 
-    useEffect(() => {
-        const fetchData = async (): Promise<void> => {
-            if (fetchedUpdateIntegrationAllAttributes) {
-                toast.success("Integration account attributes (accounts, invoices, bills) fetched successfully");
-                await currencies.refetch();
-                await bills.refetch();
-                await accounts.refetch();
-                setFetchedUpdateIntegrationAllAttributes(null);
-            }
-        };
+    const {
+        fetchUpdateAllAttributes,
+        bills,
+        accounts,
+        invoices,
+        currencies,
+        enableQuickbooksDataFetching,
+    } = useQuickBooksData();
 
-        fetchData();
-    }, [fetchedUpdateIntegrationAllAttributes, bills, accounts, invoices, currencies, setFetchedUpdateIntegrationAllAttributes]);
+    const {
+        fetchedUpdateIntegrationAllAttributes,
+        setFetchedUpdateIntegrationAllAttributes,
+    } = useUserWebSocket();
+
+    useEffect(
+        () => {
+            enableQuickbooksDataFetching();
+
+            const fetchData = async (): Promise<void> => {
+                if (fetchedUpdateIntegrationAllAttributes) {
+                    toast.success("Integration account attributes (accounts, invoices, bills) fetched successfully");
+                    await currencies.refetch();
+                    await bills.refetch();
+                    await accounts.refetch();
+                    setFetchedUpdateIntegrationAllAttributes(null);
+                }
+            };
+
+            fetchData();
+        },
+        [
+            enableQuickbooksDataFetching,
+            fetchedUpdateIntegrationAllAttributes,
+            bills,
+            accounts,
+            invoices,
+            currencies,
+            setFetchedUpdateIntegrationAllAttributes,
+        ]
+    );
 
     if (isLoading) return (<div className="flex justify-center mt-8"><Loader/></div>);
     if (isError) return (<ServerError />);

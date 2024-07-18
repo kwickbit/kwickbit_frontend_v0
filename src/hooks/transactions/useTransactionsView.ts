@@ -73,7 +73,15 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>();
   const [data, setData] = useState<TransactionProps[]>([]);
-  const { currencyMappings: { data: tokenMappings, refetch: refetchTokenMappings } } = useTokenMappingContext();
+
+  const {
+    currencyMappings: {
+      data: tokenMappings,
+      refetch: refetchTokenMappings
+    },
+    enableCurrencyMappingsFetching,
+  } = useTokenMappingContext();
+
   const [isLoadingRefresh, setLoadingRefresh] = useState<boolean>(false);
   const [shouldFirstPull, setShouldFirstPull] = useState<boolean>(true);
   const { isThereNewUpdateMappedCurrencies, setIsThereNewUpdateMappedCurrenciesToFalse } = useUserWebSocket();
@@ -105,6 +113,10 @@ const useTransactionsView = (): UserTransactionsViewReturnProps => {
   });
 
   const { fetchedNewTransactionsData, clearFetchedTransactionsData, publishedTransactionToIntegration, clearPublishedTransactionToIntegration } = useUserWebSocket();
+
+  useEffect(() => {
+    enableCurrencyMappingsFetching();
+  }, []);
 
   useEffect(() => {
     if (fetchedNewTransactionsData) {

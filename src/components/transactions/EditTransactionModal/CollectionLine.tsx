@@ -33,16 +33,34 @@ const CollectionLine = ({
   tokenSymbol,
 }: Props): React.JSX.Element => {
   const [accountingType, setAccountingType] = useState<AccountingTransactionType | null>(accountingLine.accountingType !== undefined ? accountingLine.accountingType : null);
-  const {items: {data: items}, invoices: {data: invoices}, accounts: {data: accounts}, bills: {data: bills}} = useQuickBooksData();
+
+  const {
+    items: { data: items },
+    invoices: { data: invoices },
+    accounts: { data: accounts },
+    bills: { data: bills },
+    enableQuickbooksDataFetching,
+  } = useQuickBooksData();
+
   const [resourcesOptions, setResourcesOptions] = useState<Invoice[] | Bill[] | AvailableAccount[] | Item[]>([]);
   const [resourceSelected, setResourceSelected] = useState<Invoice | Bill | AvailableAccount | Item | null>(null);
   const [amount, setAmount] = useState<number>((accountingLine.accountingType !== undefined) ? ([AccountingTransactionType.Income, AccountingTransactionType.Invoice, AccountingTransactionType.Swap].includes(accountingLine.accountingType) ? accountingLine.amountIncoming as number || 0 : accountingLine.amountOutgoing as number || 0) : 0);
-  const {currencyMappings: {data: currencyMappings}} = useTokenMappingContext();
+
+  const {
+    currencyMappings: {
+      data: currencyMappings,
+    },
+    enableCurrencyMappingsFetching,
+  } = useTokenMappingContext();
+
   const isSwap = useMemo<boolean>(() => transaction.direction === Direction.Swap, [transaction]);
 
   useEffect(() => {
+    enableQuickbooksDataFetching();
+    enableCurrencyMappingsFetching();
     setResourceSelected(null);
     setAmount(0);
+
     switch (accountingType) {
       case AccountingTransactionType.Invoice:
         setResourcesOptions(invoices);
@@ -68,7 +86,7 @@ const CollectionLine = ({
       default:
         throw new Error('Illegal accountType option');
     }
-  }, [colIdx, accountingType, accounts, bills, invoices, items, currencyMappings, transaction.tokenIncoming, transaction.tokenOutgoing, token]);
+  }, [enableQuickbooksDataFetching, colIdx, accountingType, accounts, bills, invoices, items, currencyMappings, transaction.tokenIncoming, transaction.tokenOutgoing, token]);
 
   const handleChangeAccountingType = (selectedAccountingType: AccountingTransactionType | null): void => {
     const updatedTransaction = {...accountingLine, ...(selectedAccountingType ? {accountingType: selectedAccountingType} : {})};
