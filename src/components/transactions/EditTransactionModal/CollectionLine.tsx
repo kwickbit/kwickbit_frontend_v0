@@ -86,7 +86,7 @@ const CollectionLine = ({
       default:
         throw new Error('Illegal accountType option');
     }
-  }, [enableQuickbooksDataFetching, colIdx, accountingType, accounts, bills, invoices, items, currencyMappings, transaction.tokenIncoming, transaction.tokenOutgoing, token]);
+  }, [enableCurrencyMappingsFetching, enableQuickbooksDataFetching, colIdx, accountingType, accounts, bills, invoices, items, currencyMappings, transaction.tokenIncoming, transaction.tokenOutgoing, token]);
 
   const handleChangeAccountingType = (selectedAccountingType: AccountingTransactionType | null): void => {
     const updatedTransaction = {...accountingLine, ...(selectedAccountingType ? {accountingType: selectedAccountingType} : {})};
@@ -142,7 +142,7 @@ const CollectionLine = ({
   }
 
   return (
-    <div className="grid grid-cols-[1fr,1.1fr,1fr,28px] gap-1">
+    <div className="grid grid-cols-[1fr,2fr,1fr,28px] gap-1">
       <div className="flex items-center">
         {transaction.status === 'Published' || isSwap ? (
           <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-3 w-full">
