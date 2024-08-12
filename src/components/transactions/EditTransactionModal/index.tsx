@@ -35,18 +35,42 @@ interface Props {
 
 const initializeAccountingLinesIncoming = (transaction: TransactionProps): AccountingLine[] => {
   if (transaction.direction === Direction.Swap) {
-    const accountingLinesSwapIn = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType) || [];
-    if (!accountingLinesSwapIn || accountingLinesSwapIn.length === 0) return [{accountingType: AccountingTransactionType.Swap}];
-    else return accountingLinesSwapIn;
-  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Income, AccountingTransactionType.Invoice].includes(accountingLine.accountingType)) || [];
+    const accountingLinesSwapIn = transaction?.accountingLines?.filter(
+      accountingLine => accountingLine?.accountingType === AccountingTransactionType.Swap
+    ) || [];
+
+    return accountingLinesSwapIn.length > 0
+      ? accountingLinesSwapIn
+      : [{ accountingType: AccountingTransactionType.Swap }];
+  }
+
+  return transaction?.accountingLines?.filter(
+    accountingLine => accountingLine.accountingType
+      && [
+        AccountingTransactionType.Income,
+        AccountingTransactionType.Invoice
+      ].includes(accountingLine.accountingType)
+    ) || [{ accountingType: AccountingTransactionType.Income }];
 };
 
 const initializeAccountingLinesOutgoing = (transaction: TransactionProps): AccountingLine[] => {
   if (transaction.direction === Direction.Swap) {
-    const accountingLinesSwapOut = transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && AccountingTransactionType.Swap === accountingLine.accountingType) || [];
-    if (!accountingLinesSwapOut || accountingLinesSwapOut.length === 0) return [{accountingType: AccountingTransactionType.Swap}];
-    else return accountingLinesSwapOut;
-  } else return transaction?.accountingLines?.filter(accountingLine => accountingLine.accountingType && [AccountingTransactionType.Expense, AccountingTransactionType.Bill].includes(accountingLine.accountingType)) || [];
+    const accountingLinesSwapOut = transaction?.accountingLines?.filter(
+      accountingLine => accountingLine?.accountingType === AccountingTransactionType.Swap
+    ) || [];
+
+    return accountingLinesSwapOut.length > 0
+      ? accountingLinesSwapOut
+      : [{accountingType: AccountingTransactionType.Swap}];
+  }
+
+  return transaction?.accountingLines?.filter(
+    accountingLine => accountingLine.accountingType
+      && [
+        AccountingTransactionType.Expense,
+        AccountingTransactionType.Bill
+      ].includes(accountingLine.accountingType)
+    ) || [{ accountingType: AccountingTransactionType.Expense }];
 };
 
 const EditTransactionModal = ({
@@ -54,8 +78,14 @@ const EditTransactionModal = ({
   transaction,
   nonSetMappings,
 }: Props): React.JSX.Element => {
-  const [accountingLinesIncoming, setAccountingLinesIncoming] = useState<AccountingLine[]>(initializeAccountingLinesIncoming(transaction as TransactionProps));
-  const [accountingLinesOutgoing, setAccountingLinesOutgoing] = useState<AccountingLine[]>(initializeAccountingLinesOutgoing(transaction as TransactionProps));
+  const [accountingLinesIncoming, setAccountingLinesIncoming] = useState<AccountingLine[]>(
+    initializeAccountingLinesIncoming(transaction as TransactionProps)
+  );
+
+  const [accountingLinesOutgoing, setAccountingLinesOutgoing] = useState<AccountingLine[]>(
+    initializeAccountingLinesOutgoing(transaction as TransactionProps)
+  );
+
   const showMismatchAmount = useBoolean(false);
   const publishTransactionMutation = useMutationPublishTransaction();
 
@@ -67,6 +97,7 @@ const EditTransactionModal = ({
         reference: "USD",
       },
     };
+
     setAccountingLinesIncoming([...accountingLinesIncoming, newLine]);
   };
 
@@ -78,6 +109,7 @@ const EditTransactionModal = ({
         reference: "USD",
       },
     };
+
     setAccountingLinesOutgoing([...accountingLinesOutgoing, newLine]);
   };
 
@@ -107,15 +139,36 @@ const EditTransactionModal = ({
     showMismatchAmount.onFalse();
   }, [showMismatchAmount]);
 
-  const nonMappedTokensOfTransaction = useMemo((): Token[] => {
-    const nonMappedTokens = nonSetMappings.filter(tokenMapping => tokenMapping.token.chain === transaction?.tokenIncoming?.chain || tokenMapping.token.chain === transaction?.tokenOutgoing?.chain)
+  const nonMappedTokensOfTransaction = useMemo(
+    (): Token[] => {
+      const nonMappedTokens = nonSetMappings
+        .filter(
+          tokenMapping => tokenMapping.token.chain === transaction?.tokenIncoming?.chain
+            || tokenMapping.token.chain === transaction?.tokenOutgoing?.chain
+          )
         .map(tokenMapping => tokenMapping.token);
-    if (transaction?.direction === Direction.Incoming) return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenIncoming as Token));
-    else if (transaction?.direction === Direction.Outgoing) return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenOutgoing as Token));
-    else if (transaction?.direction === Direction.Swap) {
-      return nonMappedTokens.filter(token => keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenIncoming as Token) || keyFormatTransaction(token) === keyFormatTransaction(transaction?.tokenOutgoing as Token));
-    } else return [];
-  }, [nonSetMappings, transaction]);
+
+      switch (transaction?.direction) {
+        case Direction.Incoming:
+          return nonMappedTokens.filter(
+            token => keyFormatTransaction(token) ===
+              keyFormatTransaction(transaction?.tokenIncoming as Token));
+        case Direction.Outgoing:
+          return nonMappedTokens.filter(
+            token => keyFormatTransaction(token) ===
+              keyFormatTransaction(transaction?.tokenOutgoing as Token));
+        case Direction.Swap:
+          return nonMappedTokens.filter(
+            token => keyFormatTransaction(token) ===
+                keyFormatTransaction(transaction?.tokenIncoming as Token)
+              || keyFormatTransaction(token) ===
+                keyFormatTransaction(transaction?.tokenOutgoing as Token));
+        default:
+          return [];
+      }
+    },
+    [nonSetMappings, transaction]
+  );
 
   const isSumMismatchedIncoming = useMemo((): boolean => {
     if ([Direction.Incoming, Direction.Swap].includes(transaction?.direction as Direction)) {
@@ -206,7 +259,7 @@ const EditTransactionModal = ({
 
   return (
     <RightModal
-      modalClassNames="max-w-2xl max-h-[calc(100%-54px)]"
+      modalClassNames="max-w-4xl max-h-[calc(100%-54px)]"
       show={editTransaction.value}
       closeModal={editTransaction.onFalse}
     >
@@ -218,7 +271,7 @@ const EditTransactionModal = ({
             />
             <CommonWarningAlert
               shouldShow={showMismatchAmount.value}
-              message="The Total amount value if too much different from transaction amount. Please regulate the transaction values"
+              message="The total amount value is too different from the transaction amount. Please correct the transaction values"
               onClose={closeWarningSumMismatch}
             />
 

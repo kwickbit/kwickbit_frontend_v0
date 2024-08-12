@@ -39,7 +39,7 @@ export const AccountingLines = ({
                 <div className="flex items-center text-sm text-[#171A1F] font-bold py-4">
                     Transaction Value
                 </div>
-                <div className="grid grid-cols-[1fr,1.1fr,1fr,28px] gap-1">
+                <div className="grid grid-cols-[1fr,2fr,1fr,28px] gap-1">
                     <div className="flex justify-center items-center text-sm text-[#171A1F] font-bold py-4">
                         Type
                     </div>
@@ -54,16 +54,16 @@ export const AccountingLines = ({
                             className="relative top-3 right-0.5 w-7 h-8 flex items-center justify-center"
                             onClick={(): void => handleAddNewLine()}
                         >
-                            <CirclePlus className="w-6 h-6"/>
+                            <CirclePlus className="w-6 h-6" />
                         </button>
                     )}
                 </div>
             </div>
             <div className="grid grid-cols-[2fr,4.1fr] mt-3 gap-1 relative">
                 <div>
-                  <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
-                    {`${amount} ${symbolAmount}`}
-                  </span>
+                    <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
+                        {`${amount} ${symbolAmount}`}
+                    </span>
                 </div>
                 <div className="relative space-y-3">
                     {accountingLines && accountingLines.map((accountingLine, idx) => (
