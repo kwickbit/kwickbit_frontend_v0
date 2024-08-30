@@ -1,21 +1,31 @@
-import { useState } from "react";
-import { IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports/reconciliation";
-import { EntriesSelector } from "./EntriesSelector";
-import { EntrySourceButtons } from "./EntrySourceButtons";
+import { Dispatch, SetStateAction, useState } from "react";
+import { type IntegrationTransactionEntry, ReconciliationEntrySources } from "@/services/reports/reconciliation";
+import { TransactionProps } from "@/services/transactions";
+import { EntriesSelector } from "@/components/reports/create/reconciliation/EntriesSelector";
+import { EntrySourceButtons } from "@/components/reports/create/reconciliation/EntrySourceButtons";
 
 interface Props {
-  transactionAmount: number;
-  entriesAmount: number;
   isReconcilable: boolean;
-  entriesToReconcile: IntegrationTransactionEntry[];
+  setEntriesToReconcile: Dispatch<SetStateAction<IntegrationTransactionEntry[]>>;
+  setIsReconcilable: Dispatch<SetStateAction<boolean>>;
+  setUnreconciledEntries: Dispatch<SetStateAction<IntegrationTransactionEntry[]>>;
+  transaction: TransactionProps;
   unreconciledEntries: IntegrationTransactionEntry[];
-  removeEntry: (entry: string) => void;
-  addEntry: (entry: string) => void;
 }
 
 export const ReconciliationTransactionEntries = (props: Props): React.JSX.Element => {
-  const [entriesSource, setEntriesSource] = useState(ReconciliationEntrySources.Match);
-  const propsWithSource = { ...props, entriesSource }
+  const { transaction, unreconciledEntries } = props;
+
+  const matchingEntries = unreconciledEntries.filter(
+    entry => entry.integrationTransactionLabel === transaction.atomicTransactionId
+  );
+
+  const defaultEntriesSource = matchingEntries.length > 0
+    ? ReconciliationEntrySources.Match
+    : ReconciliationEntrySources.Pick;
+
+  const [entriesSource, setEntriesSource] = useState(defaultEntriesSource);
+  const selectorProps = { ...props, entriesSource, matchingEntries };
 
   return (
     <div className="mx-2 p-4">
@@ -23,7 +33,7 @@ export const ReconciliationTransactionEntries = (props: Props): React.JSX.Elemen
         entriesSource={entriesSource}
         setEntriesSource={setEntriesSource}
       />
-      <EntriesSelector { ...propsWithSource } />
+      <EntriesSelector {...selectorProps} />
     </div>
   );
 };

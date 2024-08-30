@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import classNames from "classnames";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
@@ -86,6 +86,15 @@ export const CreateReconciliationReport = (): React.JSX.Element => {
     setReconciliations(reconciliations.concat(newReconciliation))
   };
 
+  // These are precomputed rather than executing N times the same filtering
+  const incomingEntries = useMemo(() => unreconciledEntries.filter(
+    entry => entry.direction === Direction.Incoming
+  ), [unreconciledEntries]);
+
+  const outgoingEntries = useMemo(() => unreconciledEntries.filter(
+    entry => entry.direction === Direction.Outgoing
+  ), [unreconciledEntries]);
+
   if (transactionsAreLoading || entriesAreLoading) {
     return (
       <div className="flex justify-center mt-8">
@@ -97,15 +106,6 @@ export const CreateReconciliationReport = (): React.JSX.Element => {
   if (transactionsAreError || entriesAreError) {
     return <ServerError />;
   }
-
-  // These are precomputed rather than executing N times the same filtering
-  const incomingEntries = unreconciledEntries.filter(
-    entry => entry.direction === Direction.Incoming
-  );
-
-  const outgoingEntries = unreconciledEntries.filter(
-    entry => entry.direction === Direction.Outgoing
-  )
 
   const filterEntriesByDirection = (
     transaction: TransactionProps

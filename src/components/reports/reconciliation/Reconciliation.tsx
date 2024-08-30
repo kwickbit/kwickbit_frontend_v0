@@ -1,23 +1,15 @@
-import { IntegrationTransactionEntry, ReconciledTransaction } from "@/services/reports/reconciliation"
+import { ReconciledTransaction } from "@/services/reports/reconciliation"
 import { ChainTransactionForReconciliation } from "./ChainTransactionForReconciliation";
 import { ReconciliationEntry } from "./ReconciliationEntry";
-import { parseAmount } from "@/lib/helpers";
+import { calculateTransactionAmount, sumEntryAmounts } from "@/lib/helpers";
 
 interface Props {
   reconciliation: ReconciledTransaction;
 }
 
 export const Reconciliation = ({ reconciliation }: Props): React.JSX.Element => {
-  // This is repeated from the ReconciliationTransaction component
-  // TODO: make it not be repeated
-  const amountIncoming = parseAmount(reconciliation.transaction.amountIncoming);
-  const amountOutgoing = parseAmount(reconciliation.transaction.amountOutgoing);
-  const transactionAmount = Math.abs(amountIncoming - amountOutgoing);
-
-  const sumAmounts = (total: number, entry: IntegrationTransactionEntry): number =>
-    total + parseAmount(entry.reconvertedAmount);
-
-  const entriesAmount = reconciliation.matchingEntries.reduce(sumAmounts, 0);
+  const transactionAmount = calculateTransactionAmount(reconciliation.transaction);
+  const entriesAmount = sumEntryAmounts(reconciliation.matchingEntries)
   const excessAmountInTransaction = transactionAmount - entriesAmount;
   const excessPercentage = Math.abs(100 * excessAmountInTransaction / transactionAmount)
 

@@ -1,49 +1,52 @@
 import classNames from "classnames";
+import { calculateTransactionAmount } from "@/lib/helpers";
+import { TransactionProps } from "@/services/transactions";
 import { IntegrationTransactionEntry } from "@/services/reports/reconciliation";
 import { UnreconciledEntries } from "./UnreconciledEntries";
 import { ReconciliationEntry } from "@/components/reports/reconciliation/ReconciliationEntry";
 
 interface Props {
-  transactionAmount: number;
-  entriesAmount: number;
   isReconcilable: boolean;
-  entriesToReconcile: IntegrationTransactionEntry[];
+  pickedEntries: IntegrationTransactionEntry[];
+  pickedEntriesAmount: number;
+  pickEntry: (entry: string) => void;
+  unpickEntry: (entry: string) => void;
   unreconciledEntries: IntegrationTransactionEntry[];
-  removeEntry: (entry: string) => void;
-  addEntry: (entry: string) => void;
+  transaction: TransactionProps;
 }
 
 export const PickReconciliationEntries = ({
-  transactionAmount,
-  entriesAmount,
   isReconcilable,
-  entriesToReconcile,
+  pickedEntries,
+  pickedEntriesAmount,
+  pickEntry,
+  unpickEntry,
   unreconciledEntries,
-  removeEntry,
-  addEntry,
+  transaction,
 }: Props): React.JSX.Element => {
-  const discrepancy = transactionAmount - entriesAmount;
+  const transactionAmount = calculateTransactionAmount(transaction);
+  const discrepancy = transactionAmount - pickedEntriesAmount;
   const margin = Math.abs(100 * discrepancy / transactionAmount);
 
   return (
     <>
       <ul className={classNames("w-full divide-y-4 mt-6 p-3", isReconcilable && "bg-[#4ADDB6]")}>
         <p>Amount left to reconcile: {discrepancy.toFixed(6)} ({margin.toFixed(1)}%)</p>
-        {entriesToReconcile.length ?
-          entriesToReconcile.map((entry) =>
+        {pickedEntries.length ?
+          pickedEntries.map((entry) =>
             <ReconciliationEntry
               key={entry.entryId}
               entry={entry}
-              moveEntry={removeEntry}
+              moveEntry={unpickEntry}
               buttonText={"Remove"}
             />) :
           "Please select some entries below."
         }
       </ul>
       <UnreconciledEntries
-        entries={unreconciledEntries.filter((entry) => !entriesToReconcile.includes(entry))}
-        moveEntry={addEntry}
+        entries={unreconciledEntries.filter((entry) => !pickedEntries.includes(entry))}
+        moveEntry={pickEntry}
       />
     </>
   );
-}
+};

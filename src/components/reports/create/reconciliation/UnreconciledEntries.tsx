@@ -8,8 +8,8 @@ interface Props {
 
 export const UnreconciledEntries = ({ entries, moveEntry }: Props): React.JSX.Element => {
   return (
-    <div className="flex-1 border border-gray-500 p-4">
-      <h5 className="pb-4">Entries from integration not yet reconciled</h5>
+    <div className="flex-1 border border-gray-500 px-4 py-2">
+      <h5 className="pb-4">{entries.length} entries from integration not yet reconciled</h5>
       <ul className="w-full divide-y-4">
         {entries.length ?
           entries.map((entry) =>
