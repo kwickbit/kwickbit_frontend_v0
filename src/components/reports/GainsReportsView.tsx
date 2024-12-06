@@ -5,7 +5,7 @@ import { useQueryAllGainsReports } from "@/hooks/reports/gains";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import CreateItemButton from "@/components/common/CreateItemButton";
-import CreateGainsReportModal from "@/components/reports/gains/CreateGainsReportModal";
+import CreateGainsReportModal from "@/components/reports/create/gains/CreateGainsReportModal";
 import { GainsReportList } from "@/components/reports/gains/GainsReportList";
 
 export const GainsReportsView = (): JSX.Element => {
