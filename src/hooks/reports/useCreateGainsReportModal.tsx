@@ -43,10 +43,10 @@ const defaultAsset = {
       issuer: "Stellar",
     }
   },
-  fifo: 0,
-  lifo: 0,
-  hifo: 0,
-  tokenBalance: 0,
+  fifo: 1,
+  lifo: 1,
+  hifo: 1,
+  tokenBalance: 1,
 };
 
 const reportProps = (): CreateGainsReportAPIProps => ({

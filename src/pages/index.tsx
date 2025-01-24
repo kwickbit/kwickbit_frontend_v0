@@ -8,7 +8,7 @@ const HomePage = (): ReactNode => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/transactions");
+    router.push("/reports/gains");
   }, [router]);
   return (
     <>
