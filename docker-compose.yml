@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   frontend:
     container_name: frontend_kwickbit_v0
@@ -19,5 +17,5 @@ services:
 
 networks:
   kwickbit-network:
-    external:
-      name: kwickbit_network
+    name: kwickbit_network
+    external: true
