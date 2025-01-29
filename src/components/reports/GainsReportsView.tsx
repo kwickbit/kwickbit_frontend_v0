@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import { useBoolean } from "@/hooks/useBoolean";
 import useUserWebSocket from "@/hooks/useWebSocket";
 import { useQueryAllGainsReports } from "@/hooks/reports/gains";
 import Loader from "@/components/Loader";
 import ServerError from "@/components/ServerError";
 import CreateItemButton from "@/components/common/CreateItemButton";
-import CreateGainsReportModal from "@/components/reports/gains/CreateGainsReportModal";
+import CreateGainsReportModal from "@/components/reports/create/gains/CreateGainsReportModal";
 import { GainsReportList } from "@/components/reports/gains/GainsReportList";
 
 export const GainsReportsView = (): JSX.Element => {
   const { data, isLoading, isError } = useQueryAllGainsReports();
   const showModal = useBoolean();
-  const { newGainsReport: newReport } = useUserWebSocket();
+
+  const {
+    newGainsReport: newReport,
+    newGainsReportError: newReportError,
+    setNewGainsReportError: setNewReportError
+  } = useUserWebSocket();
+
   const [reports, setReports] = useState(data?.data ?? []);
   const [newReportId, setNewReportId] = useState<string | undefined>(undefined);
 
@@ -26,6 +34,13 @@ export const GainsReportsView = (): JSX.Element => {
       setTimeout(() => setNewReportId(undefined), 10_000);
     }
   }, [newReport]);
+
+  useEffect(() => {
+    if (newReportError) {
+      toast.error(`Error building gains report: ${newReportError}`);
+      setNewReportError(null);
+    }
+  }, [newReportError, setNewReportError]);
 
   if (isLoading) {
     return (

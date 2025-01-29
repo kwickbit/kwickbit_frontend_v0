@@ -129,7 +129,7 @@ export const useCreateGainsReportModal = (): ReturnProps => {
         toast.success(data?.message ?? "Gains report requested.");
       },
       onError: (error: AxiosError<any>): void => {
-        toast.error(error?.response?.data.error ?? "Error while requesting new gains report.");
+        toast.error(error?.response?.data.error ?? "Error while requesting gains report.");
       },
     };
 

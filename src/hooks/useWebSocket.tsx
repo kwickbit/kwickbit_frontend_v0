@@ -29,19 +29,21 @@ export interface PublishedTransactionToIntegration {
 }
 
 export interface UserWebSocketReturn {
-  sendMessage: SendMessage;
-  lastMessage: MessageEvent<any> | null;
-  readyState: WebSocket["readyState"];
-  fetchedNewTransactionsData: any;
-  fetchedAvailableIntegrationAccounts: FetchedAvailableIntegrationAccountsData | null;
-  fetchedUpdateIntegrationAllAttributes: FetchedUpdateIntegrationAllAttributes | null;
   clearFetchedTransactionsData: () => void;
-  setFetchedUpdateIntegrationAllAttributes: React.Dispatch<React.SetStateAction<FetchedUpdateIntegrationAllAttributes | null>>;
-  isThereNewUpdateMappedCurrencies: boolean;
-  setIsThereNewUpdateMappedCurrenciesToFalse: () => void;
-  publishedTransactionToIntegration: PublishedTransactionToIntegration | null;
   clearPublishedTransactionToIntegration: () => void;
+  fetchedAvailableIntegrationAccounts: FetchedAvailableIntegrationAccountsData | null;
+  fetchedNewTransactionsData: any;
+  fetchedUpdateIntegrationAllAttributes: FetchedUpdateIntegrationAllAttributes | null;
+  isThereNewUpdateMappedCurrencies: boolean;
+  lastMessage: MessageEvent<any> | null;
   newGainsReport: GainsReport | null,
+  newGainsReportError: any | null,
+  publishedTransactionToIntegration: PublishedTransactionToIntegration | null;
+  readyState: WebSocket["readyState"];
+  sendMessage: SendMessage;
+  setFetchedUpdateIntegrationAllAttributes: React.Dispatch<React.SetStateAction<FetchedUpdateIntegrationAllAttributes | null>>;
+  setIsThereNewUpdateMappedCurrenciesToFalse: () => void;
+  setNewGainsReportError: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const generateWebSocketUrl = (templateUrl: string): string => {
@@ -50,20 +52,21 @@ const generateWebSocketUrl = (templateUrl: string): string => {
 };
 
 export const SocketContext = React.createContext<UserWebSocketReturn>({
-  sendMessage: (message: WebSocketMessage) => {},
-  lastMessage: null,
-  readyState: 3,
-  fetchedNewTransactionsData: null,
-  fetchedAvailableIntegrationAccounts: null,
-  fetchedUpdateIntegrationAllAttributes: null,
   clearFetchedTransactionsData: () => {},
-  setFetchedUpdateIntegrationAllAttributes: () => {},
-  isThereNewUpdateMappedCurrencies: false,
-  setIsThereNewUpdateMappedCurrenciesToFalse: () => {},
-  publishedTransactionToIntegration: null,
   clearPublishedTransactionToIntegration: () => {},
+  fetchedAvailableIntegrationAccounts: null,
+  fetchedNewTransactionsData: null,
+  fetchedUpdateIntegrationAllAttributes: null,
+  isThereNewUpdateMappedCurrencies: false,
+  lastMessage: null,
   newGainsReport: null,
-
+  newGainsReportError: null,
+  publishedTransactionToIntegration: null,
+  readyState: 3,
+  sendMessage: (message: WebSocketMessage) => {},
+  setFetchedUpdateIntegrationAllAttributes: () => {},
+  setIsThereNewUpdateMappedCurrenciesToFalse: () => {},
+  setNewGainsReportError: () => {},
 });
 
 const websocketUrl = generateWebSocketUrl(process.env.NEXT_PUBLIC_WS_APP_URL!);
@@ -92,6 +95,7 @@ export const UserWebSocketProvider = ({
   const {value: isThereNewUpdateMappedCurrencies, onTrue: setIsThereNewUpdateMappedCurrenciesToTrue, onFalse: setIsThereNewUpdateMappedCurrenciesToFalse} = useBoolean(false);
 
   const [newGainsReport, setNewGainsReport] = useState<GainsReport | null>(null);
+  const [newGainsReportError, setNewGainsReportError] = useState<string | null>(null);
 
   const onError = (error: WebSocketEventMap["error"]): void => {
     console.error("WebSocket error:", error);
@@ -139,7 +143,11 @@ export const UserWebSocketProvider = ({
           break;
 
         case 'builtGainsReport':
-          setNewGainsReport(data.report);
+          if (data.report) {
+            setNewGainsReport(data.report);
+          } else {
+            setNewGainsReportError(data.error);
+          }
           break;
 
         default:
@@ -185,10 +193,12 @@ export const UserWebSocketProvider = ({
       fetchedNewTransactionsData,
       fetchedUpdateIntegrationAllAttributes,
       newGainsReport,
+      newGainsReportError,
       isThereNewUpdateMappedCurrencies,
       publishedTransactionToIntegration,
       setFetchedUpdateIntegrationAllAttributes,
       setIsThereNewUpdateMappedCurrenciesToFalse,
+      setNewGainsReportError,
     }),
     [
       // properly websocket stuff
@@ -201,8 +211,10 @@ export const UserWebSocketProvider = ({
       fetchedUpdateIntegrationAllAttributes,
       isThereNewUpdateMappedCurrencies,
       newGainsReport,
+      newGainsReportError,
       publishedTransactionToIntegration,
       setIsThereNewUpdateMappedCurrenciesToFalse,
+      setNewGainsReportError,
     ]
   );
 
