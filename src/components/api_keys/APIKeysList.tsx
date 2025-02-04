@@ -84,7 +84,7 @@ export const APIKeysList = ({ apiKeys }: Props): React.JSX.Element => {
             {row.getVisibleCells().map(cell => (
               <div
                 key={cell.id}
-                className="flex flex-col justify-center items-center h-full text-base font-bold text-[#BDC1CA]"
+                className="flex flex-col justify-center items-center h-full text-base font-bold text-[#9095A1] hover:text-[#565D6D]"
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </div>
