@@ -4,7 +4,7 @@
 ---
 [![CI](https://github.com/kwickbit/kwickbit_frontend_v0/actions/workflows/push_workflow.yml/badge.svg?branch=main&event=push)](https://github.com/kwickbit/kwickbit_frontend_v0/actions/workflows/push_workflow.yml)
 
-This repository contains the frontend application for Kwickbit, built with Next.js and TypeScript. The application is served as static code with no server-side rendering.
+This repository contains the frontend application for Kwickbit, built with Next.js and TypeScript. The application is served as static code with no server-side rendering. It works with the [Serverless Framework backend](https://github.com/kwickbit/kwickbit_saas).
 
 <div style="text-align: center">
   <img src="https://raw.githubusercontent.com/kwickbit/.github/main/resources/screenshots/kwickbit_frontend_v0/login_page.png" alt="Login page" width="49%" />
