@@ -34,7 +34,7 @@ This repository contains the frontend application for Kwickbit, built with Next.
     ```
 
 4. Run `npm install` to install the necessary dependencies.
-5. (Optional) Modify the `.env.development` file with appropriate environment variables if needed.
+5. (Optional) Modify the `.env.development` file with appropriate environment variables if needed. Besides the ones present there, the following two need to be in the environment: `NEXT_PUBLIC_API_QUICKBOOK_CLIENT_ID` and `NEXT_PUBLIC_GOOGLE_RE_CAPTCHA_V3_PUBLIC_KEY`.
 6. (Optional) Create a Docker network if it doesn't exist:
 
     ```bash
