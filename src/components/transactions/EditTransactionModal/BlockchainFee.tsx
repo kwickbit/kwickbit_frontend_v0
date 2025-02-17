@@ -10,7 +10,7 @@ const BlockchainFee = ({ transaction }: Props): React.JSX.Element => {
     <div className="mb-5">
       <div className="grid grid-cols-[2fr,4.1fr] mb-2 gap-1">
         <div className="flex items-center text-sm text-[#171A1F] font-bold pr-1 py-4">
-          Blokchain Fee
+          Blockchain Fee
         </div>
         <div className="grid grid-cols-[1fr,2fr,1fr,28px] gap-1">
           <div className="flex justify-center items-center text-sm text-[#171A1F] font-bold py-4" />
@@ -29,7 +29,7 @@ const BlockchainFee = ({ transaction }: Props): React.JSX.Element => {
             <div>
               <span className="bg-[#F3F4F6] text-sm text-[#565D6D] rounded-2xl py-2 px-7">
                 {`${transaction.fee?.amount.toFixed(5)} ${
-                  transaction.detail?.symbolIncoming
+                  transaction.detail?.symbolIncoming || "XLM"
                 }`}
               </span>
             </div>

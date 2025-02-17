@@ -32,7 +32,7 @@ const CollectionLine = ({
   token,
   tokenSymbol,
 }: Props): React.JSX.Element => {
-  const [accountingType, setAccountingType] = useState<AccountingTransactionType | null>(accountingLine.accountingType !== undefined ? accountingLine.accountingType : null);
+  const [accountingType, setAccountingType] = useState<AccountingTransactionType | null>(accountingLine.accountingType === undefined ? AccountingTransactionType.Bill : accountingLine.accountingType);
 
   const {
     items: { data: items },
@@ -44,7 +44,26 @@ const CollectionLine = ({
 
   const [resourcesOptions, setResourcesOptions] = useState<Invoice[] | Bill[] | AvailableAccount[] | Item[]>([]);
   const [resourceSelected, setResourceSelected] = useState<Invoice | Bill | AvailableAccount | Item | null>(null);
-  const [amount, setAmount] = useState<number>((accountingLine.accountingType !== undefined) ? ([AccountingTransactionType.Income, AccountingTransactionType.Invoice, AccountingTransactionType.Swap].includes(accountingLine.accountingType) ? accountingLine.amountIncoming as number || 0 : accountingLine.amountOutgoing as number || 0) : 0);
+
+  let initialAmount;
+  const defaultAmount = 0;
+
+  if (accountingLine.accountingType !== undefined) {
+    const hasAmountIncoming = [
+      AccountingTransactionType.Income,
+      AccountingTransactionType.Invoice,
+      AccountingTransactionType.Swap
+    ]
+      .includes(accountingLine.accountingType);
+
+    initialAmount = (
+      hasAmountIncoming
+      ? accountingLine.amountIncoming
+      : accountingLine.amountOutgoing
+    ) as number;
+  }
+
+  const [amount, setAmount] = useState<number>(initialAmount || defaultAmount);
 
   const {
     currencyMappings: {
@@ -59,7 +78,7 @@ const CollectionLine = ({
     enableQuickbooksDataFetching();
     enableCurrencyMappingsFetching();
     setResourceSelected(null);
-    setAmount(0);
+    setAmount(defaultAmount);
 
     switch (accountingType) {
       case AccountingTransactionType.Invoice:

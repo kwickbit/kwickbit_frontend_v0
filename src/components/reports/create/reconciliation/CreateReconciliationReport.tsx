@@ -120,10 +120,6 @@ export const CreateReconciliationReport = (): React.JSX.Element => {
     }
   };
 
-  const temporaryRemoveTransaction = (): void => {
-    setTransactionsToReconcile([]);
-  }
-
   const createReport = (): void => {
     const report: CreateReportAPIProps = {
       reportDate: new Date().toISOString(),
@@ -151,12 +147,6 @@ export const CreateReconciliationReport = (): React.JSX.Element => {
       <div className="flex justify-between my-6 mx-12">
         <span className="text-base text-[#21254E]">There are {transactionsToReconcile.length ?? "no"} unreconciled transactions, for a total of {transactionAmount} XLM.
         </span>
-        <button
-          className="self-center h-16 rounded-md font-bold text-lg px-6 py-2 mx-2 text-white bg-red-400"
-          onClick={temporaryRemoveTransaction}
-        >
-          (temporary) Remove all transactions
-        </button>
         <button className={
           classNames(
             "self-center h-16 rounded-md font-bold text-lg px-6 py-2 mx-2 text-white",
